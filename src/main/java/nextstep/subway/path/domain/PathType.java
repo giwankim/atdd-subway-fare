@@ -1,20 +1,19 @@
 package nextstep.subway.path.domain;
 
+import java.util.function.Function;
 import nextstep.subway.line.domain.LineSection;
 
 public enum PathType {
-  DISTANCE {
-    @Override
-    public int getEdgeWeight(LineSection lineSection) {
-      return lineSection.getDistance();
-    }
-  },
-  DURATION {
-    @Override
-    public int getEdgeWeight(LineSection lineSection) {
-      return lineSection.getDuration();
-    }
-  };
+  DISTANCE(LineSection::getDistance),
+  DURATION(LineSection::getDuration);
 
-  public abstract int getEdgeWeight(LineSection lineSection);
+  private final Function<LineSection, Integer> edgeWeightFunction;
+
+  PathType(Function<LineSection, Integer> edgeWeightFunction) {
+    this.edgeWeightFunction = edgeWeightFunction;
+  }
+
+  public int getEdgeWeight(LineSection lineSection) {
+    return edgeWeightFunction.apply(lineSection);
+  }
 }
