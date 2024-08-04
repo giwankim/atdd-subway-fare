@@ -12,7 +12,6 @@ import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.application.GraphService;
 import nextstep.subway.path.domain.*;
 import nextstep.subway.station.domain.Station;
-import org.jgrapht.graph.WeightedMultigraph;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,14 +37,10 @@ class GraphServiceTest {
 
     SubwayGraph graph = graphService.loadGraph(PathType.DISTANCE);
 
-    SubwayGraph expectedGraph =
-        new SubwayGraph(
-            WeightedMultigraph.<Station, LineSectionEdge>builder(LineSectionEdge.class)
-                .addVertex(강남역)
-                .addVertex(역삼역)
-                .addEdge(강남역, 역삼역, LineSectionEdge.of(강남_역삼_구간), 강남_역삼_구간.getDistance())
-                .build(),
-            PathType.DISTANCE);
+    SubwayGraph expectedGraph = new SubwayGraph(PathType.DISTANCE);
+    expectedGraph.addStation(강남역);
+    expectedGraph.addStation(역삼역);
+    expectedGraph.addLineSection(강남_역삼_구간);
     assertThat(graph.isSame(expectedGraph)).isTrue();
   }
 
@@ -60,15 +55,10 @@ class GraphServiceTest {
 
     SubwayGraph graph = graphService.loadGraph(PathType.DURATION);
 
-    SubwayGraph expectedGraph =
-        new SubwayGraph(
-            WeightedMultigraph.<Station, LineSectionEdge>builder(LineSectionEdge.class)
-                .addVertex(강남역)
-                .addVertex(역삼역)
-                .addEdge(강남역, 역삼역, LineSectionEdge.of(강남_역삼_구간), 강남_역삼_구간.getDuration())
-                .build(),
-            PathType.DURATION);
-
+    SubwayGraph expectedGraph = new SubwayGraph(PathType.DURATION);
+    expectedGraph.addStation(강남역);
+    expectedGraph.addStation(역삼역);
+    expectedGraph.addLineSection(강남_역삼_구간);
     assertThat(graph.isSame(expectedGraph)).isTrue();
   }
 }
