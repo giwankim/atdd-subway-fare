@@ -1,7 +1,9 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.path.domain.Path;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FareCalculator {
   private static final long BASE_FARE = 1250L;
   private static final long ZERO = 0L;

@@ -1,6 +1,7 @@
 package nextstep.subway.path.ui;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PathController {
   private final PathService pathService;
+  private final FareCalculator fareCalculator;
 
   @GetMapping("/paths")
   public ResponseEntity<PathResponse> findPath(@ModelAttribute PathRequest request) {
     Path path = pathService.findPath(request);
-    return ResponseEntity.ok(PathResponse.from(path));
+    long fare = fareCalculator.calculateFare(path);
+    return ResponseEntity.ok(PathResponse.of(path, fare));
   }
 }

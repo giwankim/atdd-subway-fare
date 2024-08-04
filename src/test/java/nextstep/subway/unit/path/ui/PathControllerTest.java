@@ -3,6 +3,7 @@ package nextstep.subway.unit.path.ui;
 import static nextstep.Fixtures.교대역;
 import static nextstep.Fixtures.양재역;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
+import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.domain.Path;
@@ -31,6 +33,7 @@ class PathControllerTest {
   @Autowired private MockMvc mockMvc;
   @MockBean private PathService pathService;
   @MockBean private JwtTokenProvider jwtTokenProvider;
+  @MockBean private FareCalculator fareCalculator;
 
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
@@ -39,6 +42,7 @@ class PathControllerTest {
     Station 양재역 = 양재역();
     PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
     given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
+    given(fareCalculator.calculateFare(any(Path.class))).willReturn(1250L);
 
     mockMvc
         .perform(
@@ -54,6 +58,7 @@ class PathControllerTest {
         .andExpect(jsonPath("$.stations[1].id").value(양재역.getId()))
         .andExpect(jsonPath("$.stations[1].name").value(양재역.getName()))
         .andExpect(jsonPath("$.distance").value(5))
-        .andExpect(jsonPath("$.duration").value(10));
+        .andExpect(jsonPath("$.duration").value(10))
+        .andExpect(jsonPath("$.fare").value(1250L));
   }
 }

@@ -16,18 +16,20 @@ import org.junit.jupiter.api.Test;
 class PathResponseTest {
   @DisplayName("경로로부터 응답을 생성한다.")
   @Test
-  void from() {
+  void of() {
     Station 교대역 = 교대역();
     Station 남부터미널역 = 남부터미널역();
     Station 양재역 = 양재역();
     Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), 5, 10);
+    long fare = 1250;
 
-    PathResponse response = PathResponse.from(path);
+    PathResponse response = PathResponse.of(path, fare);
 
     assertThat(response.getStations())
         .containsExactly(
             StationResponse.from(교대역), StationResponse.from(남부터미널역), StationResponse.from(양재역));
     assertThat(response.getDistance()).isEqualTo(5);
     assertThat(response.getDuration()).isEqualTo(10);
+    assertThat(response.getFare()).isEqualTo(1250);
   }
 }

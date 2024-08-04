@@ -34,6 +34,7 @@ class FareCalculatorTest {
 
   private static Stream<Arguments> calculateFare() {
     return Stream.of(
+        Arguments.of(0, 1250),
         Arguments.of(9, 1250),
         Arguments.of(10, 1250),
         Arguments.of(11, 1350),
