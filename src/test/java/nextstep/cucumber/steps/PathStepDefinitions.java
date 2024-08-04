@@ -25,7 +25,10 @@ public class PathStepDefinitions {
             .log()
             .all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParams("source", sourceId, "target", targetId, "type", PathType.DISTANCE.name())
+            .queryParams(
+                "source", sourceId,
+                "target", targetId,
+                "type", PathType.DISTANCE.name())
             .when()
             .get("/paths")
             .then()
@@ -43,7 +46,10 @@ public class PathStepDefinitions {
             .log()
             .all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParams("source", sourceId, "target", targetId, "type", PathType.DURATION.name())
+            .queryParams(
+                "source", sourceId,
+                "target", targetId,
+                "type", PathType.DURATION.name())
             .when()
             .get("/paths")
             .then()

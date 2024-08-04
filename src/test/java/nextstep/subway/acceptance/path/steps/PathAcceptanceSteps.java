@@ -22,12 +22,9 @@ public class PathAcceptanceSteps {
         .all()
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .queryParams(
-            "source",
-            request.getSource(),
-            "target",
-            request.getTarget(),
-            "type",
-            request.getType().name())
+            "source", request.getSource(),
+            "target", request.getTarget(),
+            "type", request.getType().name())
         .when()
         .get("/paths")
         .then()
