@@ -18,27 +18,15 @@ public class PathStepDefinitions {
 
   @When("{string}에서 {string}까지 최단 거리 경로를 조회하면")
   public void 교대역_에서_강남역_까지_최단_거리_경로를_조회하면(String source, String target) {
-    Long sourceId = ((StationResponse) context.store.get(source)).getId();
-    Long targetId = ((StationResponse) context.store.get(target)).getId();
-    context.response =
-        RestAssured.given()
-            .log()
-            .all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParams(
-                "source", sourceId,
-                "target", targetId,
-                "type", PathType.DISTANCE.name())
-            .when()
-            .get("/paths")
-            .then()
-            .log()
-            .all()
-            .extract();
+    doPathSearch(source, target, PathType.DISTANCE);
   }
 
   @When("{string}에서 {string}까지 최소 시간 경로를 조회하면")
   public void 교대역_에서_양재역_까지_최소_시간_경로를_조회하면(String source, String target) {
+    doPathSearch(source, target, PathType.DURATION);
+  }
+
+  private void doPathSearch(String source, String target, PathType duration) {
     Long sourceId = ((StationResponse) context.store.get(source)).getId();
     Long targetId = ((StationResponse) context.store.get(target)).getId();
     context.response =
@@ -49,7 +37,7 @@ public class PathStepDefinitions {
             .queryParams(
                 "source", sourceId,
                 "target", targetId,
-                "type", PathType.DURATION.name())
+                "type", duration.name())
             .when()
             .get("/paths")
             .then()
