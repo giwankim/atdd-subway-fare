@@ -66,4 +66,10 @@ public class PathStepDefinitions {
     assertThat(actualDistance).isEqualTo(distance);
     assertThat(actualDuration).isEqualTo(duration);
   }
+
+  @Then("이용 요금은 {int}원이다")
+  public void 이용_요금은_x_원이다(int fare) {
+    long actualFare = context.response.jsonPath().getLong("fare");
+    assertThat(actualFare).isEqualTo(fare);
+  }
 }
