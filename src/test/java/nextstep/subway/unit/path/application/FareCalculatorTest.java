@@ -16,13 +16,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("요금 계산기 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class FareCalculatorTest {
   FareCalculator fareCalculator = new FareCalculator();
 
   @ParameterizedTest
-  @MethodSource
+  @MethodSource("calculateFare")
   void calculateFare(int distance, int expectedFare) {
     List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
     Path path = Path.of(stations, distance, 10);
