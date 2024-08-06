@@ -29,10 +29,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = PathController.class)
-@Import({JwtTokenProvider.class})
 @DisplayName("경로 조회 컨트롤러 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
+@WebMvcTest(controllers = PathController.class)
+@Import({JwtTokenProvider.class})
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;

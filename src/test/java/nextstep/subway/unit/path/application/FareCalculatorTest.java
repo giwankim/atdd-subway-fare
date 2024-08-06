@@ -15,14 +15,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("요금 계산기 단위 테스트")
+@SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
 class FareCalculatorTest {
   FareCalculator fareCalculator = new FareCalculator();
 
   @ParameterizedTest
-  @MethodSource("calculateFare")
+  @MethodSource
   void calculateFare(int distance, int expectedFare) {
     Member member = aMember().build();
     Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), distance, 10);
@@ -48,5 +48,34 @@ class FareCalculatorTest {
         Arguments.of(59, 2250),
         Arguments.of(66, 2250),
         Arguments.of(67, 2350));
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  void calculateFareYouth(int distance, int expectedFare) {
+    Member member = aMember().age(13).build();
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), distance, 10);
+
+    long fare = fareCalculator.calculateFare(path, member);
+
+    assertThat(fare).isEqualTo(expectedFare);
+  }
+
+  private static Stream<Arguments> calculateFareYouth() {
+    return Stream.of(
+        Arguments.of(0, 1070),
+        Arguments.of(9, 1070),
+        Arguments.of(10, 1070),
+        Arguments.of(11, 1150),
+        Arguments.of(14, 1150),
+        Arguments.of(15, 1150),
+        Arguments.of(16, 1230),
+        Arguments.of(20, 1230),
+        Arguments.of(50, 1710),
+        Arguments.of(51, 1790),
+        Arguments.of(58, 1790),
+        Arguments.of(59, 1870),
+        Arguments.of(66, 1870),
+        Arguments.of(67, 1950));
   }
 }
