@@ -12,6 +12,7 @@ import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("거리 기반 할인 조건 단위 테스트")
 class DistanceConditionTest {
   @DisplayName("조건을 만족하는지 확인")

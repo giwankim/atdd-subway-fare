@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("거리 기반 요금 정책 단위 테스트")
 class DistanceOverFarePolicyTest {
   @DisplayName("경로의 추가 요금을 계산한다.")

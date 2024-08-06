@@ -10,13 +10,11 @@ public abstract class OverFarePolicy {
   }
 
   public long calculateOverFare(Path path) {
-    for (OverFareCondition condition : conditions) {
-      if (condition.isSatisfiedBy(path)) {
-        return getOverFareAmount(path);
-      }
-    }
-
-    return 0L;
+    return conditions.stream()
+        .filter(condition -> condition.isSatisfiedBy(path))
+        .findFirst()
+        .map(condition -> getOverFareAmount(path))
+        .orElse(0L);
   }
 
   protected abstract long getOverFareAmount(Path path);

@@ -11,12 +11,11 @@ public abstract class DiscountPolicy {
   }
 
   public long calculateDiscount(long fare, Member member) {
-    for (DiscountCondition condition : conditions) {
-      if (condition.isSatisfiedBy(member)) {
-        return getDiscountAmount(fare, member);
-      }
-    }
-    return 0L;
+    return conditions.stream()
+        .filter(condition -> condition.isSatisfiedBy(member))
+        .findFirst()
+        .map(condition -> getDiscountAmount(fare, member))
+        .orElse(0L);
   }
 
   protected abstract long getDiscountAmount(long fare, Member member);
