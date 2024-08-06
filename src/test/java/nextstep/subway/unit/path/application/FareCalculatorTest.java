@@ -4,11 +4,10 @@ import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
+import nextstep.member.domain.Member;
 import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.path.domain.Path;
-import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,10 +24,10 @@ class FareCalculatorTest {
   @ParameterizedTest
   @MethodSource("calculateFare")
   void calculateFare(int distance, int expectedFare) {
-    List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
-    Path path = Path.of(stations, distance, 10);
+    Member member = aMember().build();
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), distance, 10);
 
-    long fare = fareCalculator.calculateFare(path);
+    long fare = fareCalculator.calculateFare(path, member);
 
     assertThat(fare).isEqualTo(expectedFare);
   }
