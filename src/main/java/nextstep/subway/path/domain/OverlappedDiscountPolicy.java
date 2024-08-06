@@ -15,9 +15,11 @@ public class OverlappedDiscountPolicy extends DiscountPolicy {
   @Override
   protected long getDiscountAmount(long fare, Member member) {
     long discountAmount = 0L;
+
     for (DiscountPolicy policy : policies) {
       discountAmount += policy.calculateDiscount(fare, member);
     }
+
     return discountAmount;
   }
 }
