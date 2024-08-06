@@ -14,22 +14,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("OverlappedOverFarePolicy 클래스 단위 테스트")
-class OverlappedOverFarePolicyTest {
+class OverlappedSurchargePolicyTest {
   @DisplayName("할증 금액을 계산한다.")
   @ParameterizedTest
   @MethodSource
-  void calculateOverFare(int distance, int expectedFare) {
+  void calculateSurcharge(int distance, int expectedFare) {
     List<Station> stations = Arrays.asList(교대역(), 강남역());
     Path path = Path.of(stations, distance, 10);
-    OverlappedOverFarePolicy policy =
-        new OverlappedOverFarePolicy(
-            new DistanceOverFarePolicy(10, 50, 100, 5),
-            new DistanceOverFarePolicy(50, Long.MAX_VALUE, 100, 8));
-    assertThat(policy.calculateOverFare(path)).isEqualTo(expectedFare);
+    OverlappedSurchargePolicy policy =
+        new OverlappedSurchargePolicy(
+            new DistanceSurchargePolicy(10, 50, 100, 5),
+            new DistanceSurchargePolicy(50, Long.MAX_VALUE, 100, 8));
+    assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }
 
-  private static Stream<Arguments> calculateOverFare() {
+  private static Stream<Arguments> calculateSurcharge() {
     return Stream.of(
         Arguments.of(0, 0),
         Arguments.of(9, 0),

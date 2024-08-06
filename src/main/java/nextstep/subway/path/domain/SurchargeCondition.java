@@ -1,5 +1,5 @@
 package nextstep.subway.path.domain;
 
-public interface OverFareCondition {
+public interface SurchargeCondition {
   boolean isSatisfiedBy(Path path);
 }

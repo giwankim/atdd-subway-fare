@@ -1,6 +1,6 @@
 package nextstep.subway.path.domain;
 
-public class DistanceCondition implements OverFareCondition {
+public class DistanceCondition implements SurchargeCondition {
   private final long lowerBound;
 
   public DistanceCondition(long lowerBound) {
