@@ -43,7 +43,7 @@ Feature: 지하철 경로 조회 기능
     And 총 거리는 50km이며 총 소요 시간은 5분이다
     And 이용 요금은 2050원이다
 
-  Rule: 사용자의 연령별 요금이 할인
+  Rule: 사용자의 연령별 요금 할인
 
     Scenario: 청소년 운임은 350원을 공제한 금액의 20% 할인
       Given "youth@example.com"과 "secret"으로 로그인을 하고

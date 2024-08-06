@@ -65,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 경로 조회")
   @Test
   void shouldReturnShortestDistancePath() {
-    var response = 경로_조회_요청(교대역, 양재역);
+    var response = 경로_조회_요청(교대역, 양재역, accessToken);
     경로_역_목록_조회됨(response, "교대역", "남부터미널역", "양재역");
     경로_거리_조회됨(response, 5);
   }

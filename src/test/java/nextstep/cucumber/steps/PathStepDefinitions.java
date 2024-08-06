@@ -29,10 +29,13 @@ public class PathStepDefinitions {
   private void doPathSearch(String source, String target, PathType duration) {
     Long sourceId = ((StationResponse) context.store.get(source)).getId();
     Long targetId = ((StationResponse) context.store.get(target)).getId();
+    String accessToken = (String) context.store.get("accessToken");
     context.response =
         RestAssured.given()
             .log()
             .all()
+            .auth()
+            .oauth2(accessToken)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParams(
                 "source", sourceId,

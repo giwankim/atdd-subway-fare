@@ -15,11 +15,14 @@ import org.springframework.http.MediaType;
 public class PathAcceptanceSteps {
   private PathAcceptanceSteps() {}
 
-  public static ExtractableResponse<Response> 경로_조회_요청(Station source, Station target) {
+  public static ExtractableResponse<Response> 경로_조회_요청(
+      Station source, Station target, String accessToken) {
     PathRequest request = PathRequest.of(source.getId(), target.getId(), PathType.DISTANCE);
     return RestAssured.given()
         .log()
         .all()
+        .auth()
+        .oauth2(accessToken)
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .queryParams(
             "source", request.getSource(),

@@ -1,7 +1,6 @@
 package nextstep.subway.unit.path.ui;
 
-import static nextstep.Fixtures.교대역;
-import static nextstep.Fixtures.양재역;
+import static nextstep.Fixtures.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -12,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
+import nextstep.member.application.MemberService;
+import nextstep.member.domain.Member;
 import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
@@ -24,16 +25,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = PathController.class)
+@Import({JwtTokenProvider.class})
 @DisplayName("경로 조회 컨트롤러 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
+  @Autowired private JwtTokenProvider jwtTokenProvider;
   @MockBean private PathService pathService;
-  @MockBean private JwtTokenProvider jwtTokenProvider;
   @MockBean private FareCalculator fareCalculator;
+  @MockBean private MemberService memberService;
 
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
@@ -44,9 +49,13 @@ class PathControllerTest {
     given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
     given(fareCalculator.calculateFare(any(Path.class))).willReturn(1250L);
 
+    Member member = aMember().build();
+    String accessToken = jwtTokenProvider.createToken(member.getEmail());
+
     mockMvc
         .perform(
             get("/paths")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .param("source", String.valueOf(교대역.getId()))
                 .param("target", String.valueOf(양재역.getId()))
                 .param("type", PathType.DISTANCE.name()))

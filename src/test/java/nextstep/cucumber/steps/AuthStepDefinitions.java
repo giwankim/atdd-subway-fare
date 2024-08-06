@@ -29,6 +29,6 @@ public class AuthStepDefinitions {
             .statusCode(HttpStatus.OK.value())
             .extract();
     String accessToken = response.jsonPath().getString("accessToken");
-    context.store.put(email, accessToken);
+    context.store.put("accessToken", accessToken);
   }
 }
