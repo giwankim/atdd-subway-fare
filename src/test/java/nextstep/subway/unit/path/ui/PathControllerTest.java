@@ -43,14 +43,15 @@ class PathControllerTest {
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
   void findPath() throws Exception {
+    Member member = aMember().build();
+    String accessToken = jwtTokenProvider.createToken(member.getEmail());
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
     PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
     given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
-    given(fareCalculator.calculateFare(any(Path.class))).willReturn(1250L);
-
-    Member member = aMember().build();
-    String accessToken = jwtTokenProvider.createToken(member.getEmail());
+    given(fareCalculator.calculateFare(any(Path.class), any(Member.class))).willReturn(1250L);
 
     mockMvc
         .perform(

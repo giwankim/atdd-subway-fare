@@ -1,5 +1,6 @@
 package nextstep.subway.path.application;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.path.domain.DistanceOverFarePolicy;
 import nextstep.subway.path.domain.OverFarePolicy;
 import nextstep.subway.path.domain.OverlappedOverFarePolicy;
@@ -16,7 +17,7 @@ public class FareCalculator {
           new DistanceOverFarePolicy(10L, 50L, OVERCHARGE, 5L),
           new DistanceOverFarePolicy(50L, Long.MAX_VALUE, OVERCHARGE, 8L));
 
-  public long calculateFare(Path path) {
+  public long calculateFare(Path path, Member member) {
     return BASE_FARE + overFarePolicy.calculateOverFare(path);
   }
 }
