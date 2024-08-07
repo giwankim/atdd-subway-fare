@@ -1,4 +1,4 @@
-package nextstep.subway.unit.path.application;
+package nextstep.subway.unit.path.application.dto;
 
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
