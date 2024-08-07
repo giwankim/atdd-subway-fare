@@ -1,24 +1,28 @@
 package nextstep.subway.surcharge.application;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.domain.Line;
 import nextstep.subway.surcharge.application.dto.SurchargeRequest;
 import nextstep.subway.surcharge.application.dto.SurchargeResponse;
 import nextstep.subway.surcharge.domain.Surcharge;
 import nextstep.subway.surcharge.domain.SurchargeRepository;
+import nextstep.subway.surcharge.exception.SurchargeNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SurchargeService {
   private final SurchargeRepository surchargeRepository;
-  private final LineService lineService;
+  private final SurchargeMapper surchargeMapper;
 
   public SurchargeResponse save(SurchargeRequest request) {
-    Line line = lineService.findLineById(request.getLineId());
-    Surcharge surcharge = new Surcharge(line.getId(), request.getSurcharge());
+    Surcharge surcharge = new Surcharge(request.getLineId(), request.getSurcharge());
     Surcharge savedSurcharge = surchargeRepository.save(surcharge);
-    return SurchargeResponse.of(savedSurcharge, line);
+    return surchargeMapper.mapToResponse(savedSurcharge);
+  }
+
+  public SurchargeResponse findById(Long id) {
+    Surcharge surcharge =
+        surchargeRepository.findById(id).orElseThrow(() -> new SurchargeNotFoundException(id));
+    return surchargeMapper.mapToResponse(surcharge);
   }
 }
