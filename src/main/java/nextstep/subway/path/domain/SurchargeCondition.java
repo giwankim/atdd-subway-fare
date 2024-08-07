@@ -1,5 +1,5 @@
 package nextstep.subway.path.domain;
 
 public interface SurchargeCondition {
-  boolean isSatisfiedBy(Path2 path);
+  boolean isSatisfiedBy(Path path);
 }

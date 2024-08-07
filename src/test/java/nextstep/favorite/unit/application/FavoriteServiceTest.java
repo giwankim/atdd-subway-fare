@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import nextstep.auth.domain.LoginMember;
 import nextstep.auth.exception.AuthorizationException;
@@ -17,6 +18,7 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.favorite.exception.FavoritePathNotFoundException;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.domain.Path;
@@ -44,10 +46,12 @@ class FavoriteServiceTest {
   @DisplayName("즐겨찾기를 저장한다.")
   @Test
   void createFavorite() {
+    List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
+    List<Line> lines = Arrays.asList(이호선(), 신분당선());
     FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
     given(pathService.findPath(any(PathRequest.class)))
-        .willReturn(Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), 10, 10));
+        .willReturn(Path.of(stations, lines, 10, 10));
 
     favoriteService.createFavorite(request, loginMember);
 

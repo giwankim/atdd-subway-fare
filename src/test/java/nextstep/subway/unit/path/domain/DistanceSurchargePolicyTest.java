@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.domain.DistanceSurchargePolicy;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SurchargePolicy;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ class DistanceSurchargePolicyTest {
     List<Station> stations = Arrays.asList(교대역(), 강남역());
     List<Line> lines = List.of(이호선());
     SurchargePolicy policy = new DistanceSurchargePolicy(10, 50, 100, 5);
-    assertThat(policy.calculateSurcharge(Path2.of(stations, lines, distance, 10)))
+    assertThat(policy.calculateSurcharge(Path.of(stations, lines, distance, 10)))
         .isEqualTo(expectedFare);
   }
 

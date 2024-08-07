@@ -8,7 +8,7 @@ public class DistanceCondition implements SurchargeCondition {
   }
 
   @Override
-  public boolean isSatisfiedBy(Path2 path) {
+  public boolean isSatisfiedBy(Path path) {
     return path.getTotalDistance() >= lowerBound;
   }
 }

@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
@@ -15,7 +16,7 @@ public class SubwayGraph {
   private final WeightedMultigraph<Station, LineSectionEdge> graph;
   private final PathType type;
 
-  public SubwayGraph(WeightedMultigraph<Station, LineSectionEdge> graph, PathType type) {
+  private SubwayGraph(WeightedMultigraph<Station, LineSectionEdge> graph, PathType type) {
     this.graph = graph;
     this.type = type;
   }
@@ -24,29 +25,19 @@ public class SubwayGraph {
     this(new WeightedMultigraph<>(LineSectionEdge.class), type);
   }
 
-  public void addStation(Station station) {
+  public void addLine(Line line) {
+    line.getStations().forEach(this::addStation);
+    line.getLineSections().getSections().forEach(section -> addLineSection(section, line));
+  }
+
+  private void addStation(Station station) {
     graph.addVertex(station);
   }
 
-  public void addLineSection(LineSection lineSection) {
-    Station upStation = lineSection.getUpStation();
-    Station downStation = lineSection.getDownStation();
-    validate(upStation, downStation);
-
-    LineSectionEdge edge = LineSectionEdge.of(lineSection);
-    graph.addEdge(upStation, downStation, edge);
+  private void addLineSection(LineSection lineSection, Line line) {
+    LineSectionEdge edge = LineSectionEdge.of(lineSection, line);
+    graph.addEdge(lineSection.getUpStation(), lineSection.getDownStation(), edge);
     graph.setEdgeWeight(edge, type.getEdgeWeight(lineSection));
-  }
-
-  private void validate(Station upStation, Station downStation) {
-    if (!graph.containsVertex(upStation) || !graph.containsVertex(downStation)) {
-      throw new IllegalArgumentException(STATION_NOT_FOUND);
-    }
-  }
-
-  public void addLine(Line line) {
-    line.getStations().forEach(this::addStation);
-    line.getLineSections().getSections().forEach(this::addLineSection);
   }
 
   public Path getShortestPath(Station source, Station target) {
@@ -62,11 +53,20 @@ public class SubwayGraph {
     List<LineSectionEdge> edges = path.getEdgeList();
     long totalDistance = edges.stream().mapToLong(e -> e.getLineSection().getDistance()).sum();
     long totalDuration = edges.stream().mapToLong(e -> e.getLineSection().getDuration()).sum();
+    List<Line> lines = edges.stream().map(LineSectionEdge::getLine).collect(Collectors.toList());
+    return Path.of(path.getVertexList(), lines, totalDistance, totalDuration);
+  }
 
-    return Path.of(path.getVertexList(), totalDistance, totalDuration);
+  private void validate(Station source, Station target) {
+    if (!graph.containsVertex(source) || !graph.containsVertex(target)) {
+      throw new IllegalArgumentException(STATION_NOT_FOUND);
+    }
   }
 
   public boolean isSame(SubwayGraph that) {
+    if (type != that.type) {
+      return false;
+    }
     if (!graph.vertexSet().equals(that.graph.vertexSet())) {
       return false;
     }

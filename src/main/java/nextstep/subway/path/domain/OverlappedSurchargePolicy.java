@@ -12,7 +12,7 @@ public class OverlappedSurchargePolicy extends SurchargePolicy {
   }
 
   @Override
-  protected long getSurchargeAmount(Path2 path) {
+  protected long getSurchargeAmount(Path path) {
     long overFareAmount = 0L;
 
     for (SurchargePolicy policy : policies) {

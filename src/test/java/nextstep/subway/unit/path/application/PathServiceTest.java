@@ -3,18 +3,25 @@ package nextstep.subway.unit.path.application;
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import java.util.List;
+import java.util.stream.Stream;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.line.domain.LineSections;
 import nextstep.subway.path.application.GraphService;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.domain.*;
 import nextstep.subway.station.application.StationReader;
 import nextstep.subway.station.domain.Station;
-import org.jgrapht.graph.WeightedMultigraph;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,70 +34,50 @@ class PathServiceTest {
   @Mock StationReader stationReader;
   @InjectMocks PathService pathService;
 
-  private final Station 교대역 = 교대역();
-  private final Station 강남역 = 강남역();
-  private final Station 남부터미널역 = 남부터미널역();
-  private final Station 양재역 = 양재역();
-  private final LineSection 교대_강남_구간 = 교대_강남_구간();
-  private final LineSection 강남_양재_구간 = 강남_양재_구간();
-  private final LineSection 교대_남부터미널_구간 = 교대_남부터미널_구간();
-  private final LineSection 남부터미널_양재_구간 = 남부터미널_양재_구간();
+  @DisplayName("최적 경로를 조회한다.")
+  @ParameterizedTest
+  @MethodSource
+  void findPathDistance(
+      PathType type, List<Station> expectedStations, int expectedDistance, int expectedDuration) {
+    Station 교대역 = 교대역();
+    Station 강남역 = 강남역();
+    Station 남부터미널역 = 남부터미널역();
+    Station 양재역 = 양재역();
+    Line 이호선 =
+        aLine().name("2호선").lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build();
+    Line 삼호선 =
+        aLine()
+            .name("3호선")
+            .lineSections(
+                new LineSections(
+                    LineSection.of(교대역, 남부터미널역, 2, 10), LineSection.of(남부터미널역, 양재역, 3, 10)))
+            .build();
+    Line 신분당선 =
+        aLine()
+            .name("신분당선")
+            .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
+            .build();
+    SubwayGraph graph = new SubwayGraph(type);
+    graph.addLine(이호선);
+    graph.addLine(삼호선);
+    graph.addLine(신분당선);
 
-  @DisplayName("최단 거리 경로를 조회한다.")
-  @Test
-  void findPathDistance() {
-    PathType type = PathType.DISTANCE;
-    given(graphService.loadGraph(type))
-        .willReturn(
-            new SubwayGraph(
-                WeightedMultigraph.<Station, LineSectionEdge>builder(LineSectionEdge.class)
-                    .addVertices(교대역, 강남역, 남부터미널역, 양재역)
-                    .addEdge(교대역, 강남역, LineSectionEdge.of(교대_강남_구간), 교대_강남_구간.getDistance())
-                    .addEdge(강남역, 양재역, LineSectionEdge.of(강남_양재_구간), 강남_양재_구간.getDistance())
-                    .addEdge(
-                        교대역, 남부터미널역, LineSectionEdge.of(교대_남부터미널_구간), 교대_남부터미널_구간.getDistance())
-                    .addEdge(
-                        남부터미널역, 양재역, LineSectionEdge.of(남부터미널_양재_구간), 남부터미널_양재_구간.getDistance())
-                    .build(),
-                type));
+    given(graphService.loadGraph(type)).willReturn(graph);
     given(stationReader.readById(교대역.getId())).willReturn(교대역);
     given(stationReader.readById(양재역.getId())).willReturn(양재역);
 
-    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), type);
-    Path path = pathService.findPath(request);
+    Path path = pathService.findPath(PathRequest.of(교대역.getId(), 양재역.getId(), type));
 
-    assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
-    assertThat(path.getTotalDistance())
-        .isEqualTo(교대_남부터미널_구간.getDistance() + 남부터미널_양재_구간.getDistance());
-    assertThat(path.getTotalDuration())
-        .isEqualTo(교대_남부터미널_구간.getDuration() + 남부터미널_양재_구간.getDuration());
+    verify(graphService, times(1)).loadGraph(type);
+
+    assertThat(path.getStations()).containsExactlyElementsOf(expectedStations);
+    assertThat(path.getTotalDistance()).isEqualTo(expectedDistance);
+    assertThat(path.getTotalDuration()).isEqualTo(expectedDuration);
   }
 
-  @DisplayName("최단 소요시간 경로를 조회한다.")
-  @Test
-  void findPathDuration() {
-    PathType type = PathType.DURATION;
-    given(graphService.loadGraph(type))
-        .willReturn(
-            new SubwayGraph(
-                WeightedMultigraph.<Station, LineSectionEdge>builder(LineSectionEdge.class)
-                    .addVertices(교대역, 강남역, 남부터미널역, 양재역)
-                    .addEdge(교대역, 강남역, LineSectionEdge.of(교대_강남_구간), 교대_강남_구간.getDuration())
-                    .addEdge(강남역, 양재역, LineSectionEdge.of(강남_양재_구간), 강남_양재_구간.getDuration())
-                    .addEdge(
-                        교대역, 남부터미널역, LineSectionEdge.of(교대_남부터미널_구간), 교대_남부터미널_구간.getDuration())
-                    .addEdge(
-                        남부터미널역, 양재역, LineSectionEdge.of(남부터미널_양재_구간), 남부터미널_양재_구간.getDuration())
-                    .build(),
-                type));
-    given(stationReader.readById(교대역.getId())).willReturn(교대역);
-    given(stationReader.readById(양재역.getId())).willReturn(양재역);
-
-    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), type);
-    Path path = pathService.findPath(request);
-
-    assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
-    assertThat(path.getTotalDistance()).isEqualTo(교대_강남_구간.getDistance() + 강남_양재_구간.getDistance());
-    assertThat(path.getTotalDuration()).isEqualTo(교대_강남_구간.getDuration() + 강남_양재_구간.getDuration());
+  private static Stream<Arguments> findPathDistance() {
+    return Stream.of(
+        Arguments.of(PathType.DISTANCE, List.of(교대역(), 남부터미널역(), 양재역()), 5, 20),
+        Arguments.of(PathType.DURATION, List.of(교대역(), 강남역(), 양재역()), 20, 5));
   }
 }

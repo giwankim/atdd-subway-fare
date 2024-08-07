@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import nextstep.member.domain.Member;
 import nextstep.subway.path.application.FareCalculator;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -24,7 +24,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFare(int distance, int expectedFare) {
     Member adult = aMember().build();
-    Path2 path = Path2.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
 
     long fare = fareCalculator.calculateFare(path, adult);
 
@@ -54,7 +54,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareYouth(int distance, int expectedFare) {
     Member youth = aMember().age(13).build();
-    Path2 path = Path2.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
 
     long fare = fareCalculator.calculateFare(path, youth);
 
@@ -84,7 +84,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareChild(int distance, int expectedFare) {
     Member child = aMember().age(6).build();
-    Path2 path = Path2.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 신분당선()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 신분당선()), distance, 10);
 
     long fare = fareCalculator.calculateFare(path, child);
 
