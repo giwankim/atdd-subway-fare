@@ -19,7 +19,7 @@ public class FareCalculator {
           new PercentDiscountPolicy(0.2, DEDUCTION_AMOUNT, new AgeCondition(13, 19)),
           new PercentDiscountPolicy(0.5, DEDUCTION_AMOUNT, new AgeCondition(6, 13)));
 
-  public long calculateFare(Path path, Member member) {
+  public long calculateFare(Path2 path, Member member) {
     long fare = BASE_FARE + surchargePolicy.calculateSurcharge(path);
     return fare - discountPolicy.calculateDiscount(fare, member);
   }

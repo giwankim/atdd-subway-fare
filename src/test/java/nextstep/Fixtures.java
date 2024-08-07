@@ -62,6 +62,15 @@ public class Fixtures {
         .build();
   }
 
+  public static Line 삼호선() {
+    return Line.builder()
+        .id(3L)
+        .name("삼호선")
+        .color("bg-orange-600")
+        .lineSections(new LineSections(교대_남부터미널_구간(), 남부터미널_양재_구간()))
+        .build();
+  }
+
   public static LineSection 강남_역삼_구간() {
     return LineSection.builder()
         .upStation(강남역())
@@ -94,7 +103,7 @@ public class Fixtures {
         .upStation(교대역())
         .downStation(강남역())
         .distance(10)
-        .duration(1)
+        .duration(2)
         .build();
   }
 
@@ -103,7 +112,7 @@ public class Fixtures {
         .upStation(강남역())
         .downStation(양재역())
         .distance(10)
-        .duration(1)
+        .duration(3)
         .build();
   }
 
@@ -112,7 +121,7 @@ public class Fixtures {
         .upStation(교대역())
         .downStation(남부터미널역())
         .distance(2)
-        .duration(2)
+        .duration(10)
         .build();
   }
 
@@ -121,7 +130,7 @@ public class Fixtures {
         .upStation(남부터미널역())
         .downStation(양재역())
         .distance(3)
-        .duration(3)
+        .duration(10)
         .build();
   }
 

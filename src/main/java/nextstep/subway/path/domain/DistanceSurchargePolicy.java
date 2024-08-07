@@ -16,7 +16,7 @@ public class DistanceSurchargePolicy extends SurchargePolicy {
   }
 
   @Override
-  protected long getSurchargeAmount(Path path) {
+  protected long getSurchargeAmount(Path2 path) {
     long distance = Math.min(path.getTotalDistance(), upperBound);
     return (long) Math.ceil((double) (distance - lowerBound) / distanceUnit) * farePerUnitDistance;
   }

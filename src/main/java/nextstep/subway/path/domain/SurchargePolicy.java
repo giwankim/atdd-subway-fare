@@ -9,7 +9,7 @@ public abstract class SurchargePolicy {
     this.conditions = List.of(conditions);
   }
 
-  public long calculateSurcharge(Path path) {
+  public long calculateSurcharge(Path2 path) {
     return conditions.stream()
         .filter(condition -> condition.isSatisfiedBy(path))
         .findFirst()
@@ -17,5 +17,5 @@ public abstract class SurchargePolicy {
         .orElse(0L);
   }
 
-  protected abstract long getSurchargeAmount(Path path);
+  protected abstract long getSurchargeAmount(Path2 path);
 }

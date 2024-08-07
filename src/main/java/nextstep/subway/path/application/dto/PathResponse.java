@@ -2,7 +2,7 @@ package nextstep.subway.path.application.dto;
 
 import java.util.List;
 import lombok.Getter;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.application.dto.StationResponse;
 
 @Getter
@@ -19,7 +19,7 @@ public class PathResponse {
     this.fare = fare;
   }
 
-  public static PathResponse of(Path path, long fare) {
+  public static PathResponse of(Path2 path, long fare) {
     return new PathResponse(
         StationResponse.listOf(path.getStations()),
         path.getTotalDistance(),

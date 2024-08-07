@@ -14,9 +14,9 @@ import nextstep.auth.application.JwtTokenProvider;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.path.application.FareCalculator;
-import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.Path2;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;
-  @MockBean private PathService pathService;
+  @MockBean private PathService2 pathService;
   @MockBean private FareCalculator fareCalculator;
   @MockBean private MemberService memberService;
 
@@ -50,8 +50,9 @@ class PathControllerTest {
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
     PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
-    given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
-    given(fareCalculator.calculateFare(any(Path.class), any(Member.class))).willReturn(1250L);
+    given(pathService.findPath(request))
+        .willReturn(Path2.of(List.of(교대역, 양재역), List.of(이호선(), 신분당선()), 5, 10));
+    given(fareCalculator.calculateFare(any(Path2.class), any(Member.class))).willReturn(1250L);
 
     mockMvc
         .perform(
