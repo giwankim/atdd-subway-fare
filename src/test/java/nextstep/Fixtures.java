@@ -41,7 +41,7 @@ public class Fixtures {
   }
 
   public static LineBuilder aLine() {
-    return Line.builder().id(1L).name("2호선").color("bg-green-600");
+    return Line.builder().id(1L).name("2호선").color("bg-green-600").lineSections(new LineSections());
   }
 
   public static Line 이호선() {

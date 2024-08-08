@@ -17,9 +17,9 @@ public class LineSurchargePolicy extends SurchargePolicy {
   protected long getSurchargeAmount(Path path) {
     List<Line> lines = path.getLines();
     return lines.stream()
-        .mapToLong(line -> lineIdToSurcharge.get(line.getId()))
+        .map(line -> lineIdToSurcharge.get(line.getId()))
         .filter(Objects::nonNull)
-        .max()
+        .max(Long::compareTo)
         .orElse(0L);
   }
 }
