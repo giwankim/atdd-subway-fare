@@ -13,7 +13,7 @@ import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.path.application.FareCalculator;
+import nextstep.subway.fare.application.FareCalculator;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.domain.Path;

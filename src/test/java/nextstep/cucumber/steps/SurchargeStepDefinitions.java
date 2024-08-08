@@ -5,8 +5,8 @@ import io.restassured.RestAssured;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.support.AcceptanceContext;
+import nextstep.subway.fare.application.dto.SurchargeRequest;
 import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.surcharge.application.dto.SurchargeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 

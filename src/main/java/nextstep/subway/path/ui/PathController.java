@@ -5,7 +5,7 @@ import nextstep.auth.domain.LoginMember;
 import nextstep.auth.ui.AuthenticationPrincipal;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.path.application.FareCalculator;
+import nextstep.subway.fare.application.FareCalculator;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
