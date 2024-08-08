@@ -15,7 +15,6 @@ import nextstep.subway.surcharge.application.SurchargeService;
 import nextstep.subway.surcharge.application.dto.SurchargeRequest;
 import nextstep.subway.surcharge.domain.Surcharge;
 import nextstep.subway.surcharge.domain.SurchargeRepository;
-import nextstep.subway.surcharge.exception.SurchargeByLineIdNotFoundException;
 import nextstep.subway.surcharge.exception.SurchargeNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,22 +69,11 @@ class SurchargeServiceTest {
         .isThrownBy(() -> surchargeService.findById(99L));
   }
 
-  @DisplayName("노선 ID 로 요금 정보를 조회한다.")
+  @DisplayName("모든 요금 정보를 조회한다.")
   @Test
-  void findByLineId() {
-    long lineId = 1L;
-    given(surchargeRepository.findByLineId(lineId)).willReturn(Optional.of(new Surcharge(2L, lineId, 900L)));
+  void findAll() {
+    surchargeService.findAll();
 
-    surchargeService.findByLineId(lineId);
-
-    then(surchargeRepository).should(times(1)).findByLineId(lineId);
-  }
-
-  @Test
-  void findByLineIdNotFound() {
-    long lineId = 99L;
-    given(surchargeRepository.findByLineId(lineId)).willReturn(Optional.empty());
-    assertThatExceptionOfType(SurchargeByLineIdNotFoundException.class)
-        .isThrownBy(() -> surchargeService.findByLineId(lineId));
+    then(surchargeRepository).should(times(1)).findAll();
   }
 }
