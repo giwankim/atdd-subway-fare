@@ -21,6 +21,7 @@ import nextstep.member.domain.Member;
 import nextstep.subway.line.domain.Line2;
 import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse2;
 import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -50,8 +51,8 @@ class FavoriteServiceTest {
     List<Line2> lines = Arrays.asList(이호선2(), 신분당선2());
     FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
-    given(pathService.findPath(any(PathRequest.class)))
-        .willReturn(Path2.of(stations, lines, 10, 10));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse2.of(Path2.of(stations, lines, 10, 10), 0L));
 
     favoriteService.createFavorite(request, loginMember);
 
@@ -62,7 +63,8 @@ class FavoriteServiceTest {
   @Test
   void createFavoriteWhenPathNotFound() {
     FavoriteRequest request = FavoriteRequest.of(1L, 99L);
-    given(pathService.findPath(any(PathRequest.class))).willReturn(Path2.empty());
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse2.of(Path2.empty(), 0L));
 
     assertThatExceptionOfType(FavoritePathNotFoundException.class)
         .isThrownBy(() -> favoriteService.createFavorite(request, loginMember));

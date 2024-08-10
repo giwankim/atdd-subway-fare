@@ -2,20 +2,27 @@ package nextstep.subway.unit.path.application;
 
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.stream.Stream;
+import nextstep.auth.domain.LoginMember;
+import nextstep.member.application.MemberService;
+import nextstep.member.domain.Member;
+import nextstep.subway.fare.application.FareCalculator2;
 import nextstep.subway.line.domain.Line2;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.line.domain.LineSections;
 import nextstep.subway.path.application.GraphService2;
 import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse2;
 import nextstep.subway.path.domain.*;
 import nextstep.subway.station.application.StationReader;
+import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,15 +37,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 조회 서비스 단위 테스트")
 class PathServiceTest2 {
-  @Mock GraphService2 graphService;
-  @Mock StationReader stationReader;
-  @InjectMocks PathService2 pathService;
+  @Mock private GraphService2 graphService;
+  @Mock private StationReader stationReader;
+  @Mock private MemberService memberService;
+  @Mock private FareCalculator2 fareCalculator2;
+  @InjectMocks private PathService2 pathService;
 
   @DisplayName("최적 경로를 조회한다.")
   @ParameterizedTest
   @MethodSource
   void findPathDistance(
-      PathType type, List<Station> expectedStations, int expectedDistance, int expectedDuration) {
+      PathType type,
+      List<StationResponse> expectedStations,
+      int expectedDistance,
+      int expectedDuration) {
+    Member member = aMember().build();
+    LoginMember loginMember = new LoginMember(member.getEmail());
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+
     Station 교대역 = 교대역();
     Station 강남역 = 강남역();
     Station 남부터미널역 = 남부터미널역();
@@ -65,22 +81,42 @@ class PathServiceTest2 {
     graph.addLine(삼호선);
     graph.addLine(신분당선);
 
-    given(graphService.loadGraph(type)).willReturn(graph);
     given(stationReader.readById(교대역.getId())).willReturn(교대역);
     given(stationReader.readById(양재역.getId())).willReturn(양재역);
+    given(graphService.loadGraph(type)).willReturn(graph);
 
-    Path2 path = pathService.findPath(PathRequest.of(교대역.getId(), 양재역.getId(), type));
+    long fare = 1250L;
+    given(fareCalculator2.calculateFare(any(Path2.class), any(Member.class))).willReturn(fare);
+
+    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), type);
+    PathResponse2 path = pathService.findPath(request, loginMember);
 
     verify(graphService, times(1)).loadGraph(type);
+    verify(fareCalculator2, times(1)).calculateFare(any(Path2.class), any(Member.class));
 
     assertThat(path.getStations()).containsExactlyElementsOf(expectedStations);
-    assertThat(path.getTotalDistance()).isEqualTo(expectedDistance);
-    assertThat(path.getTotalDuration()).isEqualTo(expectedDuration);
+    assertThat(path.getDistance()).isEqualTo(expectedDistance);
+    assertThat(path.getDuration()).isEqualTo(expectedDuration);
+    assertThat(path.getFare()).isEqualTo(fare);
   }
 
   private static Stream<Arguments> findPathDistance() {
     return Stream.of(
-        Arguments.of(PathType.DISTANCE, List.of(교대역(), 남부터미널역(), 양재역()), 5, 20),
-        Arguments.of(PathType.DURATION, List.of(교대역(), 강남역(), 양재역()), 20, 5));
+        Arguments.of(
+            PathType.DISTANCE,
+            List.of(
+                StationResponse.from(교대역()),
+                StationResponse.from(남부터미널역()),
+                StationResponse.from(양재역())),
+            5,
+            20),
+        Arguments.of(
+            PathType.DURATION,
+            List.of(
+                StationResponse.from(교대역()),
+                StationResponse.from(강남역()),
+                StationResponse.from(양재역())),
+            20,
+            5));
   }
 }

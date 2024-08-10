@@ -14,7 +14,7 @@ import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.application.dto.PathResponse2;
 import nextstep.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class FavoriteService {
    * @throws nextstep.subway.station.exception.StationNotFoundException 역을 찾을 수 없는 경우
    */
   public FavoriteResponse createFavorite(FavoriteRequest request, LoginMember loginMember) {
-    if (!isValidPath(request)) {
+    if (!isValidPath(request, loginMember)) {
       throw new FavoritePathNotFoundException();
     }
 
@@ -46,10 +46,11 @@ public class FavoriteService {
     return favoriteMapper.mapToFavoriteResponse(savedFavorite);
   }
 
-  private boolean isValidPath(FavoriteRequest request) {
-    Path2 path =
+  private boolean isValidPath(FavoriteRequest request, LoginMember loginMember) {
+    PathResponse2 path =
         pathService.findPath(
-            PathRequest.of(request.getSource(), request.getTarget(), PathType.DISTANCE));
+            PathRequest.of(request.getSource(), request.getTarget(), PathType.DISTANCE),
+            loginMember);
     return !path.getStations().isEmpty();
   }
 

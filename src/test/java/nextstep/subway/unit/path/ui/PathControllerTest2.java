@@ -11,11 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
-import nextstep.member.application.MemberService;
+import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
-import nextstep.subway.fare.application.FareCalculator2;
 import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse2;
 import nextstep.subway.path.domain.Path2;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController2;
@@ -37,22 +37,18 @@ class PathControllerTest2 {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;
   @MockBean private PathService2 pathService;
-  @MockBean private FareCalculator2 fareCalculator;
-  @MockBean private MemberService memberService;
 
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
   void findPath() throws Exception {
     Member member = aMember().build();
     String accessToken = jwtTokenProvider.createToken(member.getEmail());
-    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
 
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
-    given(pathService.findPath(request))
-        .willReturn(Path2.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10));
-    given(fareCalculator.calculateFare(any(Path2.class), any(Member.class))).willReturn(1250L);
+    Path2 path = Path2.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse2.of(path, 1250L));
 
     mockMvc
         .perform(
