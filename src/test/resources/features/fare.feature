@@ -15,11 +15,11 @@ Feature: 요급 정책 기능
       | 강남역    |
       | 남부터미널역 |
       | 양재역    |
-    And 노선들을 생성하고
-      | name | color  | upStation | downStation | distance | duration |
-      | 2호선  | green  | 교대역       | 강남역         | 20       | 2        |
-      | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        |
-      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       |
+    And 노선들을 생성하고2
+      | name | color  | upStation | downStation | distance | duration | surcharge |
+      | 2호선  | green  | 교대역       | 강남역         | 20       | 2        | 0         |
+      | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        | 900       |
+      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       | 0         |
     And 구간들을 등록하고
       | line | upStation | downStation | distance | duration |
       | 3호선  | 남부터미널역    | 양재역         | 3        | 10       |
