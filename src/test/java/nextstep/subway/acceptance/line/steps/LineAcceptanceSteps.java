@@ -7,10 +7,10 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineResponse;
+import nextstep.subway.line.application.dto.LineRequest2;
+import nextstep.subway.line.application.dto.LineResponse2;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
-import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Line2;
 import nextstep.subway.line.domain.LineSection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,13 @@ import org.springframework.http.MediaType;
 public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
 
-  public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
+  public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line2 line) {
     LineSection section = line.getLineSections().getFirst();
-    LineRequest request =
-        new LineRequest(
+    LineRequest2 request =
+        new LineRequest2(
             line.getName(),
             line.getColor(),
+            line.getSurcharge(),
             section.getUpStation().getId(),
             section.getDownStation().getId(),
             section.getDistance(),
@@ -36,7 +37,7 @@ public class LineAcceptanceSteps {
         .body(request)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
-        .post("/lines")
+        .post("/new/lines")
         .then()
         .log()
         .all()
@@ -49,14 +50,14 @@ public class LineAcceptanceSteps {
   }
 
   public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
-    return RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
+    return RestAssured.given().log().all().when().get("/new/lines").then().log().all().extract();
   }
 
   public static void 지하철_노선_목록에_포함됨(
       ExtractableResponse<Response> response, List<ExtractableResponse<Response>> createResponses) {
-    List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
-    List<LineResponse> expectedLines =
-        createResponses.stream().map(it -> it.as(LineResponse.class)).collect(Collectors.toList());
+    List<LineResponse2> actualLines = response.jsonPath().getList(".", LineResponse2.class);
+    List<LineResponse2> expectedLines =
+        createResponses.stream().map(it -> it.as(LineResponse2.class)).collect(Collectors.toList());
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
@@ -64,9 +65,9 @@ public class LineAcceptanceSteps {
     return RestAssured.given().log().all().when().get(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line line) {
+  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line2 line) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
+    assertThat(response.as(LineResponse2.class)).isEqualTo(LineResponse2.from(line));
   }
 
   public static ExtractableResponse<Response> 지하철_노선_수정_요청(String uri, String name, String color) {
@@ -84,7 +85,7 @@ public class LineAcceptanceSteps {
   }
 
   public static void 지하철_노선_수정됨(String uri, String newName, String newColor) {
-    LineResponse updatedLine = 지하철_노선_조회_요청(uri).as(LineResponse.class);
+    LineResponse2 updatedLine = 지하철_노선_조회_요청(uri).as(LineResponse2.class);
     assertThat(updatedLine.getName()).isEqualTo(newName);
     assertThat(updatedLine.getColor()).isEqualTo(newColor);
   }

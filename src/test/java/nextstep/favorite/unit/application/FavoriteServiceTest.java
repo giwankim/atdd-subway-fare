@@ -18,10 +18,10 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.favorite.exception.FavoritePathNotFoundException;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.application.PathService;
+import nextstep.subway.line.domain.Line2;
+import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class FavoriteServiceTest {
   @Mock private MemberService memberService;
   @Mock private FavoriteMapper favoriteMapper;
   @Mock private FavoriteRepository favoriteRepository;
-  @Mock private PathService pathService;
+  @Mock private PathService2 pathService;
   @InjectMocks private FavoriteService favoriteService;
 
   private final Member member = aMember().build();
@@ -47,11 +47,11 @@ class FavoriteServiceTest {
   @Test
   void createFavorite() {
     List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
-    List<Line> lines = Arrays.asList(이호선(), 신분당선());
+    List<Line2> lines = Arrays.asList(이호선2(), 신분당선2());
     FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
     given(pathService.findPath(any(PathRequest.class)))
-        .willReturn(Path.of(stations, lines, 10, 10));
+        .willReturn(Path2.of(stations, lines, 10, 10));
 
     favoriteService.createFavorite(request, loginMember);
 
@@ -62,7 +62,7 @@ class FavoriteServiceTest {
   @Test
   void createFavoriteWhenPathNotFound() {
     FavoriteRequest request = FavoriteRequest.of(1L, 99L);
-    given(pathService.findPath(any(PathRequest.class))).willReturn(Path.empty());
+    given(pathService.findPath(any(PathRequest.class))).willReturn(Path2.empty());
 
     assertThatExceptionOfType(FavoritePathNotFoundException.class)
         .isThrownBy(() -> favoriteService.createFavorite(request, loginMember));
