@@ -37,7 +37,7 @@ public class LineAcceptanceSteps {
         .body(request)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
-        .post("/new/lines")
+        .post("/lines")
         .then()
         .log()
         .all()
@@ -50,7 +50,7 @@ public class LineAcceptanceSteps {
   }
 
   public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
-    return RestAssured.given().log().all().when().get("/new/lines").then().log().all().extract();
+    return RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
   }
 
   public static void 지하철_노선_목록에_포함됨(

@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/new/lines")
+@RequestMapping("/lines")
 @RequiredArgsConstructor
-public class LineSectionController2 {
+public class LineSectionController {
   private final LineSectionService lineSectionService;
 
   @PostMapping("/{lineId}/sections")

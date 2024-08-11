@@ -43,8 +43,7 @@ public class SubwayGraph {
   public Path getShortestPath(Station source, Station target) {
     validate(source, target);
 
-    DijkstraShortestPath<Station, LineSectionEdge> shortestPath =
-        new DijkstraShortestPath<>(graph);
+    DijkstraShortestPath<Station, LineSectionEdge> shortestPath = new DijkstraShortestPath<>(graph);
 
     GraphPath<Station, LineSectionEdge> path = shortestPath.getPath(source, target);
     if (path == null) {

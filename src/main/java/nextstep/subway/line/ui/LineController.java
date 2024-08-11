@@ -10,15 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/new/lines")
+@RequestMapping("/lines")
 @RequiredArgsConstructor
-public class LineController2 {
+public class LineController {
   private final LineService lineService;
 
   @PostMapping
   public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
     Line line = lineService.saveLine(request);
-    return ResponseEntity.created(URI.create("/new/lines/" + line.getId()))
+    return ResponseEntity.created(URI.create("/lines/" + line.getId()))
         .body(LineResponse.from(line));
   }
 

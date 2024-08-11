@@ -18,7 +18,7 @@ import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
-import nextstep.subway.path.ui.PathController2;
+import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,9 +31,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("경로 조회 컨트롤러 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
-@WebMvcTest(controllers = PathController2.class)
+@WebMvcTest(controllers = PathController.class)
 @Import({JwtTokenProvider.class})
-class PathControllerTest2 {
+class PathControllerTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;
   @MockBean private PathService pathService;
@@ -52,7 +52,7 @@ class PathControllerTest2 {
 
     mockMvc
         .perform(
-            get("/new/paths")
+            get("/paths")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .param("source", String.valueOf(교대역.getId()))
                 .param("target", String.valueOf(양재역.getId()))

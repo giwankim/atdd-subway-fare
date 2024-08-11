@@ -29,7 +29,7 @@ public class PathAcceptanceSteps {
             "target", request.getTarget(),
             "type", request.getType().name())
         .when()
-        .get("/new/paths")
+        .get("/paths")
         .then()
         .log()
         .all()

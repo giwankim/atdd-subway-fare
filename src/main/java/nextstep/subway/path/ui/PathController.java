@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class PathController2 {
+public class PathController {
   private final PathService pathService;
 
-  @GetMapping("/new/paths")
+  @GetMapping("/paths")
   public ResponseEntity<PathResponse> findPath(
       @ModelAttribute PathRequest request, @AuthenticationPrincipal LoginMember loginMember) {
     PathResponse response = pathService.findPath(request, loginMember);
