@@ -21,13 +21,13 @@ class LineSectionAcceptanceTest {
   private Station 역삼역;
   private Station 선릉역;
   private Station 판교역;
-  private Line2 이호선;
+  private Line 이호선;
 
   @Nested
   @DisplayName("지하철 구간 추가 인수테스트")
   class AddLineSectionAcceptanceTest extends AcceptanceTest {
     @Autowired private StationRepository stationRepository;
-    @Autowired private LineRepository2 lineRepository;
+    @Autowired private LineRepository lineRepository;
 
     /** Given 지하철역들을 생성 하고 */
     @Override
@@ -113,7 +113,7 @@ class LineSectionAcceptanceTest {
   @DisplayName("지하철 구간 제거 인수테스트")
   class RemoveLineSectionAcceptanceTest extends AcceptanceTest {
     @Autowired StationRepository stationRepository;
-    @Autowired LineRepository2 lineRepository;
+    @Autowired LineRepository lineRepository;
 
     /** Given 지하철역과 노선 그리고 하나 이상의 구간이 등록되어 있고 */
     @Override

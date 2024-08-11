@@ -8,7 +8,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import nextstep.subway.line.application.dto.LineSectionRequest;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 public class LineSectionAcceptanceSteps {
   private LineSectionAcceptanceSteps() {}
 
-  public static ExtractableResponse<Response> 노선_구간_등록_요청(Line2 line, LineSection lineSection) {
+  public static ExtractableResponse<Response> 노선_구간_등록_요청(Line line, LineSection lineSection) {
     LineSectionRequest request =
         new LineSectionRequest(
             lineSection.getUpStation().getId(),
@@ -39,7 +39,7 @@ public class LineSectionAcceptanceSteps {
   }
 
   public static void 노선_첫_구간으로_등록됨(
-      ExtractableResponse<Response> response, Line2 line, LineSection lineSection) {
+      ExtractableResponse<Response> response, Line line, LineSection lineSection) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     var lineResponse = 지하철_노선_조회_요청("/new/lines/" + line.getId());
     List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);
@@ -47,7 +47,7 @@ public class LineSectionAcceptanceSteps {
   }
 
   public static void 노선_마지막_구간으로_등록됨(
-      ExtractableResponse<Response> response, Line2 line, LineSection lineSection) {
+      ExtractableResponse<Response> response, Line line, LineSection lineSection) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     var lineResponse = 지하철_노선_조회_요청("/new/lines/" + line.getId());
     List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);
@@ -56,7 +56,7 @@ public class LineSectionAcceptanceSteps {
   }
 
   public static void 노선_i변째_구간으로_등록됨(
-      ExtractableResponse<Response> response, Line2 line, LineSection lineSection, int i) {
+      ExtractableResponse<Response> response, Line line, LineSection lineSection, int i) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     var lineResponse = 지하철_노선_조회_요청("/new/lines/" + line.getId());
     List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);
@@ -67,7 +67,7 @@ public class LineSectionAcceptanceSteps {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
   }
 
-  public static ExtractableResponse<Response> 노선_구간_삭제_요청(Line2 line, Station station) {
+  public static ExtractableResponse<Response> 노선_구간_삭제_요청(Line line, Station station) {
     String uri = String.format("/new/lines/%d/sections", line.getId());
     return RestAssured.given()
         .log()
@@ -81,8 +81,7 @@ public class LineSectionAcceptanceSteps {
         .extract();
   }
 
-  public static void 노선_구간_삭제됨(
-      ExtractableResponse<Response> response, Line2 line, Station station) {
+  public static void 노선_구간_삭제됨(ExtractableResponse<Response> response, Line line, Station station) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     var lineResponse = 지하철_노선_조회_요청("/new/lines/" + line.getId());
     List<Long> stationIds = lineResponse.jsonPath().getList("stations.id", Long.class);

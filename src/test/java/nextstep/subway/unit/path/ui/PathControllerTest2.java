@@ -13,10 +13,10 @@ import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
-import nextstep.subway.path.application.PathService2;
+import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.application.dto.PathResponse2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController2;
 import nextstep.subway.station.domain.Station;
@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class PathControllerTest2 {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;
-  @MockBean private PathService2 pathService;
+  @MockBean private PathService pathService;
 
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
@@ -46,9 +46,9 @@ class PathControllerTest2 {
 
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    Path2 path = Path2.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
+    Path path = Path.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
     given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
-        .willReturn(PathResponse2.of(path, 1250L));
+        .willReturn(PathResponse.of(path, 1250L));
 
     mockMvc
         .perform(

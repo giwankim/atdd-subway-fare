@@ -12,7 +12,7 @@ import nextstep.subway.station.domain.Station;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Line2 {
+public class Line {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -28,7 +28,7 @@ public class Line2 {
   private int surcharge;
 
   @Builder
-  public Line2(Long id, String name, String color, int surcharge, LineSections lineSections) {
+  public Line(Long id, String name, String color, int surcharge, LineSections lineSections) {
     this.id = id;
     this.name = name;
     this.color = color;
@@ -36,11 +36,11 @@ public class Line2 {
     this.lineSections.addAll(lineSections);
   }
 
-  public Line2(String name, String color, int surcharge, LineSection... lineSections) {
+  public Line(String name, String color, int surcharge, LineSection... lineSections) {
     this(null, name, color, surcharge, new LineSections(Arrays.asList(lineSections)));
   }
 
-  public Line2(String name, String color, int surcharge) {
+  public Line(String name, String color, int surcharge) {
     this(null, name, color, surcharge, new LineSections());
   }
 

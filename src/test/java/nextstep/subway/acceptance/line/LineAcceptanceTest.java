@@ -5,7 +5,7 @@ import static nextstep.subway.acceptance.line.steps.LineAcceptanceSteps.*;
 
 import java.util.Arrays;
 import java.util.Collections;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.support.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 노선을 조회한다.")
   @Test
   void showLine() {
-    Line2 이호선 = 이호선2();
+    Line 이호선 = 이호선2();
     var 노선_생성_응답 = 지하철_노선_생성_요청(이호선);
     String uri = 노선_생성_응답.header(HttpHeaders.LOCATION);
 

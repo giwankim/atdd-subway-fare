@@ -19,7 +19,7 @@ import org.springframework.http.HttpHeaders;
 @DisplayName("즐겨찾기 관련 기능 인수 테스트")
 class FavoriteAcceptanceTest extends AcceptanceTest {
   @Autowired private StationRepository stationRepository;
-  @Autowired private LineRepository2 lineRepository;
+  @Autowired private LineRepository lineRepository;
 
   private Station 교대역;
   private Station 남부터미널역;

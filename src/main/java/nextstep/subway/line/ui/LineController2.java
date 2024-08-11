@@ -3,9 +3,9 @@ package nextstep.subway.line.ui;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.LineService2;
+import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.application.dto.*;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/new/lines")
 @RequiredArgsConstructor
 public class LineController2 {
-  private final LineService2 lineService;
+  private final LineService lineService;
 
   @PostMapping
-  public ResponseEntity<LineResponse2> createLine(@RequestBody LineRequest2 request) {
-    Line2 line = lineService.saveLine(request);
+  public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
+    Line line = lineService.saveLine(request);
     return ResponseEntity.created(URI.create("/new/lines/" + line.getId()))
-        .body(LineResponse2.from(line));
+        .body(LineResponse.from(line));
   }
 
   @GetMapping
-  public ResponseEntity<List<LineResponse2>> showLines() {
-    List<Line2> lines = lineService.findAllLines();
-    return ResponseEntity.ok().body(LineResponse2.listOf(lines));
+  public ResponseEntity<List<LineResponse>> showLines() {
+    List<Line> lines = lineService.findAllLines();
+    return ResponseEntity.ok().body(LineResponse.listOf(lines));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<LineResponse2> showLine(@PathVariable Long id) {
-    Line2 line = lineService.findLineById(id);
-    return ResponseEntity.ok().body(LineResponse2.from(line));
+  public ResponseEntity<LineResponse> showLine(@PathVariable Long id) {
+    Line line = lineService.findLineById(id);
+    return ResponseEntity.ok().body(LineResponse.from(line));
   }
 
   @PutMapping("/{id}")

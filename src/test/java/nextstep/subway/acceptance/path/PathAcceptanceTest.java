@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayName("경로 조회 기능 인수테스트")
 class PathAcceptanceTest extends AcceptanceTest {
   @Autowired StationRepository stationRepository;
-  @Autowired LineRepository2 lineRepository;
+  @Autowired LineRepository lineRepository;
 
   private Station 교대역;
   private Station 양재역;

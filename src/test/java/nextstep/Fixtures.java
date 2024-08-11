@@ -5,7 +5,7 @@ import nextstep.favorite.domain.Favorite.FavoriteBuilder;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.Member.MemberBuilder;
 import nextstep.subway.line.domain.*;
-import nextstep.subway.line.domain.Line2.Line2Builder;
+import nextstep.subway.line.domain.Line.LineBuilder;
 import nextstep.subway.station.domain.Station;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -40,8 +40,8 @@ public class Fixtures {
     return Station.builder().id(7L).name("양재역").build();
   }
 
-  public static Line2Builder aLine2() {
-    return Line2.builder()
+  public static LineBuilder aLine2() {
+    return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
@@ -49,8 +49,8 @@ public class Fixtures {
         .lineSections(new LineSections());
   }
 
-  public static Line2 이호선2() {
-    return Line2.builder()
+  public static Line 이호선2() {
+    return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
@@ -59,8 +59,8 @@ public class Fixtures {
         .build();
   }
 
-  public static Line2 신분당선2() {
-    return Line2.builder()
+  public static Line 신분당선2() {
+    return Line.builder()
         .id(2L)
         .name("신분당선")
         .color("bg-red-600")
@@ -69,8 +69,8 @@ public class Fixtures {
         .build();
   }
 
-  public static Line2 삼호선2() {
-    return Line2.builder()
+  public static Line 삼호선2() {
+    return Line.builder()
         .id(3L)
         .name("삼호선")
         .color("bg-orange-600")

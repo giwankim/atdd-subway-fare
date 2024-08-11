@@ -2,10 +2,10 @@ package nextstep.subway.line.application.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 
 @Getter
-public class LineRequest2 {
+public class LineRequest {
   private final String name;
   private final String color;
   private final Integer surcharge;
@@ -15,7 +15,7 @@ public class LineRequest2 {
   private final Integer duration;
 
   @Builder
-  public LineRequest2(
+  public LineRequest(
       String name,
       String color,
       Integer surcharge,
@@ -32,8 +32,8 @@ public class LineRequest2 {
     this.duration = duration;
   }
 
-  public Line2 toLine() {
-    return new Line2(name, color, surcharge);
+  public Line toLine() {
+    return new Line(name, color, surcharge);
   }
 
   public LineSectionRequest toLineSection() {
