@@ -1,7 +1,6 @@
 package nextstep.subway.unit.path.ui;
 
-import static nextstep.Fixtures.교대역;
-import static nextstep.Fixtures.양재역;
+import static nextstep.Fixtures.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -12,9 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
-import nextstep.subway.path.application.FareCalculator;
+import nextstep.auth.domain.LoginMember;
+import nextstep.member.domain.Member;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController;
@@ -24,29 +25,35 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = PathController.class)
 @DisplayName("경로 조회 컨트롤러 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
+@WebMvcTest(controllers = PathController.class)
+@Import({JwtTokenProvider.class})
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
+  @Autowired private JwtTokenProvider jwtTokenProvider;
   @MockBean private PathService pathService;
-  @MockBean private JwtTokenProvider jwtTokenProvider;
-  @MockBean private FareCalculator fareCalculator;
 
   @Test
   @DisplayName("경로를 조회 요청에 응답한다.")
   void findPath() throws Exception {
+    Member member = aMember().build();
+    String accessToken = jwtTokenProvider.createToken(member.getEmail());
+
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
-    given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
-    given(fareCalculator.calculateFare(any(Path.class))).willReturn(1250L);
+    Path path = Path.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(path, 1250L));
 
     mockMvc
         .perform(
             get("/paths")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .param("source", String.valueOf(교대역.getId()))
                 .param("target", String.valueOf(양재역.getId()))
                 .param("type", PathType.DISTANCE.name()))

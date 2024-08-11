@@ -1,9 +1,10 @@
-package nextstep.subway.unit.path.application;
+package nextstep.subway.unit.path.application.dto;
 
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
+import java.util.List;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -20,7 +21,7 @@ class PathResponseTest {
     Station 교대역 = 교대역();
     Station 남부터미널역 = 남부터미널역();
     Station 양재역 = 양재역();
-    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), 5, 10);
+    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), List.of(삼호선2(), 이호선2()), 5, 10);
     long fare = 1250;
 
     PathResponse response = PathResponse.of(path, fare);

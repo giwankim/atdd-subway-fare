@@ -2,7 +2,8 @@ package nextstep.subway.line.application;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.line.application.dto.LineSectionRequest;
-import nextstep.subway.line.domain.*;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.application.StationReader;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;

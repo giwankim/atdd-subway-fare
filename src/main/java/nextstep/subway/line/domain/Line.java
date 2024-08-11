@@ -25,20 +25,23 @@ public class Line {
 
   @Embedded private final LineSections lineSections = new LineSections();
 
+  private int surcharge;
+
   @Builder
-  public Line(Long id, String name, String color, LineSections lineSections) {
+  public Line(Long id, String name, String color, int surcharge, LineSections lineSections) {
     this.id = id;
     this.name = name;
     this.color = color;
+    this.surcharge = surcharge;
     this.lineSections.addAll(lineSections);
   }
 
-  public Line(String name, String color, LineSection... lineSections) {
-    this(null, name, color, new LineSections(Arrays.asList(lineSections)));
+  public Line(String name, String color, int surcharge, LineSection... lineSections) {
+    this(null, name, color, surcharge, new LineSections(Arrays.asList(lineSections)));
   }
 
-  public Line(String name, String color) {
-    this(null, name, color, new LineSections());
+  public Line(String name, String color, int surcharge) {
+    this(null, name, color, surcharge, new LineSections());
   }
 
   public void changeName(String name) {

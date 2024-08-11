@@ -1,12 +1,14 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.fare.domain;
 
-public class DistanceOverFarePolicy extends OverFarePolicy {
+import nextstep.subway.path.domain.Path;
+
+public class DistanceSurchargePolicy extends SurchargePolicy {
   private final long lowerBound;
   private final long upperBound;
   private final long farePerUnitDistance;
   private final long distanceUnit;
 
-  public DistanceOverFarePolicy(
+  public DistanceSurchargePolicy(
       long lowerBound, long upperBound, long farePerUnitDistance, long distanceUnit) {
     super(new DistanceCondition(lowerBound));
     this.lowerBound = lowerBound;
@@ -16,7 +18,7 @@ public class DistanceOverFarePolicy extends OverFarePolicy {
   }
 
   @Override
-  protected long getOverFareAmount(Path path) {
+  protected long getSurchargeAmount(Path path) {
     long distance = Math.min(path.getTotalDistance(), upperBound);
     return (long) Math.ceil((double) (distance - lowerBound) / distanceUnit) * farePerUnitDistance;
   }

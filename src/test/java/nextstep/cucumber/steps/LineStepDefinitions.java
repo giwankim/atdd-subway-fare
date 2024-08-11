@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class LineStepDefinitions {
         });
   }
 
-  @When("노선들을 생성하고")
+  @Given("노선들을 생성하고")
   public void 노선들을_생성하고(List<Map<String, String>> rows) {
     rows.forEach(
         row -> {
@@ -60,6 +59,7 @@ public class LineStepDefinitions {
                   .downStationId(downStationId)
                   .distance(Integer.parseInt(row.get("distance")))
                   .duration(Integer.parseInt(row.get("duration")))
+                  .surcharge(Integer.parseInt(row.get("surcharge")))
                   .build();
           var response =
               RestAssured.given()

@@ -26,6 +26,7 @@ public class LineAcceptanceSteps {
         new LineRequest(
             line.getName(),
             line.getColor(),
+            line.getSurcharge(),
             section.getUpStation().getId(),
             section.getDownStation().getId(),
             section.getDistance(),

@@ -1,6 +1,8 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.fare.domain;
 
-public class DistanceCondition implements OverFareCondition {
+import nextstep.subway.path.domain.Path;
+
+public class DistanceCondition implements SurchargeCondition {
   private final long lowerBound;
 
   public DistanceCondition(long lowerBound) {

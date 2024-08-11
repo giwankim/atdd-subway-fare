@@ -29,10 +29,13 @@ public class PathStepDefinitions {
   private void doPathSearch(String source, String target, PathType duration) {
     Long sourceId = ((StationResponse) context.store.get(source)).getId();
     Long targetId = ((StationResponse) context.store.get(target)).getId();
+    String accessToken = (String) context.store.get("accessToken");
     context.response =
         RestAssured.given()
             .log()
             .all()
+            .auth()
+            .oauth2(accessToken)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParams(
                 "source", sourceId,
@@ -59,11 +62,5 @@ public class PathStepDefinitions {
     long actualDuration = context.response.jsonPath().getLong("duration");
     assertThat(actualDistance).isEqualTo(distance);
     assertThat(actualDuration).isEqualTo(duration);
-  }
-
-  @Then("이용 요금은 {int}원이다")
-  public void 이용_요금은_x_원이다(int fare) {
-    long actualFare = context.response.jsonPath().getLong("fare");
-    assertThat(actualFare).isEqualTo(fare);
   }
 }

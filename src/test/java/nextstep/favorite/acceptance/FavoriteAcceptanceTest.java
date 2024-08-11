@@ -3,8 +3,6 @@ package nextstep.favorite.acceptance;
 import static nextstep.Fixtures.*;
 import static nextstep.favorite.acceptance.steps.FavoriteAcceptanceSteps.*;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import java.util.Arrays;
 import java.util.Collections;
 import nextstep.subway.line.domain.*;
@@ -36,7 +34,7 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     남부터미널역 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine()
+        aLine2()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(
@@ -49,7 +47,7 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
   @DisplayName("즐겨찾기를 추가한다.")
   @Test
   void addFavorite() {
-    ExtractableResponse<Response> response = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
+    var response = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
 
     즐겨찾기_생성됨(response);
     즐겨찾기_목록에_포함됨(즐겨찾기_목록_조회_요청(accessToken), Collections.singletonList(response));
@@ -59,10 +57,10 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
   @DisplayName("즐겨찾기 목록을 조회한다.")
   @Test
   void listFavorites() {
-    ExtractableResponse<Response> 교대_양재_즐겨찾기_응답 = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
-    ExtractableResponse<Response> 양재_남부터미널_즐겨찾기_응답 = 즐겨찾기_생성_요청(양재역, 남부터미널역, accessToken);
+    var 교대_양재_즐겨찾기_응답 = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
+    var 양재_남부터미널_즐겨찾기_응답 = 즐겨찾기_생성_요청(양재역, 남부터미널역, accessToken);
 
-    ExtractableResponse<Response> response = 즐겨찾기_목록_조회_요청(accessToken);
+    var response = 즐겨찾기_목록_조회_요청(accessToken);
 
     즐겨찾기_목록에_포함됨(response, Arrays.asList(교대_양재_즐겨찾기_응답, 양재_남부터미널_즐겨찾기_응답));
   }
@@ -71,10 +69,10 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
   @DisplayName("즐겨찾기를 삭제한다.")
   @Test
   void deleteFavorite() {
-    ExtractableResponse<Response> 즐겨찾기_응답 = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
+    var 즐겨찾기_응답 = 즐겨찾기_생성_요청(교대역, 양재역, accessToken);
     String uri = 즐겨찾기_응답.header(HttpHeaders.LOCATION);
 
-    ExtractableResponse<Response> response = 즐겨찾기_삭제_요청(uri, accessToken);
+    var response = 즐겨찾기_삭제_요청(uri, accessToken);
 
     즐겨찾기_삭제됨(response);
     즐겨찾기_목록에서_제외됨(uri, accessToken);

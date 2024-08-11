@@ -44,15 +44,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     Station 남부터미널 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build());
+        aLine2().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build());
     lineRepository.save(
-        aLine()
+        aLine2()
             .name("신분당선")
             .color("bg-red-600")
             .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
             .build());
     lineRepository.save(
-        aLine()
+        aLine2()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(
@@ -65,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 경로 조회")
   @Test
   void shouldReturnShortestDistancePath() {
-    var response = 경로_조회_요청(교대역, 양재역);
+    var response = 경로_조회_요청(교대역, 양재역, accessToken);
     경로_역_목록_조회됨(response, "교대역", "남부터미널역", "양재역");
     경로_거리_조회됨(response, 5);
   }
