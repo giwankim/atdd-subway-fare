@@ -7,9 +7,9 @@ import nextstep.subway.line.domain.Line2;
 import nextstep.subway.path.domain.Path2;
 
 public class LineSurchargePolicy2 extends SurchargePolicy2 {
-  private final Map<Long, Long> lineIdToSurcharge;
+  private final Map<Long, Integer> lineIdToSurcharge;
 
-  public LineSurchargePolicy2(Map<Long, Long> lineIdToSurcharge) {
+  public LineSurchargePolicy2(Map<Long, Integer> lineIdToSurcharge) {
     super(path -> true);
     this.lineIdToSurcharge = lineIdToSurcharge;
   }
@@ -20,7 +20,7 @@ public class LineSurchargePolicy2 extends SurchargePolicy2 {
     return lines.stream()
         .map(line -> lineIdToSurcharge.get(line.getId()))
         .filter(Objects::nonNull)
-        .max(Long::compareTo)
-        .orElse(0L);
+        .max(Integer::compareTo)
+        .orElse(0);
   }
 }

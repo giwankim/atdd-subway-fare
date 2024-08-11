@@ -22,6 +22,7 @@ public class FareCalculator2 {
   public long calculateFare(Path2 path, Member member) {
     SurchargePolicy2 surchargePolicy = surchargePolicyService.loadPolicy();
     long fare = BASE_FARE + surchargePolicy.calculateSurcharge(path);
+
     return fare - discountPolicy.calculateDiscount(fare, member);
   }
 }

@@ -143,7 +143,10 @@ class FareCalculatorTest2 {
   @DisplayName("요금 계산 - 노선별 추가 요금")
   @Test
   void calculateFareLineSurcharge() {
-    Map<Long, Long> lineIdToSurcharge = Map.of(1L, 900L, 2L, 1000L);
+    Map<Long, Integer> lineIdToSurcharge =
+        Map.of(
+            1L, 900,
+            2L, 1000);
     given(surchargePolicyService.loadPolicy())
         .willReturn(new LineSurchargePolicy2(lineIdToSurcharge));
 

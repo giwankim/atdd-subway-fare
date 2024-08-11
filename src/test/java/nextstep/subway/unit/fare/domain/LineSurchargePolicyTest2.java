@@ -15,11 +15,10 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("노선별 요금 추가 정책 서비스 단위 테스트")
 class LineSurchargePolicyTest2 {
-
   @DisplayName("추가 요금을 계산한다.")
   @Test
   void getSurchargeAmount() {
-    LineSurchargePolicy2 policy = new LineSurchargePolicy2(Map.of(1L, 900L));
+    LineSurchargePolicy2 policy = new LineSurchargePolicy2(Map.of(1L, 900));
     Path2 path = Path2.of(List.of(교대역(), 강남역()), List.of(aLine2().id(1L).build()), 10L, 10L);
 
     long surcharge = policy.calculateSurcharge(path);
@@ -33,9 +32,9 @@ class LineSurchargePolicyTest2 {
     LineSurchargePolicy2 policy =
         new LineSurchargePolicy2(
             Map.of(
-                1L, 900L,
-                2L, 1000L,
-                3L, 1100L));
+                1L, 900,
+                2L, 1000,
+                3L, 1100));
     List<Station> stations = List.of(교대역(), 강남역(), 양재역());
     List<Line2> lines =
         List.of(aLine2().id(1L).build(), aLine2().id(2L).build(), aLine2().id(3L).build());
