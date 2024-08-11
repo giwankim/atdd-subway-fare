@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SurchargePolicyService2 {
-  private static final long OVERCHARGE_PER_5KM = 100L;
-  private static final long OVERCHARGE_PER_8KM = 100L;
-  private static final long DISTANCE_5KM = 5L;
-  private static final long DISTANCE_8KM = 8L;
+  public static final long OVERCHARGE_PER_5KM = 100L;
+  public static final long OVERCHARGE_PER_8KM = 100L;
+  public static final long DISTANCE_5KM = 5L;
+  public static final long DISTANCE_8KM = 8L;
 
   private final LineService2 lineService;
 

@@ -1,7 +1,7 @@
 package nextstep.subway.unit.line.application;
 
-import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.application.LineService2;
+import nextstep.subway.line.domain.LineRepository2;
 import nextstep.subway.station.domain.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class LineServiceTest {
   @Autowired private StationRepository stationRepository;
-  @Autowired private LineRepository lineRepository;
+  @Autowired private LineRepository2 lineRepository;
 
-  @Autowired private LineService lineService;
+  @Autowired private LineService2 lineService;
 
   @Test
   void addSection() {

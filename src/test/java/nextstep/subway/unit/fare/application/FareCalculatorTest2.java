@@ -1,7 +1,7 @@
 package nextstep.subway.unit.fare.application;
 
 import static nextstep.Fixtures.*;
-import static nextstep.subway.fare.application.SurchargePolicyService.OVERCHARGE;
+import static nextstep.subway.fare.application.SurchargePolicyService2.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -42,8 +42,9 @@ class FareCalculatorTest2 {
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE, 5L),
-                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE, 8L)));
+                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, DISTANCE_5KM),
+                new DistanceSurchargePolicy2(
+                    50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, DISTANCE_8KM)));
 
     long fare = fareCalculator.calculateFare(path, adult);
 
@@ -78,8 +79,8 @@ class FareCalculatorTest2 {
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE, 5L),
-                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE, 8L)));
+                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, 5L),
+                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
 
     long fare = fareCalculator.calculateFare(path, youth);
 
@@ -114,8 +115,8 @@ class FareCalculatorTest2 {
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE, 5L),
-                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE, 8L)));
+                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, 5L),
+                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
 
     long fare = fareCalculator.calculateFare(path, child);
 
