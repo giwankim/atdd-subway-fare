@@ -25,8 +25,6 @@ Feature: 지하철 경로 조회 기능
       | 3호선  | 남부터미널역    | 양재역         | 3        | 10       |
     And 사용자들을 생셩하고
       | email             | password | age |
-      | child@example.com | secret   | 6   |
-      | youth@example.com | secret   | 13  |
       | adult@example.com | secret   | 19  |
 
   Scenario: 두 역의 최단 거리 경로를 조회

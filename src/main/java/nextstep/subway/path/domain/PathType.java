@@ -5,7 +5,8 @@ import nextstep.subway.line.domain.LineSection;
 
 public enum PathType {
   DISTANCE(LineSection::getDistance),
-  DURATION(LineSection::getDuration);
+  DURATION(LineSection::getDuration),
+  ARRIVAL_TIME(LineSection::getDuration);
 
   private final Function<LineSection, Integer> edgeWeightFunction;
 

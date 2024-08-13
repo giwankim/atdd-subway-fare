@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.support.AcceptanceContext;
@@ -60,6 +61,42 @@ public class LineStepDefinitions {
                   .distance(Integer.parseInt(row.get("distance")))
                   .duration(Integer.parseInt(row.get("duration")))
                   .surcharge(Integer.parseInt(row.get("surcharge")))
+                  .build();
+          var response =
+              RestAssured.given()
+                  .log()
+                  .all()
+                  .body(request)
+                  .contentType(MediaType.APPLICATION_JSON_VALUE)
+                  .when()
+                  .post("/lines")
+                  .then()
+                  .log()
+                  .all()
+                  .extract();
+          context.store.put(request.getName(), response.as(LineResponse.class));
+        });
+  }
+
+  @Given("노선들을 생성하고2")
+  public void 노선들을_생성하고2(List<Map<String, String>> rows) {
+    rows.forEach(
+        row -> {
+          Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
+          Long downStationId =
+              ((StationResponse) context.store.get(row.get("downStation"))).getId();
+          LineRequest2 request =
+              LineRequest2.builder()
+                  .name(row.get("name"))
+                  .color(row.get("color"))
+                  .upStationId(upStationId)
+                  .downStationId(downStationId)
+                  .distance(Integer.parseInt(row.get("distance")))
+                  .duration(Integer.parseInt(row.get("duration")))
+                  .surcharge(Integer.parseInt(row.get("surcharge")))
+                  .startTime(LocalTime.parse(row.get("startTime")))
+                  .endTime(LocalTime.parse(row.get("endTime")))
+                  .intervalTime(Integer.parseInt(row.get("intervalTime")))
                   .build();
           var response =
               RestAssured.given()

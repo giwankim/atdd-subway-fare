@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import nextstep.cucumber.support.AcceptanceContext;
 import nextstep.subway.path.domain.PathType;
@@ -26,7 +28,8 @@ public class PathStepDefinitions {
     doPathSearch(source, target, PathType.DURATION);
   }
 
-  private void doPathSearch(String source, String target, PathType duration) {
+  @When("{string}에서 {string}까지 {string}에 출발하는 가장 빠른 경로를 조회하면")
+  public void 역_에서_역_까지_시간_에_출발하는_가장_빠른_경로를_조회하면(String source, String target, String startTime) {
     Long sourceId = ((StationResponse) context.store.get(source)).getId();
     Long targetId = ((StationResponse) context.store.get(target)).getId();
     String accessToken = (String) context.store.get("accessToken");
@@ -40,7 +43,31 @@ public class PathStepDefinitions {
             .queryParams(
                 "source", sourceId,
                 "target", targetId,
-                "type", duration.name())
+                "type", PathType.ARRIVAL_TIME.name(),
+                "time", startTime)
+            .when()
+            .get("/paths")
+            .then()
+            .log()
+            .all()
+            .extract();
+  }
+
+  private void doPathSearch(String source, String target, PathType type) {
+    Long sourceId = ((StationResponse) context.store.get(source)).getId();
+    Long targetId = ((StationResponse) context.store.get(target)).getId();
+    String accessToken = (String) context.store.get("accessToken");
+    context.response =
+        RestAssured.given()
+            .log()
+            .all()
+            .auth()
+            .oauth2(accessToken)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParams(
+                "source", sourceId,
+                "target", targetId,
+                "type", type.name())
             .when()
             .get("/paths")
             .then()
@@ -62,5 +89,14 @@ public class PathStepDefinitions {
     long actualDuration = context.response.jsonPath().getLong("duration");
     assertThat(actualDistance).isEqualTo(distance);
     assertThat(actualDuration).isEqualTo(duration);
+  }
+
+  @Then("도착 시간은 {string}이다")
+  public void 도착_시간은_x_이다(String arrivalTimeString) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    LocalDateTime arrivalTime =
+        LocalDateTime.parse(context.response.jsonPath().get("arrivalTime"), formatter);
+    LocalDateTime expectedTime = LocalDateTime.parse(arrivalTimeString, formatter);
+    assertThat(arrivalTime).isEqualTo(expectedTime);
   }
 }
