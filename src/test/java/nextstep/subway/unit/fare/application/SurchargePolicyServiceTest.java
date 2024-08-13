@@ -28,7 +28,7 @@ class SurchargePolicyServiceTest {
   @DisplayName("요금 정책을 불러온다.")
   @Test
   void loadPolicy() {
-    Line line = aLine2().id(1L).surcharge(900).build();
+    Line line = aLine().id(1L).surcharge(900).build();
     given(lineService.findAllLines()).willReturn(List.of(line));
 
     SurchargePolicy policy = surchargePolicyService.loadPolicy();

@@ -34,7 +34,7 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     남부터미널역 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(

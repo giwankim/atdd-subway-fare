@@ -48,7 +48,7 @@ class FavoriteServiceTest {
   @Test
   void createFavorite() {
     List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
-    List<Line> lines = Arrays.asList(이호선2(), 신분당선2());
+    List<Line> lines = Arrays.asList(이호선(), 신분당선());
     FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
     given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))

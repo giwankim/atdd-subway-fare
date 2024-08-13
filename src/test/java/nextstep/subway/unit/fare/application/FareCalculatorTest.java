@@ -37,7 +37,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFare(int distance, int expectedFare) {
     Member adult = aMember().build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 삼호선2()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -73,7 +73,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareYouth(int distance, int expectedFare) {
     Member youth = aMember().age(13).build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 삼호선2()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 삼호선()), distance, 10);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -108,7 +108,7 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareChild(int distance, int expectedFare) {
     Member child = aMember().age(6).build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 신분당선2()), distance, 10);
+    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선(), 신분당선()), distance, 10);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -148,7 +148,7 @@ class FareCalculatorTest {
     given(surchargePolicyService.loadPolicy())
         .willReturn(new LineSurchargePolicy(lineIdToSurcharge));
 
-    List<Line> lines = List.of(aLine2().id(1L).build(), aLine2().id(2L).build());
+    List<Line> lines = List.of(aLine().id(1L).build(), aLine().id(2L).build());
     Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), lines, 10, 10);
 
     Member adult = aMember().build();

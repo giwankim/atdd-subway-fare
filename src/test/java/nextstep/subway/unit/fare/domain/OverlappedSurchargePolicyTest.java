@@ -23,7 +23,7 @@ class OverlappedSurchargePolicyTest {
   @MethodSource
   void calculateSurcharge(int distance, int expectedFare) {
     List<Station> stations = Arrays.asList(교대역(), 강남역());
-    Path path = Path.of(stations, List.of(이호선2()), distance, 10);
+    Path path = Path.of(stations, List.of(이호선()), distance, 10);
     OverlappedSurchargePolicy policy =
         new OverlappedSurchargePolicy(
             new DistanceSurchargePolicy(10, 50, 100, 5),

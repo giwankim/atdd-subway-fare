@@ -24,7 +24,7 @@ class DistanceSurchargePolicyTest {
   @MethodSource
   void calculateSurcharge(long distance, long expectedFare) {
     List<Station> stations = Arrays.asList(교대역(), 강남역());
-    List<Line> lines = List.of(이호선2());
+    List<Line> lines = List.of(이호선());
     SurchargePolicy policy = new DistanceSurchargePolicy(10, 50, 100, 5);
     assertThat(policy.calculateSurcharge(Path.of(stations, lines, distance, 10)))
         .isEqualTo(expectedFare);

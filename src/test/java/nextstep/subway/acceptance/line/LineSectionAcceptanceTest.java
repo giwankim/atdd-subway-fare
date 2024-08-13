@@ -45,7 +45,7 @@ class LineSectionAcceptanceTest {
     @Test
     void shouldPrependLineSection() {
       LineSections 역삼_선릉_구간 = LineSections.of(역삼역, 선릉역, 10, 1);
-      이호선 = lineRepository.save(aLine2().lineSections(역삼_선릉_구간).build());
+      이호선 = lineRepository.save(aLine().lineSections(역삼_선릉_구간).build());
       LineSection 강남_역삼_구간 = LineSection.of(강남역, 역삼역, 20, 2);
 
       var response = 노선_구간_등록_요청(이호선, 강남_역삼_구간);
@@ -60,7 +60,7 @@ class LineSectionAcceptanceTest {
     @Test
     void shouldAppendLineSection() {
       LineSections 강남_역삼_구간 = LineSections.of(강남역, 역삼역, 10, 1);
-      이호선 = lineRepository.save(aLine2().lineSections(강남_역삼_구간).build());
+      이호선 = lineRepository.save(aLine().lineSections(강남_역삼_구간).build());
       LineSection 역삼_선릉_구간 = LineSection.of(역삼역, 선릉역, 20, 2);
 
       var response = 노선_구간_등록_요청(이호선, 역삼_선릉_구간);
@@ -72,7 +72,7 @@ class LineSectionAcceptanceTest {
     @DisplayName("종점 하행역과 같은 상행역인 구간 등록 시 구간의 하행 역이 이미 해당 노선에 등록되어 있으면 에러가 발생한다.")
     @Test
     void appendLineSectionCycle() {
-      이호선 = lineRepository.save(aLine2().lineSections(new LineSections(강남_역삼_구간())).build());
+      이호선 = lineRepository.save(aLine().lineSections(new LineSections(강남_역삼_구간())).build());
       LineSection cyclicSection =
           LineSection.builder().upStation(역삼역).downStation(강남역).distance(20).duration(2).build();
 
@@ -86,7 +86,7 @@ class LineSectionAcceptanceTest {
     @Test
     void shouldAddLineSectionToMiddle() {
       LineSections 강남_선릉_구간 = LineSections.of(강남역, 선릉역, 30, 3);
-      이호선 = lineRepository.save(aLine2().lineSections(강남_선릉_구간).build());
+      이호선 = lineRepository.save(aLine().lineSections(강남_선릉_구간).build());
       LineSection 강남_역삼_구간 = LineSection.of(강남역, 역삼역, 10, 1);
 
       var response = 노선_구간_등록_요청(이호선, 강남_역삼_구간);
@@ -99,7 +99,7 @@ class LineSectionAcceptanceTest {
     @Test
     void addDisjointLineSectionReturnsBadRequest() {
       LineSections 강남_역삼_구간 = LineSections.of(강남역, 역삼역, 10, 1);
-      이호선 = lineRepository.save(aLine2().lineSections(강남_역삼_구간).build());
+      이호선 = lineRepository.save(aLine().lineSections(강남_역삼_구간).build());
       LineSection disjointedSection =
           LineSection.builder().upStation(선릉역).downStation(판교역).distance(20).duration(2).build();
 
@@ -126,7 +126,7 @@ class LineSectionAcceptanceTest {
       판교역 = stationRepository.save(판교역());
       이호선 =
           lineRepository.save(
-              aLine2().lineSections(new LineSections(강남_역삼_구간(), 역삼_선릉_구간())).build());
+              aLine().lineSections(new LineSections(강남_역삼_구간(), 역삼_선릉_구간())).build());
     }
 
     /** When 하행 종점역 구간 제거를 요청하면 Then 해당 노선 조회 시 역 목록에서 하행 종점이 제거된다. */

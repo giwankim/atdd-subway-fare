@@ -19,7 +19,7 @@ class DistanceConditionTest {
   @Test
   void isSatisfiedBy() {
     List<Station> stations = Arrays.asList(교대역(), 강남역());
-    List<Line> lines = List.of(이호선2(), 신분당선2());
+    List<Line> lines = List.of(이호선(), 신분당선());
     DistanceCondition condition = new DistanceCondition(10);
     assertThat(condition.isSatisfiedBy(Path.of(stations, lines, 9, 10))).isFalse();
     assertThat(condition.isSatisfiedBy(Path.of(stations, lines, 10, 10))).isTrue();

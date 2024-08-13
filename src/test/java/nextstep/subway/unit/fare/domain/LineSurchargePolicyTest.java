@@ -19,7 +19,7 @@ class LineSurchargePolicyTest {
   @Test
   void getSurchargeAmount() {
     LineSurchargePolicy policy = new LineSurchargePolicy(Map.of(1L, 900));
-    Path path = Path.of(List.of(교대역(), 강남역()), List.of(aLine2().id(1L).build()), 10L, 10L);
+    Path path = Path.of(List.of(교대역(), 강남역()), List.of(aLine().id(1L).build()), 10L, 10L);
 
     long surcharge = policy.calculateSurcharge(path);
 
@@ -37,7 +37,7 @@ class LineSurchargePolicyTest {
                 3L, 1100));
     List<Station> stations = List.of(교대역(), 강남역(), 양재역());
     List<Line> lines =
-        List.of(aLine2().id(1L).build(), aLine2().id(2L).build(), aLine2().id(3L).build());
+        List.of(aLine().id(1L).build(), aLine().id(2L).build(), aLine().id(3L).build());
     Path path = Path.of(stations, lines, 10L, 10L);
 
     long surcharge = policy.calculateSurcharge(path);

@@ -21,7 +21,7 @@ class PathResponseTest {
     Station 교대역 = 교대역();
     Station 남부터미널역 = 남부터미널역();
     Station 양재역 = 양재역();
-    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), List.of(삼호선2(), 이호선2()), 5, 10);
+    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), List.of(삼호선(), 이호선()), 5, 10);
     long fare = 1250;
 
     PathResponse response = PathResponse.of(path, fare);

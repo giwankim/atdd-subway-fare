@@ -46,7 +46,7 @@ class PathControllerTest {
 
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    Path path = Path.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
+    Path path = Path.of(List.of(교대역, 양재역), List.of(이호선(), 신분당선()), 5, 10);
     given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
         .willReturn(PathResponse.of(path, 1250L));
 
