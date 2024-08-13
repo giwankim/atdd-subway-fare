@@ -3,7 +3,7 @@ package nextstep.subway.line.application.dto;
 import java.time.LocalTime;
 import lombok.Builder;
 import lombok.Getter;
-import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Line2;
 
 @Getter
 public class LineRequest2 {
@@ -42,8 +42,8 @@ public class LineRequest2 {
     this.intervalTime = intervalTime;
   }
 
-  public Line toLine() {
-    return new Line(name, color, surcharge);
+  public Line2 toLine() {
+    return new Line2(name, color, surcharge, startTime, endTime, intervalTime);
   }
 
   public LineSectionRequest toLineSection() {
