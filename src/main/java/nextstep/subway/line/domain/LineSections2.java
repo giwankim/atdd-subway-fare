@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -132,7 +133,7 @@ public class LineSections2 {
   private boolean containsBothStations(LineSection2 lineSection) {
     List<Station> stations = getStations();
     return stations.stream().anyMatch(it -> it.isSame(lineSection.getUpStation()))
-        && stations.stream().anyMatch(it -> it.isSame(lineSection.getDownStation()));
+           && stations.stream().anyMatch(it -> it.isSame(lineSection.getDownStation()));
   }
 
   public void addAll(LineSections2 lineSections) {
@@ -198,5 +199,15 @@ public class LineSections2 {
     if (size() <= 1) {
       throw new CannotRemoveLastLineSectionException();
     }
+  }
+
+  public long getTimeTo(LineSection2 section) {
+    if (sections.stream().noneMatch(section::isSame)) {
+      throw new IllegalArgumentException("구간이 존재하지 않습니다.");
+    }
+    return sections.stream()
+        .takeWhile(it -> !it.isSame(section))
+        .mapToLong(LineSection2::getDuration)
+        .sum();
   }
 }

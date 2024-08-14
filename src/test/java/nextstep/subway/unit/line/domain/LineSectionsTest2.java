@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.Arrays;
+
 import nextstep.subway.line.domain.LineSection2;
 import nextstep.subway.line.domain.LineSections2;
 import nextstep.subway.line.exception.CannotAddLineSectionException;
@@ -153,16 +154,16 @@ class LineSectionsTest2 {
       assertThatExceptionOfType(CannotAddLineSectionException.class)
           .isThrownBy(() -> sections.add(section));
     }
-  }
 
-  @DisplayName("하행역이 같은 구간을 추가하는 경우 소요시간이 이전 구간 소요시간 보다 길거나 같으면 예외 처리된다.")
-  @ParameterizedTest
-  @ValueSource(ints = {10, 11, 20})
-  void addShouldThrowExceptionWhenDurationTooLong(int duration) {
-    LineSections2 sections = new LineSections2(강남역, 선릉역, 20, 10);
-    LineSection2 section = LineSection2.of(역삼역, 선릉역, 10, duration);
-    assertThatExceptionOfType(CannotAddLineSectionException.class)
-        .isThrownBy(() -> sections.add(section));
+    @DisplayName("하행역이 같은 구간을 추가하는 경우 소요시간이 이전 구간 소요시간 보다 길거나 같으면 예외 처리된다.")
+    @ParameterizedTest
+    @ValueSource(ints = {10, 11, 20})
+    void addShouldThrowExceptionWhenDurationTooLong(int duration) {
+      LineSections2 sections = new LineSections2(강남역, 선릉역, 20, 10);
+      LineSection2 section = LineSection2.of(역삼역, 선릉역, 10, duration);
+      assertThatExceptionOfType(CannotAddLineSectionException.class)
+          .isThrownBy(() -> sections.add(section));
+    }
   }
 
   @DisplayName("구간 제거 단위 테스트")
@@ -219,5 +220,29 @@ class LineSectionsTest2 {
       assertThat(sections.size()).isEqualTo(1);
       assertThat(sections.getFirst().isSame(LineSection2.of(강남역, 선릉역, 30, 3))).isTrue();
     }
+  }
+
+  @DisplayName("구간에 도착하기까지 소요 시간")
+  @Test
+  void getTimeTo() {
+    LineSection2 section1 = LineSection2.of(강남역, 역삼역, 10, 3);
+    LineSection2 section2 = LineSection2.of(역삼역, 선릉역, 20, 4);
+    LineSections2 sections =
+        new LineSections2(
+            section1, section2);
+
+    long minutes = sections.getTimeTo(section2);
+
+    assertThat(minutes).isEqualTo(3L);
+  }
+
+  @DisplayName("구간에 도착하기까지 소요 시간 - 구간이 존재하지 않는 경우")
+  @Test
+  void getTimeToSectionNotFound() {
+    LineSections2 sections =
+        new LineSections2(
+            LineSection2.of(강남역, 역삼역, 10, 3));
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> sections.getTimeTo(LineSection2.of(역삼역, 선릉역, 20, 4)));
   }
 }
