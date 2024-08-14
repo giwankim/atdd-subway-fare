@@ -50,28 +50,23 @@ public class SubwayGraph2 {
         new DijkstraShortestPath<>(graph);
 
     GraphPath<Station, LineSectionEdge2> path = shortestPath.getPath(source, target);
+
     if (path == null) {
       return Path2.empty();
     }
     return mapToPath(path);
   }
 
-  private static Path2 mapToPath(GraphPath<Station, LineSectionEdge2> path) {
-    List<LineSectionEdge2> edges = path.getEdgeList();
-    long totalDistance = edges.stream().mapToLong(e -> e.getLineSection().getDistance()).sum();
-    long totalDuration = edges.stream().mapToLong(e -> e.getLineSection().getDuration()).sum();
-    List<Line2> lines = edges.stream().map(LineSectionEdge2::getLine).collect(Collectors.toList());
-    return Path2.of(path.getVertexList(), lines, totalDistance, totalDuration);
-  }
-
   public List<Path2> getAllPaths(Station source, Station target) {
     if (source.isSame(target)) {
       return Collections.emptyList();
     }
+
     validate(source, target);
 
     List<GraphPath<Station, LineSectionEdge2>> graphPaths =
         new KShortestPaths<>(graph, MAX_PATHS).getPaths(source, target);
+
     return graphPaths.stream().map(SubwayGraph2::mapToPath).collect(Collectors.toList());
   }
 
@@ -79,6 +74,10 @@ public class SubwayGraph2 {
     if (!graph.containsVertex(source) || !graph.containsVertex(target)) {
       throw new IllegalArgumentException(STATION_NOT_FOUND);
     }
+  }
+
+  private static Path2 mapToPath(GraphPath<Station, LineSectionEdge2> path) {
+    return Path2.of(path.getVertexList(), path.getEdgeList());
   }
 
   public boolean isSame(SubwayGraph2 that) {

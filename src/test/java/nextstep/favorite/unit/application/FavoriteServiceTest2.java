@@ -1,0 +1,119 @@
+package nextstep.favorite.unit.application;
+
+import static nextstep.Fixtures.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import nextstep.auth.domain.LoginMember;
+import nextstep.auth.exception.AuthorizationException;
+import nextstep.favorite.application.FavoriteMapper;
+import nextstep.favorite.application.FavoriteService2;
+import nextstep.favorite.application.dto.FavoriteRequest;
+import nextstep.favorite.domain.Favorite;
+import nextstep.favorite.domain.FavoriteRepository;
+import nextstep.favorite.exception.FavoritePathNotFoundException;
+import nextstep.member.application.MemberService;
+import nextstep.member.domain.Member;
+import nextstep.subway.path.application.PathService2;
+import nextstep.subway.path.application.dto.PathRequest2;
+import nextstep.subway.path.application.dto.PathResponse2;
+import nextstep.subway.path.domain.LineSectionEdge2;
+import nextstep.subway.path.domain.Path2;
+import nextstep.subway.station.domain.Station;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@SuppressWarnings("NonAsciiCharacters")
+@DisplayName("즐겨찾기 서비스 단위 테스트")
+@ExtendWith(MockitoExtension.class)
+class FavoriteServiceTest2 {
+  @Mock private MemberService memberService;
+  @Mock private FavoriteMapper favoriteMapper;
+  @Mock private FavoriteRepository favoriteRepository;
+  @Mock private PathService2 pathService;
+  @InjectMocks private FavoriteService2 favoriteService;
+
+  private final Member member = aMember().build();
+  private final LoginMember loginMember = new LoginMember(member.getEmail());
+
+  @DisplayName("즐겨찾기를 저장한다.")
+  @Test
+  void createFavorite() {
+    List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
+    List<LineSectionEdge2> edges =
+        List.of(
+            LineSectionEdge2.of(강남_역삼_구간2(), 이호선2()), LineSectionEdge2.of(강남_판교_구간2(), 신분당선2()));
+    FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
+        .willReturn(PathResponse2.of(Path2.of(stations, edges), 0L));
+
+    favoriteService.createFavorite(request, loginMember);
+
+    then(favoriteRepository).should().save(any(Favorite.class));
+  }
+
+  @DisplayName("비정상 경로를 즐겨찾기로 등록하는 경우 예외 처리된다.")
+  @Test
+  void createFavoriteWhenPathNotFound() {
+    FavoriteRequest request = FavoriteRequest.of(1L, 99L);
+    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
+        .willReturn(PathResponse2.of(Path2.empty(), 0L));
+
+    assertThatExceptionOfType(FavoritePathNotFoundException.class)
+        .isThrownBy(() -> favoriteService.createFavorite(request, loginMember));
+  }
+
+  @DisplayName("즐겨찾기 목록을 조회한다.")
+  @Test
+  void findFavorites() {
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+
+    favoriteService.findFavorites(loginMember);
+
+    then(favoriteRepository).should().findAllByMemberId(member.getId());
+  }
+
+  @DisplayName("즐겨찾기를 삭제한다.")
+  @Test
+  void deleteFavorite() {
+    Favorite favorite = aFavorite().build();
+    long favoriteId = favorite.getId();
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+    given(favoriteRepository.findById(favoriteId)).willReturn(Optional.of(favorite));
+
+    favoriteService.deleteFavorite(favoriteId, loginMember);
+
+    then(favoriteRepository).should().deleteById(favoriteId);
+  }
+
+  @DisplayName("다른 사용자의 즐겨찾기를 삭제하려 하면 예외 처리된다.")
+  @Test
+  void deleteFavoriteBelongingToAnotherUser() {
+    Station 교대역 = 교대역();
+    Station 양재역 = 양재역();
+    long otherMemberId = 99L;
+    long favoriteId = 1L;
+    Favorite favorite =
+        Favorite.builder()
+            .id(favoriteId)
+            .sourceStationId(교대역.getId())
+            .targetStationId(양재역.getId())
+            .memberId(otherMemberId)
+            .build();
+    given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
+    given(favoriteRepository.findById(favoriteId)).willReturn(Optional.of(favorite));
+
+    assertThatExceptionOfType(AuthorizationException.class)
+        .isThrownBy(() -> favoriteService.deleteFavorite(favoriteId, loginMember));
+  }
+}

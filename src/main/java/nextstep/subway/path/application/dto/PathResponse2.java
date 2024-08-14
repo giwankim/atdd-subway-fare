@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.application.dto.StationResponse;
 
 @Getter
@@ -36,7 +36,7 @@ public class PathResponse2 {
     this(stations, distance, duration, fare, null);
   }
 
-  public static PathResponse2 of(Path path, long fare) {
+  public static PathResponse2 of(Path2 path, long fare) {
     return new PathResponse2(
         StationResponse.listOf(path.getStations()),
         path.getTotalDistance(),
