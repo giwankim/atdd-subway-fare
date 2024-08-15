@@ -43,4 +43,13 @@ public class PathResponse2 {
         path.getTotalDuration(),
         fare);
   }
+
+  public static PathResponse2 of(Path2 path, long fare, LocalDateTime arrivalTime) {
+    return new PathResponse2(
+        StationResponse.listOf(path.getStations()),
+        path.getTotalDistance(),
+        path.getTotalDuration(),
+        fare,
+        arrivalTime);
+  }
 }
