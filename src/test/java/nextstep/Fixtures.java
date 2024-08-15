@@ -7,6 +7,7 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.Member.MemberBuilder;
 import nextstep.subway.line.domain.*;
 import nextstep.subway.line.domain.Line.LineBuilder;
+import nextstep.subway.line.domain.Line2.Line2Builder;
 import nextstep.subway.station.domain.Station;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -80,7 +81,7 @@ public class Fixtures {
         .build();
   }
 
-  public static Line2.Line2Builder aLine2() {
+  public static Line2Builder aLine2() {
     return Line2.builder()
         .id(1L)
         .name("2호선")

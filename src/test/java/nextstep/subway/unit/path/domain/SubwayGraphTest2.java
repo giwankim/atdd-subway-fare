@@ -29,8 +29,8 @@ class SubwayGraphTest2 {
     assertThat(graph.isSame(new SubwayGraph2(PathType2.DISTANCE))).isFalse();
   }
 
-  @Nested
   @DisplayName("최단 경로 조회 단위 테스트")
+  @Nested
   class ShortestPathTest {
     private SubwayGraph2 graph;
 
@@ -116,7 +116,7 @@ class SubwayGraphTest2 {
 
   @DisplayName("모든 경로 조회 단위 테스트")
   @Nested
-  class GetAllPathTest {
+  class AllPathsTest {
     private SubwayGraph2 graph;
 
     @BeforeEach
@@ -142,10 +142,10 @@ class SubwayGraphTest2 {
     @DisplayName("모든 경로를 조회한다.")
     @Test
     void getAllPaths() {
-      List<Path2> paths = graph.getAllPaths(교대역, 양재역);
+      Paths paths = graph.getAllPaths(교대역, 양재역);
       List<List<Station>> pathStations =
-          paths.stream().map(Path2::getStations).collect(Collectors.toList());
-      assertThat(paths).hasSize(2);
+          paths.getPaths().stream().map(Path2::getStations).collect(Collectors.toList());
+      assertThat(paths.getPaths()).hasSize(2);
       assertThat(pathStations)
           .containsExactlyInAnyOrder(List.of(교대역, 강남역, 양재역), List.of(교대역, 남부터미널역, 양재역));
     }
@@ -153,8 +153,8 @@ class SubwayGraphTest2 {
     @DisplayName("출발역과 도착역이 같은 경우 빈 경로 목록이 반환된다.")
     @Test
     void sourceAndTargetAreTheSame() {
-      List<Path2> paths = graph.getAllPaths(교대역, 교대역);
-      System.out.println("paths = " + paths);
+      Paths paths = graph.getAllPaths(교대역, 교대역);
+      assertThat(paths.getPaths()).hasSize(1);
     }
 
     @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우")
@@ -166,9 +166,9 @@ class SubwayGraphTest2 {
       graph.addLine(이호선);
       graph.addLine(삼호선);
 
-      List<Path2> paths = graph.getAllPaths(교대역, 양재역);
+      Paths paths = graph.getAllPaths(교대역, 양재역);
 
-      assertThat(paths).isEmpty();
+      assertThat(paths.getPaths()).isEmpty();
     }
 
     @DisplayName("출발역이나 도착역이 그래프에 없는 경우")

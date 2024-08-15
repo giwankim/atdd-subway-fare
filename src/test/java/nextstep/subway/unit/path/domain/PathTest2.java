@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
 import nextstep.subway.line.domain.Line2;
 import nextstep.subway.line.domain.LineSection2;
 import nextstep.subway.line.domain.LineSections2;
@@ -39,12 +38,13 @@ class PathTest2 {
             .endTime(LocalTime.of(23, 0))
             .intervalTime(10)
             .build();
+    List<Station> stations = List.of(교대역, 강남역, 역삼역, 선릉역);
     List<LineSectionEdge2> edges =
         List.of(
             LineSectionEdge2.of(교대_강남_구간, 이호선),
             LineSectionEdge2.of(강남_역삼_구간, 이호선),
             LineSectionEdge2.of(역삼_선릉_구간, 이호선));
-    Path2 path = Path2.of(List.of(교대역, 강남역, 역삼역, 선릉역), edges);
+    Path2 path = Path2.of(stations, edges);
 
     LocalDateTime arrivalTime = path.getArrivalTime(LocalDateTime.of(2024, 8, 12, 10, 0));
 

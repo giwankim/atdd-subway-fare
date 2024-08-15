@@ -57,9 +57,9 @@ public class SubwayGraph2 {
     return mapToPath(path);
   }
 
-  public List<Path2> getAllPaths(Station source, Station target) {
+  public Paths getAllPaths(Station source, Station target) {
     if (source.isSame(target)) {
-      return Collections.emptyList();
+      return new Paths(Collections.singletonList(getShortestPath(source, target)));
     }
 
     validate(source, target);
@@ -67,7 +67,7 @@ public class SubwayGraph2 {
     List<GraphPath<Station, LineSectionEdge2>> graphPaths =
         new KShortestPaths<>(graph, MAX_PATHS).getPaths(source, target);
 
-    return graphPaths.stream().map(SubwayGraph2::mapToPath).collect(Collectors.toList());
+    return new Paths(graphPaths.stream().map(SubwayGraph2::mapToPath).collect(Collectors.toList()));
   }
 
   private void validate(Station source, Station target) {
