@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.Arrays;
-
 import nextstep.subway.line.domain.LineSection2;
 import nextstep.subway.line.domain.LineSections2;
 import nextstep.subway.line.exception.CannotAddLineSectionException;
@@ -227,9 +226,7 @@ class LineSectionsTest2 {
   void getTimeTo() {
     LineSection2 section1 = LineSection2.of(강남역, 역삼역, 10, 3);
     LineSection2 section2 = LineSection2.of(역삼역, 선릉역, 20, 4);
-    LineSections2 sections =
-        new LineSections2(
-            section1, section2);
+    LineSections2 sections = new LineSections2(section1, section2);
 
     long minutes = sections.getTimeTo(section2);
 
@@ -239,9 +236,7 @@ class LineSectionsTest2 {
   @DisplayName("구간에 도착하기까지 소요 시간 - 구간이 존재하지 않는 경우")
   @Test
   void getTimeToSectionNotFound() {
-    LineSections2 sections =
-        new LineSections2(
-            LineSection2.of(강남역, 역삼역, 10, 3));
+    LineSections2 sections = new LineSections2(LineSection2.of(강남역, 역삼역, 10, 3));
     assertThatExceptionOfType(IllegalArgumentException.class)
         .isThrownBy(() -> sections.getTimeTo(LineSection2.of(역삼역, 선릉역, 20, 4)));
   }

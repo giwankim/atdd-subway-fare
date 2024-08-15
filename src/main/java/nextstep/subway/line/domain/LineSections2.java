@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.*;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -133,7 +132,7 @@ public class LineSections2 {
   private boolean containsBothStations(LineSection2 lineSection) {
     List<Station> stations = getStations();
     return stations.stream().anyMatch(it -> it.isSame(lineSection.getUpStation()))
-           && stations.stream().anyMatch(it -> it.isSame(lineSection.getDownStation()));
+        && stations.stream().anyMatch(it -> it.isSame(lineSection.getDownStation()));
   }
 
   public void addAll(LineSections2 lineSections) {
