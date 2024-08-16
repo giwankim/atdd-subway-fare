@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Profile("test")
 @Component
-public class AcceptanceContext2 {
+public class AcceptanceContext {
   public Map<String, Object> store = new HashMap<>();
   public ExtractableResponse<Response> response;
 }

@@ -7,10 +7,10 @@ import nextstep.member.application.dto.MemberRequest;
 import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class MemberStepDefinitions2 {
+public class MemberStepDefinitions {
 
-  @Given("사용자들을 생셩하고2")
-  public void 사용자들을_생셩하고2(List<MemberRequest> memberRequests) {
+  @Given("사용자들을 생셩하고")
+  public void 사용자들을_생셩하고(List<MemberRequest> memberRequests) {
     memberRequests.forEach(
         request ->
             RestAssured.given()
