@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("노선 단위 테스트")
-class LineTest2 {
+class LineTest {
   private final Station 교대역 = 교대역();
   private final Station 강남역 = 강남역();
   private final Station 역삼역 = 역삼역();

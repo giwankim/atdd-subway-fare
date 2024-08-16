@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class LineSectionMapperTest2 {
+class LineSectionMapperTest {
   @Mock private StationReader stationReader;
   @InjectMocks private LineSectionMapper lineSectionMapper;
 
