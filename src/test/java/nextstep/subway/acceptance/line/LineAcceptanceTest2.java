@@ -1,7 +1,6 @@
 package nextstep.subway.acceptance.line;
 
 import static nextstep.Fixtures.*;
-import static nextstep.subway.acceptance.line.steps.LineAcceptanceSteps.*;
 import static nextstep.subway.acceptance.line.steps.LineAcceptanceSteps2.*;
 
 import java.util.Arrays;
