@@ -3,12 +3,14 @@ package nextstep.subway.unit.fare.domain;
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import nextstep.subway.fare.domain.DistanceSurchargePolicy;
-import nextstep.subway.fare.domain.OverlappedSurchargePolicy;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
+import nextstep.subway.fare.domain.OverlappedSurchargePolicy2;
+import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.path.domain.LineSectionEdge2;
+import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,17 +19,22 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("OverlappedOverFarePolicy 클래스 단위 테스트")
-class OverlappedSurchargePolicyTest {
+class OverlappedSurchargePolicyTest2 {
   @DisplayName("할증 금액을 계산한다.")
   @ParameterizedTest
   @MethodSource
   void calculateSurcharge(int distance, int expectedFare) {
-    List<Station> stations = Arrays.asList(교대역(), 강남역());
-    Path path = Path.of(stations, List.of(이호선()), distance, 10);
-    OverlappedSurchargePolicy policy =
-        new OverlappedSurchargePolicy(
-            new DistanceSurchargePolicy(10, 50, 100, 5),
-            new DistanceSurchargePolicy(50, Long.MAX_VALUE, 100, 8));
+    Station 교대역 = 교대역();
+    Station 강남역 = 강남역();
+    Line2 이호선 = 이호선2();
+    Path2 path =
+        Path2.of(
+            List.of(교대역, 강남역),
+            List.of(LineSectionEdge2.of(LineSection2.of(교대역, 강남역, distance, 5), 이호선)));
+    OverlappedSurchargePolicy2 policy =
+        new OverlappedSurchargePolicy2(
+            new DistanceSurchargePolicy2(10, 50, 100, 5),
+            new DistanceSurchargePolicy2(50, Long.MAX_VALUE, 100, 8));
     assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }
 
