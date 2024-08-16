@@ -1,6 +1,6 @@
 package nextstep.subway.fare.domain;
 
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 
 public class DistanceCondition2 implements SurchargeCondition2 {
   private final long lowerBound;
@@ -10,7 +10,7 @@ public class DistanceCondition2 implements SurchargeCondition2 {
   }
 
   @Override
-  public boolean isSatisfiedBy(Path2 path) {
+  public boolean isSatisfiedBy(Path path) {
     return path.getTotalDistance() >= lowerBound;
   }
 }

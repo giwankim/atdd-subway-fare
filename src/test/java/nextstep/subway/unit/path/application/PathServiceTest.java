@@ -15,10 +15,10 @@ import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.fare.application.FareCalculator2;
 import nextstep.subway.line.domain.*;
-import nextstep.subway.path.application.GraphService2;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.application.dto.PathResponse2;
+import nextstep.subway.path.application.GraphService;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.*;
 import nextstep.subway.station.application.StationReader;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -36,12 +36,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 조회 서비스 단위 테스트")
-class PathServiceTest2 {
-  @Mock private GraphService2 graphService;
+class PathServiceTest {
+  @Mock private GraphService graphService;
   @Mock private StationReader stationReader;
   @Mock private MemberService memberService;
   @Mock private FareCalculator2 fareCalculator;
-  @InjectMocks private PathService2 pathService;
+  @InjectMocks private PathService pathService;
 
   Station 교대역 = 교대역();
   Station 강남역 = 강남역();
@@ -50,7 +50,7 @@ class PathServiceTest2 {
   @ParameterizedTest
   @MethodSource
   void findPath(
-      PathType2 type,
+      PathType type,
       List<StationResponse> expectedStations,
       int expectedDistance,
       int expectedDuration) {
@@ -74,7 +74,7 @@ class PathServiceTest2 {
             .name("신분당선")
             .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
             .build();
-    SubwayGraph2 graph = new SubwayGraph2(type);
+    SubwayGraph graph = new SubwayGraph(type);
     graph.addLine(이호선);
     graph.addLine(삼호선);
     graph.addLine(신분당선);
@@ -84,13 +84,13 @@ class PathServiceTest2 {
     given(graphService.loadGraph(type)).willReturn(graph);
 
     long fare = 1250L;
-    given(fareCalculator.calculateFare(any(Path2.class), any(Member.class))).willReturn(fare);
+    given(fareCalculator.calculateFare(any(Path.class), any(Member.class))).willReturn(fare);
 
-    PathRequest2 request = PathRequest2.of(교대역.getId(), 양재역.getId(), type, null);
-    PathResponse2 path = pathService.findPath(request, loginMember);
+    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), type, null);
+    PathResponse path = pathService.findPath(request, loginMember);
 
     verify(graphService, times(1)).loadGraph(type);
-    verify(fareCalculator, times(1)).calculateFare(any(Path2.class), any(Member.class));
+    verify(fareCalculator, times(1)).calculateFare(any(Path.class), any(Member.class));
 
     assertThat(path.getStations()).containsExactlyElementsOf(expectedStations);
     assertThat(path.getDistance()).isEqualTo(expectedDistance);
@@ -101,7 +101,7 @@ class PathServiceTest2 {
   private static Stream<Arguments> findPath() {
     return Stream.of(
         Arguments.of(
-            PathType2.DISTANCE,
+            PathType.DISTANCE,
             List.of(
                 StationResponse.from(교대역()),
                 StationResponse.from(남부터미널역()),
@@ -109,7 +109,7 @@ class PathServiceTest2 {
             5,
             20),
         Arguments.of(
-            PathType2.DURATION,
+            PathType.DURATION,
             List.of(
                 StationResponse.from(교대역()),
                 StationResponse.from(강남역()),
@@ -121,7 +121,7 @@ class PathServiceTest2 {
   @DisplayName("가장 빨리 도착하는 경로를 조회한다.")
   @Test
   void findPathByArriveTime() {
-    PathType2 type = PathType2.ARRIVAL_TIME;
+    PathType type = PathType.ARRIVAL_TIME;
 
     Member member = aMember().build();
     LoginMember loginMember = new LoginMember(member.getEmail());
@@ -129,7 +129,7 @@ class PathServiceTest2 {
 
     Line 이호선 =
         aLine().name("2호선").lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 3))).build();
-    SubwayGraph2 graph = new SubwayGraph2(type);
+    SubwayGraph graph = new SubwayGraph(type);
     graph.addLine(이호선);
 
     given(stationReader.readById(교대역.getId())).willReturn(교대역);
@@ -137,12 +137,12 @@ class PathServiceTest2 {
     given(graphService.loadGraph(type)).willReturn(graph);
 
     long fare = 1250L;
-    given(fareCalculator.calculateFare(any(Path2.class), any(Member.class))).willReturn(fare);
+    given(fareCalculator.calculateFare(any(Path.class), any(Member.class))).willReturn(fare);
 
-    PathRequest2 request =
-        PathRequest2.of(교대역.getId(), 강남역.getId(), type, LocalDateTime.of(2024, 8, 12, 10, 0));
+    PathRequest request =
+        PathRequest.of(교대역.getId(), 강남역.getId(), type, LocalDateTime.of(2024, 8, 12, 10, 0));
 
-    PathResponse2 pathResponse = pathService.findPath(request, loginMember);
+    PathResponse pathResponse = pathService.findPath(request, loginMember);
 
     assertThat(pathResponse.getArrivalTime()).isEqualTo(LocalDateTime.of(2024, 8, 12, 10, 3));
   }

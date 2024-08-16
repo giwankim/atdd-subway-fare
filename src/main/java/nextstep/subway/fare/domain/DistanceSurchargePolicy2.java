@@ -1,6 +1,6 @@
 package nextstep.subway.fare.domain;
 
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 
 public class DistanceSurchargePolicy2 extends SurchargePolicy2 {
   private final long lowerBound;
@@ -18,7 +18,7 @@ public class DistanceSurchargePolicy2 extends SurchargePolicy2 {
   }
 
   @Override
-  protected long getSurchargeAmount(Path2 path) {
+  protected long getSurchargeAmount(Path path) {
     long distance = Math.min(path.getTotalDistance(), upperBound);
     return (long) Math.ceil((double) (distance - lowerBound) / distanceUnit) * farePerUnitDistance;
   }

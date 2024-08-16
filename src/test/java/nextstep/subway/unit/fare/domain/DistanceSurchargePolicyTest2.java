@@ -9,8 +9,8 @@ import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
 import nextstep.subway.fare.domain.SurchargePolicy2;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,9 +27,9 @@ class DistanceSurchargePolicyTest2 {
     Station 교대역 = 교대역();
     Station 강남역 = 강남역();
     Line 이호선 = 이호선();
-    List<LineSectionEdge2> edges =
-        List.of(LineSectionEdge2.of(LineSection.of(교대역, 강남역, distance, 5), 이호선));
-    Path2 path = Path2.of(List.of(교대역, 강남역), edges);
+    List<LineSectionEdge> edges =
+        List.of(LineSectionEdge.of(LineSection.of(교대역, 강남역, distance, 5), 이호선));
+    Path path = Path.of(List.of(교대역, 강남역), edges);
     SurchargePolicy2 policy = new DistanceSurchargePolicy2(10, 50, 100, 5);
     assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nextstep.member.domain.Member;
 import nextstep.subway.fare.domain.AgeDiscountPolicy;
 import nextstep.subway.fare.domain.SurchargePolicy2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +14,7 @@ public class FareCalculator2 {
 
   private final SurchargePolicyService2 surchargePolicyService;
 
-  public long calculateFare(Path2 path, Member member) {
+  public long calculateFare(Path path, Member member) {
     SurchargePolicy2 surchargePolicy = surchargePolicyService.loadPolicy();
     AgeDiscountPolicy discountPolicy = AgeDiscountPolicy.from(member);
     long fare = BASE_FARE + surchargePolicy.calculateSurcharge(path);

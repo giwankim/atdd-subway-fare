@@ -13,10 +13,10 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.favorite.exception.FavoritePathNotFoundException;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.application.dto.PathResponse2;
-import nextstep.subway.path.domain.PathType2;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +25,7 @@ public class FavoriteService {
   private final MemberService memberService;
   private final FavoriteMapper favoriteMapper;
   private final FavoriteRepository favoriteRepository;
-  private final PathService2 pathService;
+  private final PathService pathService;
 
   /**
    * 즐겨찾기를 생성한다.
@@ -48,10 +48,10 @@ public class FavoriteService {
   }
 
   private boolean isValidPath(FavoriteRequest request, LoginMember loginMember) {
-    PathResponse2 path =
+    PathResponse path =
         pathService.findPath(
-            PathRequest2.of(
-                request.getSource(), request.getTarget(), PathType2.DISTANCE, LocalDateTime.now()),
+            PathRequest.of(
+                request.getSource(), request.getTarget(), PathType.DISTANCE, LocalDateTime.now()),
             loginMember);
     return !path.getStations().isEmpty();
   }

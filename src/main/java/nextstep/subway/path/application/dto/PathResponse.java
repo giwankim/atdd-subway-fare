@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.application.dto.StationResponse;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PathResponse2 {
+public class PathResponse {
   private final List<StationResponse> stations;
   private final long distance;
   private final long duration;
@@ -19,7 +19,7 @@ public class PathResponse2 {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
   private final LocalDateTime arrivalTime;
 
-  private PathResponse2(
+  private PathResponse(
       List<StationResponse> stations,
       long distance,
       long duration,
@@ -32,20 +32,20 @@ public class PathResponse2 {
     this.arrivalTime = arrivalTime;
   }
 
-  private PathResponse2(List<StationResponse> stations, long distance, long duration, long fare) {
+  private PathResponse(List<StationResponse> stations, long distance, long duration, long fare) {
     this(stations, distance, duration, fare, null);
   }
 
-  public static PathResponse2 of(Path2 path, long fare) {
-    return new PathResponse2(
+  public static PathResponse of(Path path, long fare) {
+    return new PathResponse(
         StationResponse.listOf(path.getStations()),
         path.getTotalDistance(),
         path.getTotalDuration(),
         fare);
   }
 
-  public static PathResponse2 of(Path2 path, long fare, LocalDateTime arrivalTime) {
-    return new PathResponse2(
+  public static PathResponse of(Path path, long fare, LocalDateTime arrivalTime) {
+    return new PathResponse(
         StationResponse.listOf(path.getStations()),
         path.getTotalDistance(),
         path.getTotalDuration(),

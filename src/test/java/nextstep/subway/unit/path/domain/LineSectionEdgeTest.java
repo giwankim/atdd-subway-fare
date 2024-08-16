@@ -8,14 +8,14 @@ import java.time.LocalTime;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.line.domain.LineSections;
-import nextstep.subway.path.domain.LineSectionEdge2;
+import nextstep.subway.path.domain.LineSectionEdge;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 그래프 간선 단위 테스트")
-class LineSectionEdgeTest2 {
+class LineSectionEdgeTest {
   private final Station 교대역 = 교대역();
   private final Station 강남역 = 강남역();
   private final Station 역삼역 = 역삼역();
@@ -34,7 +34,7 @@ class LineSectionEdgeTest2 {
             .endTime(LocalTime.of(23, 0))
             .intervalTime(10)
             .build();
-    LineSectionEdge2 edge = LineSectionEdge2.of(section, line);
+    LineSectionEdge edge = LineSectionEdge.of(section, line);
 
     LocalDateTime arrivalTime = edge.getArrivalTime(LocalDateTime.of(2024, 8, 12, 10, 0));
 
@@ -56,7 +56,7 @@ class LineSectionEdgeTest2 {
             .endTime(LocalTime.of(23, 0))
             .intervalTime(3)
             .build();
-    LineSectionEdge2 edge = LineSectionEdge2.of(section2, line);
+    LineSectionEdge edge = LineSectionEdge.of(section2, line);
 
     LocalDateTime arrivalTime = edge.getArrivalTime(LocalDateTime.of(2024, 8, 12, 6, 0));
 
@@ -77,7 +77,7 @@ class LineSectionEdgeTest2 {
             .endTime(LocalTime.of(23, 0))
             .intervalTime(10)
             .build();
-    LineSectionEdge2 edge = LineSectionEdge2.of(section, line);
+    LineSectionEdge edge = LineSectionEdge.of(section, line);
 
     LocalDateTime arrivalTime = edge.getArrivalTime(LocalDateTime.of(2024, 8, 12, 23, 30));
 

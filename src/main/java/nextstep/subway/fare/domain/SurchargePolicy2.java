@@ -1,7 +1,7 @@
 package nextstep.subway.fare.domain;
 
 import java.util.List;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 
 public abstract class SurchargePolicy2 {
   private final List<SurchargeCondition2> conditions;
@@ -10,7 +10,7 @@ public abstract class SurchargePolicy2 {
     this.conditions = List.of(conditions);
   }
 
-  public long calculateSurcharge(Path2 path) {
+  public long calculateSurcharge(Path path) {
     return conditions.stream()
         .filter(condition -> condition.isSatisfiedBy(path))
         .findFirst()
@@ -18,5 +18,5 @@ public abstract class SurchargePolicy2 {
         .orElse(0L);
   }
 
-  protected abstract long getSurchargeAmount(Path2 path);
+  protected abstract long getSurchargeAmount(Path path);
 }

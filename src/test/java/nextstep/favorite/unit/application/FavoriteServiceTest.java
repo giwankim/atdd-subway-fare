@@ -19,11 +19,11 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.favorite.exception.FavoritePathNotFoundException;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.application.dto.PathResponse2;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class FavoriteServiceTest {
   @Mock private MemberService memberService;
   @Mock private FavoriteMapper favoriteMapper;
   @Mock private FavoriteRepository favoriteRepository;
-  @Mock private PathService2 pathService;
+  @Mock private PathService pathService;
   @InjectMocks private FavoriteService favoriteService;
 
   private final Member member = aMember().build();
@@ -49,12 +49,12 @@ class FavoriteServiceTest {
   @Test
   void createFavorite() {
     List<Station> stations = Arrays.asList(교대역(), 강남역(), 양재역());
-    List<LineSectionEdge2> edges =
-        List.of(LineSectionEdge2.of(강남_역삼_구간(), 이호선()), LineSectionEdge2.of(강남_판교_구간(), 신분당선()));
+    List<LineSectionEdge> edges =
+        List.of(LineSectionEdge.of(강남_역삼_구간(), 이호선()), LineSectionEdge.of(강남_판교_구간(), 신분당선()));
     FavoriteRequest request = FavoriteRequest.of(교대역().getId(), 양재역().getId());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
-    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
-        .willReturn(PathResponse2.of(Path2.of(stations, edges), 0L));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(Path.of(stations, edges), 0L));
 
     favoriteService.createFavorite(request, loginMember);
 
@@ -65,8 +65,8 @@ class FavoriteServiceTest {
   @Test
   void createFavoriteWhenPathNotFound() {
     FavoriteRequest request = FavoriteRequest.of(1L, 99L);
-    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
-        .willReturn(PathResponse2.of(Path2.empty(), 0L));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(Path.empty(), 0L));
 
     assertThatExceptionOfType(FavoritePathNotFoundException.class)
         .isThrownBy(() -> favoriteService.createFavorite(request, loginMember));

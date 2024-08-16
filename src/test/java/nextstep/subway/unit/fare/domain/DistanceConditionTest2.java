@@ -9,8 +9,8 @@ import nextstep.subway.fare.domain.DistanceCondition2;
 import nextstep.subway.fare.domain.SurchargeCondition2;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,8 +23,8 @@ class DistanceConditionTest2 {
   @DisplayName("조건을 만족하는지 확인")
   @ParameterizedTest
   @MethodSource
-  void isSatisfiedBy(List<Station> stations, List<LineSectionEdge2> edges, boolean expected) {
-    Path2 path = Path2.of(stations, edges);
+  void isSatisfiedBy(List<Station> stations, List<LineSectionEdge> edges, boolean expected) {
+    Path path = Path.of(stations, edges);
     SurchargeCondition2 condition = new DistanceCondition2(10);
     assertThat(condition.isSatisfiedBy(path)).isEqualTo(expected);
   }
@@ -40,20 +40,20 @@ class DistanceConditionTest2 {
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 4, 5), 신분당선)),
+                LineSectionEdge.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge.of(LineSection.of(강남역, 양재역, 4, 5), 신분당선)),
             false),
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 5, 5), 신분당선)),
+                LineSectionEdge.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge.of(LineSection.of(강남역, 양재역, 5, 5), 신분당선)),
             true),
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 6, 5), 신분당선)),
+                LineSectionEdge.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge.of(LineSection.of(강남역, 양재역, 6, 5), 신분당선)),
             true));
   }
 }

@@ -12,8 +12,8 @@ import nextstep.subway.fare.domain.SurchargePolicy2;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ class SurchargePolicyServiceTest2 {
 
     then(lineService).should(times(1)).findAllLines();
 
-    List<LineSectionEdge2> edges =
-        List.of(LineSectionEdge2.of(LineSection.of(교대역(), 강남역(), 3, 10), line));
+    List<LineSectionEdge> edges =
+        List.of(LineSectionEdge.of(LineSection.of(교대역(), 강남역(), 3, 10), line));
     List<Station> stations = List.of(교대역(), 강남역());
-    assertThat(policy.calculateSurcharge(Path2.of(stations, edges))).isEqualTo(900L);
+    assertThat(policy.calculateSurcharge(Path.of(stations, edges))).isEqualTo(900L);
   }
 }

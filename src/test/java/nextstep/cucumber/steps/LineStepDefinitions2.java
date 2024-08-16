@@ -5,11 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
-
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-
 import nextstep.cucumber.support.AcceptanceContext2;
 import nextstep.subway.line.application.dto.*;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -18,8 +16,7 @@ import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class LineStepDefinitions2 {
-  @Autowired
-  private AcceptanceContext2 context;
+  @Autowired private AcceptanceContext2 context;
 
   @Given("구간들을 등록하고2")
   public void 구간들을_등록하고2(List<Map<String, String>> rows) {

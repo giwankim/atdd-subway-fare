@@ -1,7 +1,7 @@
 package nextstep.subway.acceptance.path;
 
 import static nextstep.Fixtures.*;
-import static nextstep.subway.acceptance.path.steps.PathAcceptanceSteps2.*;
+import static nextstep.subway.acceptance.path.steps.PathAcceptanceSteps.*;
 
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.line.domain.LineSection;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 조회 기능 인수테스트")
-class PathAcceptanceTest2 extends AcceptanceTest {
+class PathAcceptanceTest extends AcceptanceTest {
   @Autowired StationRepository stationRepository;
   @Autowired LineRepository lineRepository;
 
@@ -67,8 +67,8 @@ class PathAcceptanceTest2 extends AcceptanceTest {
   @DisplayName("지하철 경로 조회")
   @Test
   void shouldReturnShortestDistancePath() {
-    var response = 경로_조회_요청2(교대역, 양재역, accessToken);
-    경로_역_목록_조회됨2(response, "교대역", "남부터미널역", "양재역");
-    경로_거리_조회됨2(response, 5);
+    var response = 경로_조회_요청(교대역, 양재역, accessToken);
+    경로_역_목록_조회됨(response, "교대역", "남부터미널역", "양재역");
+    경로_거리_조회됨(response, 5);
   }
 }

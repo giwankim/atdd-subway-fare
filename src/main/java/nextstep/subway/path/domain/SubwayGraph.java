@@ -11,21 +11,21 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.WeightedMultigraph;
 
-public class SubwayGraph2 {
+public class SubwayGraph {
   private static final String STATION_NOT_FOUND = "구간의 상/하행역이 존재하지 않습니다.";
   private static final double EPSILON = 10e-7;
   public static final int MAX_PATHS = 1000;
 
-  private final WeightedMultigraph<Station, LineSectionEdge2> graph;
-  private final PathType2 type;
+  private final WeightedMultigraph<Station, LineSectionEdge> graph;
+  private final PathType type;
 
-  private SubwayGraph2(WeightedMultigraph<Station, LineSectionEdge2> graph, PathType2 type) {
+  private SubwayGraph(WeightedMultigraph<Station, LineSectionEdge> graph, PathType type) {
     this.graph = graph;
     this.type = type;
   }
 
-  public SubwayGraph2(PathType2 type) {
-    this(new WeightedMultigraph<>(LineSectionEdge2.class), type);
+  public SubwayGraph(PathType type) {
+    this(new WeightedMultigraph<>(LineSectionEdge.class), type);
   }
 
   public void addLine(Line line) {
@@ -38,21 +38,20 @@ public class SubwayGraph2 {
   }
 
   private void addLineSection(LineSection lineSection, Line line) {
-    LineSectionEdge2 edge = LineSectionEdge2.of(lineSection, line);
+    LineSectionEdge edge = LineSectionEdge.of(lineSection, line);
     graph.addEdge(lineSection.getUpStation(), lineSection.getDownStation(), edge);
     graph.setEdgeWeight(edge, type.getEdgeWeight(lineSection));
   }
 
-  public Path2 getShortestPath(Station source, Station target) {
+  public Path getShortestPath(Station source, Station target) {
     validate(source, target);
 
-    DijkstraShortestPath<Station, LineSectionEdge2> shortestPath =
-        new DijkstraShortestPath<>(graph);
+    DijkstraShortestPath<Station, LineSectionEdge> shortestPath = new DijkstraShortestPath<>(graph);
 
-    GraphPath<Station, LineSectionEdge2> path = shortestPath.getPath(source, target);
+    GraphPath<Station, LineSectionEdge> path = shortestPath.getPath(source, target);
 
     if (path == null) {
-      return Path2.empty();
+      return Path.empty();
     }
     return mapToPath(path);
   }
@@ -64,10 +63,10 @@ public class SubwayGraph2 {
 
     validate(source, target);
 
-    List<GraphPath<Station, LineSectionEdge2>> graphPaths =
+    List<GraphPath<Station, LineSectionEdge>> graphPaths =
         new KShortestPaths<>(graph, MAX_PATHS).getPaths(source, target);
 
-    return new Paths(graphPaths.stream().map(SubwayGraph2::mapToPath).collect(Collectors.toList()));
+    return new Paths(graphPaths.stream().map(SubwayGraph::mapToPath).collect(Collectors.toList()));
   }
 
   private void validate(Station source, Station target) {
@@ -76,11 +75,11 @@ public class SubwayGraph2 {
     }
   }
 
-  private static Path2 mapToPath(GraphPath<Station, LineSectionEdge2> path) {
-    return Path2.of(path.getVertexList(), path.getEdgeList());
+  private static Path mapToPath(GraphPath<Station, LineSectionEdge> path) {
+    return Path.of(path.getVertexList(), path.getEdgeList());
   }
 
-  public boolean isSame(SubwayGraph2 that) {
+  public boolean isSame(SubwayGraph that) {
     if (type != that.type) {
       return false;
     }
@@ -90,10 +89,10 @@ public class SubwayGraph2 {
     if (graph.edgeSet().size() != that.graph.edgeSet().size()) {
       return false;
     }
-    for (LineSectionEdge2 edge : graph.edgeSet()) {
+    for (LineSectionEdge edge : graph.edgeSet()) {
       Station source = graph.getEdgeSource(edge);
       Station target = graph.getEdgeTarget(edge);
-      LineSectionEdge2 thatEdge = that.graph.getEdge(source, target);
+      LineSectionEdge thatEdge = that.graph.getEdge(source, target);
       if (thatEdge == null) {
         return false;
       }

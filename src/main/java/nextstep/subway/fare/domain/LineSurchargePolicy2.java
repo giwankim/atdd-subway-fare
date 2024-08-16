@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.Path;
 
 public class LineSurchargePolicy2 extends SurchargePolicy2 {
   private final Map<Long, Integer> lineIdToSurcharge;
@@ -15,7 +15,7 @@ public class LineSurchargePolicy2 extends SurchargePolicy2 {
   }
 
   @Override
-  protected long getSurchargeAmount(Path2 path) {
+  protected long getSurchargeAmount(Path path) {
     List<Line> lines = path.getLines();
     return lines.stream()
         .map(line -> lineIdToSurcharge.get(line.getId()))

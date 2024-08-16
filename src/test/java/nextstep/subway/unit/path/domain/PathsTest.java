@@ -10,8 +10,8 @@ import java.util.List;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.line.domain.LineSections;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.Paths;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -38,19 +38,18 @@ class PathsTest {
     Paths paths =
         new Paths(
             List.of(
-                Path2.of(
+                Path.of(
                     List.of(교대역, 강남역, 양재역),
-                    List.of(
-                        LineSectionEdge2.of(교대_강남_구간, 이호선), LineSectionEdge2.of(강남_양재_구간, 신분당선))),
-                Path2.of(
+                    List.of(LineSectionEdge.of(교대_강남_구간, 이호선), LineSectionEdge.of(강남_양재_구간, 신분당선))),
+                Path.of(
                     List.of(교대역, 남부터미널역, 양재역),
                     List.of(
-                        LineSectionEdge2.of(교대_남부터미널_구간, 삼호선),
-                        LineSectionEdge2.of(남부터미널_양재_구간, 삼호선)))));
+                        LineSectionEdge.of(교대_남부터미널_구간, 삼호선),
+                        LineSectionEdge.of(남부터미널_양재_구간, 삼호선)))));
 
     LocalDateTime departureTime = LocalDateTime.of(2024, 8, 13, 10, 0);
 
-    Path2 path = paths.getEarliestArrivalPath(departureTime);
+    Path path = paths.getEarliestArrivalPath(departureTime);
 
     assertThat(path.getArrivalTime(departureTime)).isEqualTo(LocalDateTime.of(2024, 8, 13, 10, 20));
     assertThat(path.getStations()).isEqualTo(List.of(교대역, 남부터미널역, 양재역));

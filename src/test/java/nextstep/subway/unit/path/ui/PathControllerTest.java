@@ -17,13 +17,13 @@ import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.application.dto.PathResponse2;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
-import nextstep.subway.path.domain.PathType2;
-import nextstep.subway.path.ui.PathController2;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.PathType;
+import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,12 +37,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("경로 조회 컨트롤러 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
-@WebMvcTest(controllers = PathController2.class)
+@WebMvcTest(controllers = PathController.class)
 @Import({JwtTokenProvider.class})
-class PathControllerTest2 {
+class PathControllerTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private JwtTokenProvider jwtTokenProvider;
-  @MockBean private PathService2 pathService;
+  @MockBean private PathService pathService;
 
   private String acccessToken;
 
@@ -58,18 +58,18 @@ class PathControllerTest2 {
     Station 강남역 = 강남역();
     Station 양재역 = 양재역();
     Line 신분당선 = 신분당선();
-    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
-    Path2 path = Path2.of(List.of(강남역, 양재역), Collections.singletonList(edge));
-    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
-        .willReturn(PathResponse2.of(path, 1250L));
+    LineSectionEdge edge = LineSectionEdge.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
+    Path path = Path.of(List.of(강남역, 양재역), Collections.singletonList(edge));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(path, 1250L));
 
     mockMvc
         .perform(
-            get("/new/paths")
+            get("/paths")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + acccessToken)
                 .param("source", String.valueOf(강남역.getId()))
                 .param("target", String.valueOf(양재역.getId()))
-                .param("type", PathType2.DISTANCE.name()))
+                .param("type", PathType.DISTANCE.name()))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.stations", hasSize(2)))
@@ -88,18 +88,18 @@ class PathControllerTest2 {
     Station 강남역 = 강남역();
     Station 양재역 = 양재역();
     Line 신분당선 = 신분당선();
-    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
-    Path2 path = Path2.of(List.of(강남역, 양재역), Collections.singletonList(edge));
-    given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
-        .willReturn(PathResponse2.of(path, 1250L, LocalDateTime.of(2024, 8, 12, 10, 3)));
+    LineSectionEdge edge = LineSectionEdge.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
+    Path path = Path.of(List.of(강남역, 양재역), Collections.singletonList(edge));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(path, 1250L, LocalDateTime.of(2024, 8, 12, 10, 3)));
 
     mockMvc
         .perform(
-            get("/new/paths")
+            get("/paths")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + acccessToken)
                 .param("source", String.valueOf(강남역.getId()))
                 .param("target", String.valueOf(양재역.getId()))
-                .param("type", PathType2.ARRIVAL_TIME.name())
+                .param("type", PathType.ARRIVAL_TIME.name())
                 .param("time", "202408121000"))
         .andDo(print())
         .andExpect(status().isOk())

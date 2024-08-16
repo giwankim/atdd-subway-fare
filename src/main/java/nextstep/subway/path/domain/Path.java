@@ -7,21 +7,21 @@ import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.domain.Station;
 
-public class Path2 {
+public class Path {
   private final List<Station> stations;
-  private final List<LineSectionEdge2> edges;
+  private final List<LineSectionEdge> edges;
 
-  private Path2(List<Station> stations, List<LineSectionEdge2> edges) {
+  private Path(List<Station> stations, List<LineSectionEdge> edges) {
     this.stations = stations;
     this.edges = edges;
   }
 
-  public static Path2 empty() {
-    return new Path2(Collections.emptyList(), Collections.emptyList());
+  public static Path empty() {
+    return new Path(Collections.emptyList(), Collections.emptyList());
   }
 
-  public static Path2 of(List<Station> stations, List<LineSectionEdge2> edges) {
-    return new Path2(stations, edges);
+  public static Path of(List<Station> stations, List<LineSectionEdge> edges) {
+    return new Path(stations, edges);
   }
 
   public List<Station> getStations() {
@@ -29,7 +29,7 @@ public class Path2 {
   }
 
   public List<Line> getLines() {
-    return edges.stream().map(LineSectionEdge2::getLine).collect(Collectors.toUnmodifiableList());
+    return edges.stream().map(LineSectionEdge::getLine).collect(Collectors.toUnmodifiableList());
   }
 
   public long getTotalDistance() {
@@ -42,7 +42,7 @@ public class Path2 {
 
   public LocalDateTime getArrivalTime(LocalDateTime departureTime) {
     LocalDateTime arrivalTime = departureTime;
-    for (LineSectionEdge2 edge : edges) {
+    for (LineSectionEdge edge : edges) {
       arrivalTime = edge.getArrivalTime(arrivalTime);
     }
     return arrivalTime;

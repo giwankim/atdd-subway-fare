@@ -6,9 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-
 import java.util.List;
-
 import nextstep.subway.line.application.dto.LineSectionRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
@@ -18,8 +16,7 @@ import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class LineSectionAcceptanceSteps {
-  private LineSectionAcceptanceSteps() {
-  }
+  private LineSectionAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 노선_구간_등록_요청(Line line, LineSection lineSection) {
     LineSectionRequest request =

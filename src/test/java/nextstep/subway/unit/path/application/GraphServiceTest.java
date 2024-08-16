@@ -9,9 +9,9 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.application.GraphService2;
-import nextstep.subway.path.domain.PathType2;
-import nextstep.subway.path.domain.SubwayGraph2;
+import nextstep.subway.path.application.GraphService;
+import nextstep.subway.path.domain.PathType;
+import nextstep.subway.path.domain.SubwayGraph;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,23 +23,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("경로 그래프 서비스 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
-class GraphServiceTest2 {
+class GraphServiceTest {
   @Mock private LineService lineService;
-  @InjectMocks private GraphService2 graphService;
+  @InjectMocks private GraphService graphService;
 
   @DisplayName("노선 정보 바탕으로 그래프를 불러온다.")
   @ParameterizedTest
-  @EnumSource(PathType2.class)
-  void loadGraph(PathType2 type) {
+  @EnumSource(PathType.class)
+  void loadGraph(PathType type) {
     Line 이호선 = 이호선();
     Line 신분당선 = 신분당선();
     given(lineService.findAllLines()).willReturn(List.of(이호선, 신분당선));
 
-    SubwayGraph2 graph = graphService.loadGraph(type);
+    SubwayGraph graph = graphService.loadGraph(type);
 
     verify(lineService, times(1)).findAllLines();
 
-    SubwayGraph2 expectedGraph = new SubwayGraph2(type);
+    SubwayGraph expectedGraph = new SubwayGraph(type);
     expectedGraph.addLine(이호선);
     expectedGraph.addLine(신분당선);
 

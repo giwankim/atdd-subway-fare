@@ -9,15 +9,15 @@ import java.util.List;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.line.domain.LineSections;
-import nextstep.subway.path.domain.LineSectionEdge2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.LineSectionEdge;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 도메인 단위 테스트")
-class PathTest2 {
+class PathTest {
   @DisplayName("경로의 도착 시간을 계산한다.")
   @Test
   void getArrivalTime() {
@@ -39,12 +39,12 @@ class PathTest2 {
             .intervalTime(10)
             .build();
     List<Station> stations = List.of(교대역, 강남역, 역삼역, 선릉역);
-    List<LineSectionEdge2> edges =
+    List<LineSectionEdge> edges =
         List.of(
-            LineSectionEdge2.of(교대_강남_구간, 이호선),
-            LineSectionEdge2.of(강남_역삼_구간, 이호선),
-            LineSectionEdge2.of(역삼_선릉_구간, 이호선));
-    Path2 path = Path2.of(stations, edges);
+            LineSectionEdge.of(교대_강남_구간, 이호선),
+            LineSectionEdge.of(강남_역삼_구간, 이호선),
+            LineSectionEdge.of(역삼_선릉_구간, 이호선));
+    Path path = Path.of(stations, edges);
 
     LocalDateTime arrivalTime = path.getArrivalTime(LocalDateTime.of(2024, 8, 12, 10, 0));
 
