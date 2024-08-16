@@ -30,14 +30,14 @@ public class LineStepDefinitions2 {
                   downStationId,
                   Integer.parseInt(it.get("distance")),
                   Integer.parseInt(it.get("duration")));
-          LineResponse line = (LineResponse) context.store.get(it.get("line"));
+          LineResponse2 line = (LineResponse2) context.store.get(it.get("line"));
           RestAssured.given()
               .log()
               .all()
               .contentType(MediaType.APPLICATION_JSON_VALUE)
               .body(request)
               .when()
-              .post("/lines/" + line.getId() + "/sections")
+              .post("/new/lines/" + line.getId() + "/sections")
               .then()
               .log()
               .all()
