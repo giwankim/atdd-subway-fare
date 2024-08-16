@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import nextstep.cucumber.support.AcceptanceContext2;
-import nextstep.subway.path.domain.PathType;
+import nextstep.subway.path.domain.PathType2;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,12 +20,12 @@ public class PathStepDefinitions2 {
 
   @When("{string}에서 {string}까지 최단 거리 경로를 조회하면2")
   public void 교대역_에서_강남역_까지_최단_거리_경로를_조회하면2(String source, String target) {
-    doPathSearch(source, target, PathType.DISTANCE);
+    doPathSearch(source, target, PathType2.DISTANCE);
   }
 
   @When("{string}에서 {string}까지 최소 시간 경로를 조회하면2")
   public void 교대역_에서_양재역_까지_최소_시간_경로를_조회하면2(String source, String target) {
-    doPathSearch(source, target, PathType.DURATION);
+    doPathSearch(source, target, PathType2.DURATION);
   }
 
   @When("{string}에서 {string}까지 {string}에 출발하는 가장 빠른 경로를 조회하면2")
@@ -43,7 +43,7 @@ public class PathStepDefinitions2 {
             .queryParams(
                 "source", sourceId,
                 "target", targetId,
-                "type", PathType.ARRIVAL_TIME.name(),
+                "type", PathType2.ARRIVAL_TIME.name(),
                 "time", startTime)
             .when()
             .get("/new/paths")
@@ -53,7 +53,7 @@ public class PathStepDefinitions2 {
             .extract();
   }
 
-  private void doPathSearch(String source, String target, PathType type) {
+  private void doPathSearch(String source, String target, PathType2 type) {
     Long sourceId = ((StationResponse) context.store.get(source)).getId();
     Long targetId = ((StationResponse) context.store.get(target)).getId();
     String accessToken = (String) context.store.get("accessToken");

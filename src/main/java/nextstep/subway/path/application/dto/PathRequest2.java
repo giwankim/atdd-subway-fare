@@ -26,4 +26,8 @@ public class PathRequest2 {
   public static PathRequest2 of(Long source, Long target, PathType2 type, LocalDateTime time) {
     return new PathRequest2(source, target, type, time);
   }
+
+  public static PathRequest2 of(Long source, Long target, PathType2 type) {
+    return new PathRequest2(source, target, type, null);
+  }
 }
