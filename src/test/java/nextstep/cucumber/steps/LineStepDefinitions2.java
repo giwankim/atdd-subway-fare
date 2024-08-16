@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
+
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+
 import nextstep.cucumber.support.AcceptanceContext2;
 import nextstep.subway.line.application.dto.*;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -16,7 +18,8 @@ import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class LineStepDefinitions2 {
-  @Autowired private AcceptanceContext2 context;
+  @Autowired
+  private AcceptanceContext2 context;
 
   @Given("구간들을 등록하고2")
   public void 구간들을_등록하고2(List<Map<String, String>> rows) {
@@ -30,14 +33,14 @@ public class LineStepDefinitions2 {
                   downStationId,
                   Integer.parseInt(it.get("distance")),
                   Integer.parseInt(it.get("duration")));
-          LineResponse2 line = (LineResponse2) context.store.get(it.get("line"));
+          LineResponse line = (LineResponse) context.store.get(it.get("line"));
           RestAssured.given()
               .log()
               .all()
               .contentType(MediaType.APPLICATION_JSON_VALUE)
               .body(request)
               .when()
-              .post("/new/lines/" + line.getId() + "/sections")
+              .post("/lines/" + line.getId() + "/sections")
               .then()
               .log()
               .all()
@@ -52,8 +55,8 @@ public class LineStepDefinitions2 {
           Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
           Long downStationId =
               ((StationResponse) context.store.get(row.get("downStation"))).getId();
-          LineRequest2 request =
-              LineRequest2.builder()
+          LineRequest request =
+              LineRequest.builder()
                   .name(row.get("name"))
                   .color(row.get("color"))
                   .upStationId(upStationId)
@@ -72,21 +75,21 @@ public class LineStepDefinitions2 {
                   .body(request)
                   .contentType(MediaType.APPLICATION_JSON_VALUE)
                   .when()
-                  .post("/new/lines")
+                  .post("/lines")
                   .then()
                   .log()
                   .all()
                   .extract();
-          context.store.put(request.getName(), response.as(LineResponse2.class));
+          context.store.put(request.getName(), response.as(LineResponse.class));
         });
   }
 
   @Then("지하철 노선 목록 조회 시 {string}을 찾을 수 있다2")
   public void 지하철_노선_목록_조회_시_생성한_노선을_찾을_수_있다2(String line) {
     var response =
-        RestAssured.given().log().all().when().get("/new/lines").then().log().all().extract();
-    List<LineResponse2> actualLines = response.jsonPath().getList(".", LineResponse2.class);
-    LineResponse2 expectedLine = (LineResponse2) context.store.get(line);
+        RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
+    List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
+    LineResponse expectedLine = (LineResponse) context.store.get(line);
     assertThat(actualLines).contains(expectedLine);
   }
 }

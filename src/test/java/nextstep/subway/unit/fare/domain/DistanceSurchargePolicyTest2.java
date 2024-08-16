@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
 import nextstep.subway.fare.domain.SurchargePolicy2;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge2;
 import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
@@ -26,9 +26,9 @@ class DistanceSurchargePolicyTest2 {
   void calculateSurcharge(int distance, long expectedFare) {
     Station 교대역 = 교대역();
     Station 강남역 = 강남역();
-    Line2 이호선 = 이호선2();
+    Line 이호선 = 이호선();
     List<LineSectionEdge2> edges =
-        List.of(LineSectionEdge2.of(LineSection2.of(교대역, 강남역, distance, 5), 이호선));
+        List.of(LineSectionEdge2.of(LineSection.of(교대역, 강남역, distance, 5), 이호선));
     Path2 path = Path2.of(List.of(교대역, 강남역), edges);
     SurchargePolicy2 policy = new DistanceSurchargePolicy2(10, 50, 100, 5);
     assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);

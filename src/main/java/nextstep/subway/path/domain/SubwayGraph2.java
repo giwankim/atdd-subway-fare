@@ -3,8 +3,8 @@ package nextstep.subway.path.domain;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -28,7 +28,7 @@ public class SubwayGraph2 {
     this(new WeightedMultigraph<>(LineSectionEdge2.class), type);
   }
 
-  public void addLine(Line2 line) {
+  public void addLine(Line line) {
     line.getStations().forEach(this::addStation);
     line.getLineSections().getSections().forEach(section -> addLineSection(section, line));
   }
@@ -37,7 +37,7 @@ public class SubwayGraph2 {
     graph.addVertex(station);
   }
 
-  private void addLineSection(LineSection2 lineSection, Line2 line) {
+  private void addLineSection(LineSection lineSection, Line line) {
     LineSectionEdge2 edge = LineSectionEdge2.of(lineSection, line);
     graph.addEdge(lineSection.getUpStation(), lineSection.getDownStation(), edge);
     graph.setEdgeWeight(edge, type.getEdgeWeight(lineSection));

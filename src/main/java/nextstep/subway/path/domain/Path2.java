@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.domain.Station;
 
 public class Path2 {
@@ -28,7 +28,7 @@ public class Path2 {
     return Collections.unmodifiableList(stations);
   }
 
-  public List<Line2> getLines() {
+  public List<Line> getLines() {
     return edges.stream().map(LineSectionEdge2::getLine).collect(Collectors.toUnmodifiableList());
   }
 

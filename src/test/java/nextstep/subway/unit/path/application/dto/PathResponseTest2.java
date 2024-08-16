@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.application.dto.PathResponse2;
 import nextstep.subway.path.domain.LineSectionEdge2;
 import nextstep.subway.path.domain.Path2;
@@ -21,13 +21,13 @@ class PathResponseTest2 {
   private final Station 교대역 = 교대역();
   private final Station 남부터미널역 = 남부터미널역();
   private final Station 양재역 = 양재역();
-  private final Line2 삼호선 = 삼호선2();
+  private final Line 삼호선 = 삼호선();
 
   @DisplayName("경로로부터 응답을 생성한다.")
   @Test
   void of() {
-    LineSectionEdge2 edge1 = LineSectionEdge2.of(LineSection2.of(교대역, 남부터미널역, 2, 10), 삼호선);
-    LineSectionEdge2 edge2 = LineSectionEdge2.of(LineSection2.of(남부터미널역, 양재역, 3, 10), 삼호선);
+    LineSectionEdge2 edge1 = LineSectionEdge2.of(LineSection.of(교대역, 남부터미널역, 2, 10), 삼호선);
+    LineSectionEdge2 edge2 = LineSectionEdge2.of(LineSection.of(남부터미널역, 양재역, 3, 10), 삼호선);
     Path2 path = Path2.of(List.of(교대역, 남부터미널역, 양재역), List.of(edge1, edge2));
     long fare = 1250;
     LocalDateTime arrivalTime = LocalDateTime.of(2024, 8, 12, 10, 0);

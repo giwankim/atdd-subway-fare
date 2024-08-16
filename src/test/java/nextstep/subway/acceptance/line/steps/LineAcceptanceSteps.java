@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import nextstep.subway.line.application.dto.*;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class LineAcceptanceSteps2 {
-  private LineAcceptanceSteps2() {}
+public class LineAcceptanceSteps {
+  private LineAcceptanceSteps() {}
 
-  public static ExtractableResponse<Response> 지하철_노선_생성_요청2(Line2 line) {
-    LineSection2 section = line.getLineSections().getFirst();
+  public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
+    LineSection section = line.getLineSections().getFirst();
 
     Map<String, String> params = new HashMap<>();
     params.put("name", line.getName());
@@ -41,40 +41,40 @@ public class LineAcceptanceSteps2 {
         .body(params)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
-        .post("/new/lines")
+        .post("/lines")
         .then()
         .log()
         .all()
         .extract();
   }
 
-  public static void 지하철_노선_생성됨2(ExtractableResponse<Response> response) {
+  public static void 지하철_노선_생성됨(ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     assertThat(response.header(HttpHeaders.LOCATION)).isNotBlank();
   }
 
-  public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청2() {
-    return RestAssured.given().log().all().when().get("/new/lines").then().log().all().extract();
+  public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
+    return RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
   }
 
-  public static void 지하철_노선_목록에_포함됨2(
+  public static void 지하철_노선_목록에_포함됨(
       ExtractableResponse<Response> response, List<ExtractableResponse<Response>> createResponses) {
-    List<LineResponse2> actualLines = response.jsonPath().getList(".", LineResponse2.class);
-    List<LineResponse2> expectedLines =
-        createResponses.stream().map(it -> it.as(LineResponse2.class)).collect(Collectors.toList());
+    List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
+    List<LineResponse> expectedLines =
+        createResponses.stream().map(it -> it.as(LineResponse.class)).collect(Collectors.toList());
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
-  public static ExtractableResponse<Response> 지하철_노선_조회_요청2(String uri) {
+  public static ExtractableResponse<Response> 지하철_노선_조회_요청(String uri) {
     return RestAssured.given().log().all().when().get(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_조회됨2(ExtractableResponse<Response> response, Line2 line) {
+  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line line) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    assertThat(response.as(LineResponse2.class)).isEqualTo(LineResponse2.from(line));
+    assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
   }
 
-  public static ExtractableResponse<Response> 지하철_노선_수정_요청2(String uri, String name, String color) {
+  public static ExtractableResponse<Response> 지하철_노선_수정_요청(String uri, String name, String color) {
     return RestAssured.given()
         .log()
         .all()
@@ -88,17 +88,17 @@ public class LineAcceptanceSteps2 {
         .extract();
   }
 
-  public static void 지하철_노선_수정됨2(String uri, String newName, String newColor) {
-    LineResponse2 updatedLine = 지하철_노선_조회_요청2(uri).as(LineResponse2.class);
+  public static void 지하철_노선_수정됨(String uri, String newName, String newColor) {
+    LineResponse updatedLine = 지하철_노선_조회_요청(uri).as(LineResponse.class);
     assertThat(updatedLine.getName()).isEqualTo(newName);
     assertThat(updatedLine.getColor()).isEqualTo(newColor);
   }
 
-  public static ExtractableResponse<Response> 지하철_삭제_요청2(String uri) {
+  public static ExtractableResponse<Response> 지하철_삭제_요청(String uri) {
     return RestAssured.given().log().all().when().delete(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_삭제됨2(String uri, ExtractableResponse<Response> response) {
+  public static void 지하철_노선_삭제됨(String uri, ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     var getResponse = RestAssured.given().log().all().when().get(uri).then().log().all().extract();
     assertThat(getResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());

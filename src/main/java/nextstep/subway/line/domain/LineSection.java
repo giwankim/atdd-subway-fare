@@ -11,7 +11,7 @@ import nextstep.subway.station.domain.Station;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class LineSection2 {
+public class LineSection {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -28,7 +28,7 @@ public class LineSection2 {
   private int duration;
 
   @Builder
-  public LineSection2(Long id, Station upStation, Station downStation, int distance, int duration) {
+  public LineSection(Long id, Station upStation, Station downStation, int distance, int duration) {
     this.id = id;
     this.upStation = upStation;
     this.downStation = downStation;
@@ -36,24 +36,23 @@ public class LineSection2 {
     this.duration = duration;
   }
 
-  public LineSection2(Station upStation, Station downStation, int distance, int duration) {
+  public LineSection(Station upStation, Station downStation, int distance, int duration) {
     this(null, upStation, downStation, distance, duration);
   }
 
-  public static LineSection2 of(
-      Station upStation, Station downStation, int distance, int duration) {
-    return new LineSection2(upStation, downStation, distance, duration);
+  public static LineSection of(Station upStation, Station downStation, int distance, int duration) {
+    return new LineSection(upStation, downStation, distance, duration);
   }
 
-  public boolean canPrepend(LineSection2 lineSection) {
+  public boolean canPrepend(LineSection lineSection) {
     return upStation.isSame(lineSection.downStation);
   }
 
-  public boolean canAppend(LineSection2 lineSection) {
+  public boolean canAppend(LineSection lineSection) {
     return downStation.isSame(lineSection.upStation);
   }
 
-  public boolean canSplitUp(LineSection2 lineSection) {
+  public boolean canSplitUp(LineSection lineSection) {
     if (lineSection.distance >= distance) {
       return false;
     }
@@ -63,7 +62,7 @@ public class LineSection2 {
     return upStation.isSame(lineSection.getUpStation());
   }
 
-  public boolean canSplitDown(LineSection2 lineSection) {
+  public boolean canSplitDown(LineSection lineSection) {
     if (lineSection.distance >= distance) {
       return false;
     }
@@ -73,19 +72,19 @@ public class LineSection2 {
     return downStation.isSame(lineSection.getDownStation());
   }
 
-  public boolean isSame(LineSection2 lineSection) {
+  public boolean isSame(LineSection lineSection) {
     return upStation.isSame(lineSection.getUpStation())
         && downStation.isSame(lineSection.getDownStation())
         && distance == lineSection.getDistance()
         && duration == lineSection.getDuration();
   }
 
-  public List<LineSection2> split(LineSection2 lineSection) {
+  public List<LineSection> split(LineSection lineSection) {
     if (canSplitUp(lineSection)) {
       return List.of(
-          LineSection2.of(
+          LineSection.of(
               upStation, lineSection.getDownStation(), lineSection.distance, lineSection.duration),
-          LineSection2.of(
+          LineSection.of(
               lineSection.getDownStation(),
               downStation,
               distance - lineSection.distance,
@@ -93,12 +92,12 @@ public class LineSection2 {
     }
     if (canSplitDown(lineSection)) {
       return List.of(
-          LineSection2.of(
+          LineSection.of(
               upStation,
               lineSection.upStation,
               distance - lineSection.distance,
               duration - lineSection.duration),
-          LineSection2.of(
+          LineSection.of(
               lineSection.upStation, downStation, lineSection.distance, lineSection.duration));
     }
     throw new IllegalArgumentException("LineSection#split 가 가능하지 않습니다.");
@@ -108,16 +107,16 @@ public class LineSection2 {
     return upStation.isSame(station) || downStation.isSame(station);
   }
 
-  public LineSection2 merge(LineSection2 lineSection) {
+  public LineSection merge(LineSection lineSection) {
     if (canAppend(lineSection)) {
-      return LineSection2.of(
+      return LineSection.of(
           upStation,
           lineSection.getDownStation(),
           distance + lineSection.distance,
           duration + lineSection.duration);
     }
     if (canPrepend(lineSection)) {
-      return LineSection2.of(
+      return LineSection.of(
           lineSection.getUpStation(),
           downStation,
           distance + lineSection.distance,

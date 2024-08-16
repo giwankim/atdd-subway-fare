@@ -17,7 +17,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Line2 {
+public class Line {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -28,7 +28,7 @@ public class Line2 {
   @Column(nullable = false)
   private String color;
 
-  @Embedded private final LineSections2 lineSections = new LineSections2();
+  @Embedded private final LineSections lineSections = new LineSections();
 
   private int surcharge;
   private LocalTime startTime;
@@ -36,7 +36,7 @@ public class Line2 {
   private int intervalTime;
 
   @Builder
-  public Line2(
+  public Line(
       Long id,
       String name,
       String color,
@@ -44,7 +44,7 @@ public class Line2 {
       LocalTime startTime,
       LocalTime endTime,
       int intervalTime,
-      LineSections2 lineSections) {
+      LineSections lineSections) {
     this.id = id;
     this.name = name;
     this.color = color;
@@ -55,14 +55,14 @@ public class Line2 {
     this.lineSections.addAll(lineSections);
   }
 
-  public Line2(
+  public Line(
       String name,
       String color,
       int surcharge,
       LocalTime startTime,
       LocalTime endTime,
       int intervalTime,
-      LineSection2... lineSections) {
+      LineSection... lineSections) {
     this(
         null,
         name,
@@ -71,17 +71,17 @@ public class Line2 {
         startTime,
         endTime,
         intervalTime,
-        new LineSections2(Arrays.asList(lineSections)));
+        new LineSections(Arrays.asList(lineSections)));
   }
 
-  public Line2(
+  public Line(
       String name,
       String color,
       int surcharge,
       LocalTime startTime,
       LocalTime endTime,
       int intervalTime) {
-    this(null, name, color, surcharge, startTime, endTime, intervalTime, new LineSections2());
+    this(null, name, color, surcharge, startTime, endTime, intervalTime, new LineSections());
   }
 
   public void changeName(String name) {
@@ -92,7 +92,7 @@ public class Line2 {
     this.color = color;
   }
 
-  public void addLineSection(LineSection2 lineSection) {
+  public void addLineSection(LineSection lineSection) {
     lineSections.add(lineSection);
   }
 
@@ -104,7 +104,7 @@ public class Line2 {
     lineSections.remove(station);
   }
 
-  public LocalDateTime getArrivalTime(LineSection2 section, LocalDateTime now) {
+  public LocalDateTime getArrivalTime(LineSection section, LocalDateTime now) {
     LocalDate today = now.toLocalDate();
 
     long timeTo = lineSections.getTimeTo(section);
@@ -148,8 +148,8 @@ public class Line2 {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    Line2 line2 = (Line2) o;
-    return getId() != null && Objects.equals(getId(), line2.getId());
+    Line line = (Line) o;
+    return getId() != null && Objects.equals(getId(), line.getId());
   }
 
   @Override

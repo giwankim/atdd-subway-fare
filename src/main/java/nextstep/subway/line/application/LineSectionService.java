@@ -2,8 +2,8 @@ package nextstep.subway.line.application;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.line.application.dto.LineSectionRequest;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.application.StationReader;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
@@ -11,22 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class LineSectionService2 {
-  private final LineSectionMapper2 lineSectionMapper;
+public class LineSectionService {
+  private final LineSectionMapper lineSectionMapper;
   private final StationReader stationReader;
-  private final LineService2 lineService;
+  private final LineService lineService;
 
   @Transactional
-  public Line2 appendLineSection(Long lineId, LineSectionRequest request) {
-    Line2 line = lineService.findLineById(lineId);
-    LineSection2 lineSection = lineSectionMapper.map(request);
+  public Line appendLineSection(Long lineId, LineSectionRequest request) {
+    Line line = lineService.findLineById(lineId);
+    LineSection lineSection = lineSectionMapper.map(request);
     line.addLineSection(lineSection);
     return line;
   }
 
   @Transactional
   public void removeLineSection(Long lineId, Long stationId) {
-    Line2 line = lineService.findLineById(lineId);
+    Line line = lineService.findLineById(lineId);
     Station station = stationReader.readById(stationId);
     line.remove(station);
   }

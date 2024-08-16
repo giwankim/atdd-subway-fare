@@ -14,8 +14,8 @@ import nextstep.subway.fare.application.SurchargePolicyService2;
 import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
 import nextstep.subway.fare.domain.LineSurchargePolicy2;
 import nextstep.subway.fare.domain.OverlappedSurchargePolicy2;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge2;
 import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
@@ -39,8 +39,8 @@ class FareCalculatorTest2 {
   private final Station 교대역 = 교대역();
   private final Station 강남역 = 강남역();
   private final Station 양재역 = 양재역();
-  private final Line2 이호선 = 이호선2();
-  private final Line2 신분당선 = 신분당선2();
+  private final Line 이호선 = 이호선();
+  private final Line 신분당선 = 신분당선();
 
   @DisplayName("요금 계산")
   @ParameterizedTest
@@ -49,8 +49,8 @@ class FareCalculatorTest2 {
     Member adult = aMember().build();
     List<LineSectionEdge2> edges =
         List.of(
-            LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 0, 0), 이호선),
-            LineSectionEdge2.of(LineSection2.of(강남역, 양재역, distance, 10), 신분당선));
+            LineSectionEdge2.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge2.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
     Path2 path = Path2.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
@@ -89,8 +89,8 @@ class FareCalculatorTest2 {
     Member youth = aMember().age(13).build();
     List<LineSectionEdge2> edges =
         List.of(
-            LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 0, 0), 이호선),
-            LineSectionEdge2.of(LineSection2.of(강남역, 양재역, distance, 10), 신분당선));
+            LineSectionEdge2.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge2.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
     Path2 path = Path2.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
@@ -128,8 +128,8 @@ class FareCalculatorTest2 {
     Member child = aMember().age(6).build();
     List<LineSectionEdge2> edges =
         List.of(
-            LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 0, 0), 이호선),
-            LineSectionEdge2.of(LineSection2.of(강남역, 양재역, distance, 10), 신분당선));
+            LineSectionEdge2.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge2.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
     Path2 path = Path2.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
@@ -170,12 +170,12 @@ class FareCalculatorTest2 {
     given(surchargePolicyService.loadPolicy())
         .willReturn(new LineSurchargePolicy2(lineIdToSurcharge));
 
-    Line2 line1 = aLine2().id(1L).build();
-    Line2 line2 = aLine2().id(2L).build();
+    Line line1 = aLine().id(1L).build();
+    Line line2 = aLine().id(2L).build();
     List<LineSectionEdge2> edges =
         List.of(
-            LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 5, 5), line1),
-            LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 5, 5), line2));
+            LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), line1),
+            LineSectionEdge2.of(LineSection.of(강남역, 양재역, 5, 5), line2));
     Path2 path = Path2.of(List.of(교대역, 강남역, 양재역), edges);
 
     Member adult = aMember().build();

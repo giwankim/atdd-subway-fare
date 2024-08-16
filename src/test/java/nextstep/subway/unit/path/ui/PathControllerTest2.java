@@ -15,8 +15,8 @@ import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.application.PathService2;
 import nextstep.subway.path.application.dto.PathRequest2;
 import nextstep.subway.path.application.dto.PathResponse2;
@@ -57,8 +57,8 @@ class PathControllerTest2 {
   void findPath() throws Exception {
     Station 강남역 = 강남역();
     Station 양재역 = 양재역();
-    Line2 신분당선 = 신분당선2();
-    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 10, 3), 신분당선);
+    Line 신분당선 = 신분당선();
+    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
     Path2 path = Path2.of(List.of(강남역, 양재역), Collections.singletonList(edge));
     given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
         .willReturn(PathResponse2.of(path, 1250L));
@@ -87,8 +87,8 @@ class PathControllerTest2 {
   void findPathArrivalTime() throws Exception {
     Station 강남역 = 강남역();
     Station 양재역 = 양재역();
-    Line2 신분당선 = 신분당선2();
-    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 10, 3), 신분당선);
+    Line 신분당선 = 신분당선();
+    LineSectionEdge2 edge = LineSectionEdge2.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
     Path2 path = Path2.of(List.of(강남역, 양재역), Collections.singletonList(edge));
     given(pathService.findPath(any(PathRequest2.class), any(LoginMember.class)))
         .willReturn(PathResponse2.of(path, 1250L, LocalDateTime.of(2024, 8, 12, 10, 3)));

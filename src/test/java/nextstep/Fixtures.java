@@ -6,7 +6,7 @@ import nextstep.favorite.domain.Favorite.FavoriteBuilder;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.Member.MemberBuilder;
 import nextstep.subway.line.domain.*;
-import nextstep.subway.line.domain.Line2.Line2Builder;
+import nextstep.subway.line.domain.Line.LineBuilder;
 import nextstep.subway.station.domain.Station;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -41,8 +41,8 @@ public class Fixtures {
     return Station.builder().id(7L).name("양재역").build();
   }
 
-  public static Line2Builder aLine2() {
-    return Line2.builder()
+  public static LineBuilder aLine() {
+    return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
@@ -50,15 +50,15 @@ public class Fixtures {
         .startTime(LocalTime.of(5, 0))
         .endTime(LocalTime.of(23, 0))
         .intervalTime(10)
-        .lineSections(new LineSections2());
+        .lineSections(new LineSections());
   }
 
-  public static Line2 이호선2() {
-    return Line2.builder()
+  public static Line 이호선() {
+    return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
-        .lineSections(new LineSections2(강남_역삼_구간2()))
+        .lineSections(new LineSections(강남_역삼_구간()))
         .surcharge(0)
         .startTime(LocalTime.of(5, 0))
         .endTime(LocalTime.of(23, 0))
@@ -66,12 +66,12 @@ public class Fixtures {
         .build();
   }
 
-  public static Line2 신분당선2() {
-    return Line2.builder()
+  public static Line 신분당선() {
+    return Line.builder()
         .id(2L)
         .name("신분당선")
         .color("bg-red-600")
-        .lineSections(new LineSections2(강남_판교_구간2()))
+        .lineSections(new LineSections(강남_판교_구간()))
         .surcharge(900)
         .startTime(LocalTime.of(5, 0))
         .endTime(LocalTime.of(23, 0))
@@ -79,12 +79,12 @@ public class Fixtures {
         .build();
   }
 
-  public static Line2 삼호선2() {
-    return Line2.builder()
+  public static Line 삼호선() {
+    return Line.builder()
         .id(3L)
         .name("삼호선")
         .color("bg-orange-600")
-        .lineSections(new LineSections2(교대_남부터미널_구간2(), 남부터미널_양재_구간2()))
+        .lineSections(new LineSections(교대_남부터미널_구간(), 남부터미널_양재_구간()))
         .surcharge(0)
         .startTime(LocalTime.of(5, 0))
         .endTime(LocalTime.of(23, 0))
@@ -92,8 +92,8 @@ public class Fixtures {
         .build();
   }
 
-  public static LineSection2 강남_역삼_구간2() {
-    return LineSection2.builder()
+  public static LineSection 강남_역삼_구간() {
+    return LineSection.builder()
         .upStation(강남역())
         .downStation(역삼역())
         .distance(10)
@@ -101,8 +101,8 @@ public class Fixtures {
         .build();
   }
 
-  public static LineSection2 역삼_선릉_구간2() {
-    return LineSection2.builder()
+  public static LineSection 역삼_선릉_구간() {
+    return LineSection.builder()
         .upStation(역삼역())
         .downStation(선릉역())
         .distance(20)
@@ -110,8 +110,8 @@ public class Fixtures {
         .build();
   }
 
-  public static LineSection2 강남_판교_구간2() {
-    return LineSection2.builder()
+  public static LineSection 강남_판교_구간() {
+    return LineSection.builder()
         .upStation(강남역())
         .downStation(판교역())
         .distance(20)
@@ -119,8 +119,8 @@ public class Fixtures {
         .build();
   }
 
-  public static LineSection2 교대_남부터미널_구간2() {
-    return LineSection2.builder()
+  public static LineSection 교대_남부터미널_구간() {
+    return LineSection.builder()
         .upStation(교대역())
         .downStation(남부터미널역())
         .distance(2)
@@ -128,8 +128,8 @@ public class Fixtures {
         .build();
   }
 
-  public static LineSection2 남부터미널_양재_구간2() {
-    return LineSection2.builder()
+  public static LineSection 남부터미널_양재_구간() {
+    return LineSection.builder()
         .upStation(남부터미널역())
         .downStation(양재역())
         .distance(3)

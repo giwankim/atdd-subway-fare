@@ -24,7 +24,7 @@ class SubwayGraphTest2 {
   void addLine() {
     SubwayGraph2 graph = new SubwayGraph2(PathType2.DISTANCE);
 
-    graph.addLine(이호선2());
+    graph.addLine(이호선());
 
     assertThat(graph.isSame(new SubwayGraph2(PathType2.DISTANCE))).isFalse();
   }
@@ -37,13 +37,13 @@ class SubwayGraphTest2 {
     @BeforeEach
     void setUp() {
       graph = new SubwayGraph2(PathType2.DISTANCE);
-      Line2 이호선 = aLine2().lineSections(LineSections2.of(교대역, 강남역, 10, 2)).build();
-      Line2 신분당선 = aLine2().lineSections(LineSections2.of(강남역, 양재역, 10, 3)).build();
-      Line2 삼호선 =
-          aLine2()
+      Line 이호선 = aLine().lineSections(LineSections.of(교대역, 강남역, 10, 2)).build();
+      Line 신분당선 = aLine().lineSections(LineSections.of(강남역, 양재역, 10, 3)).build();
+      Line 삼호선 =
+          aLine()
               .lineSections(
-                  new LineSections2(
-                      LineSection2.of(교대역, 남부터미널역, 2, 10), LineSection2.of(남부터미널역, 양재역, 3, 10)))
+                  new LineSections(
+                      LineSection.of(교대역, 남부터미널역, 2, 10), LineSection.of(남부터미널역, 양재역, 3, 10)))
               .build();
       graph.addLine(이호선);
       graph.addLine(신분당선);
@@ -63,13 +63,13 @@ class SubwayGraphTest2 {
     @Test
     void getShortestDurationPath() {
       graph = new SubwayGraph2(PathType2.DURATION);
-      Line2 이호선 = aLine2().lineSections(LineSections2.of(교대역, 강남역, 10, 2)).build();
-      Line2 신분당선 = aLine2().lineSections(LineSections2.of(강남역, 양재역, 10, 3)).build();
-      Line2 삼호선 =
-          aLine2()
+      Line 이호선 = aLine().lineSections(LineSections.of(교대역, 강남역, 10, 2)).build();
+      Line 신분당선 = aLine().lineSections(LineSections.of(강남역, 양재역, 10, 3)).build();
+      Line 삼호선 =
+          aLine()
               .lineSections(
-                  new LineSections2(
-                      LineSection2.of(교대역, 남부터미널역, 2, 10), LineSection2.of(남부터미널역, 양재역, 3, 10)))
+                  new LineSections(
+                      LineSection.of(교대역, 남부터미널역, 2, 10), LineSection.of(남부터미널역, 양재역, 3, 10)))
               .build();
       graph.addLine(이호선);
       graph.addLine(신분당선);
@@ -94,8 +94,8 @@ class SubwayGraphTest2 {
     @Test
     void sourceAndTargetDisconnected() {
       graph = new SubwayGraph2(PathType2.DURATION);
-      Line2 이호선 = aLine2().lineSections(LineSections2.of(교대역, 강남역, 10, 2)).build();
-      Line2 삼호선 = aLine2().lineSections(LineSections2.of(남부터미널역, 양재역, 3, 10)).build();
+      Line 이호선 = aLine().lineSections(LineSections.of(교대역, 강남역, 10, 2)).build();
+      Line 삼호선 = aLine().lineSections(LineSections.of(남부터미널역, 양재역, 3, 10)).build();
       graph.addLine(이호선);
       graph.addLine(삼호선);
 
@@ -122,17 +122,16 @@ class SubwayGraphTest2 {
     @BeforeEach
     void setUp() {
       graph = new SubwayGraph2(PathType2.ARRIVAL_TIME);
-      Line2 이호선 =
-          aLine2().id(1L).name("2호선").lineSections(LineSections2.of(교대역, 강남역, 10, 2)).build();
-      Line2 신분당선 =
-          aLine2().id(2L).name("신분당선").lineSections(LineSections2.of(강남역, 양재역, 10, 3)).build();
-      Line2 삼호선 =
-          aLine2()
+      Line 이호선 = aLine().id(1L).name("2호선").lineSections(LineSections.of(교대역, 강남역, 10, 2)).build();
+      Line 신분당선 =
+          aLine().id(2L).name("신분당선").lineSections(LineSections.of(강남역, 양재역, 10, 3)).build();
+      Line 삼호선 =
+          aLine()
               .id(3L)
               .name("3호선")
               .lineSections(
-                  new LineSections2(
-                      LineSection2.of(교대역, 남부터미널역, 2, 10), LineSection2.of(남부터미널역, 양재역, 3, 10)))
+                  new LineSections(
+                      LineSection.of(교대역, 남부터미널역, 2, 10), LineSection.of(남부터미널역, 양재역, 3, 10)))
               .build();
       graph.addLine(이호선);
       graph.addLine(신분당선);
@@ -161,8 +160,8 @@ class SubwayGraphTest2 {
     @Test
     void sourceAndTargetDisconnected() {
       graph = new SubwayGraph2(PathType2.ARRIVAL_TIME);
-      Line2 이호선 = aLine2().lineSections(LineSections2.of(교대역, 강남역, 10, 2)).build();
-      Line2 삼호선 = aLine2().lineSections(LineSections2.of(남부터미널역, 양재역, 3, 10)).build();
+      Line 이호선 = aLine().lineSections(LineSections.of(교대역, 강남역, 10, 2)).build();
+      Line 삼호선 = aLine().lineSections(LineSections.of(남부터미널역, 양재역, 3, 10)).build();
       graph.addLine(이호선);
       graph.addLine(삼호선);
 

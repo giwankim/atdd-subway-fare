@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import nextstep.subway.fare.domain.DistanceCondition2;
 import nextstep.subway.fare.domain.SurchargeCondition2;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge2;
 import nextstep.subway.path.domain.Path2;
 import nextstep.subway.station.domain.Station;
@@ -33,27 +33,27 @@ class DistanceConditionTest2 {
     Station 교대역 = 교대역();
     Station 강남역 = 강남역();
     Station 양재역 = 양재역();
-    Line2 이호선 = 이호선2();
-    Line2 신분당선 = 신분당선2();
+    Line 이호선 = 이호선();
+    Line 신분당선 = 신분당선();
 
     return Stream.of(
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 4, 5), 신분당선)),
+                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 4, 5), 신분당선)),
             false),
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 5, 5), 신분당선)),
+                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 5, 5), 신분당선)),
             true),
         Arguments.of(
             List.of(교대역, 강남역, 양재역),
             List.of(
-                LineSectionEdge2.of(LineSection2.of(교대역, 강남역, 5, 5), 이호선),
-                LineSectionEdge2.of(LineSection2.of(강남역, 양재역, 6, 5), 신분당선)),
+                LineSectionEdge2.of(LineSection.of(교대역, 강남역, 5, 5), 이호선),
+                LineSectionEdge2.of(LineSection.of(강남역, 양재역, 6, 5), 신분당선)),
             true));
   }
 }

@@ -17,27 +17,27 @@ import nextstep.subway.station.domain.Station;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LineSections2 {
+public class LineSections {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @JoinColumn(name = "line_id")
-  private final List<LineSection2> sections = new ArrayList<>();
+  private final List<LineSection> sections = new ArrayList<>();
 
   @Builder
-  public LineSections2(List<LineSection2> lineSections) {
+  public LineSections(List<LineSection> lineSections) {
     this.sections.addAll(lineSections);
   }
 
-  public LineSections2(LineSection2... lineSections) {
+  public LineSections(LineSection... lineSections) {
     this.sections.addAll(Arrays.asList(lineSections));
   }
 
-  public LineSections2(Station upStation, Station downStation, int distance, int duration) {
-    this(LineSection2.of(upStation, downStation, distance, duration));
+  public LineSections(Station upStation, Station downStation, int distance, int duration) {
+    this(LineSection.of(upStation, downStation, distance, duration));
   }
 
-  public static LineSections2 of(
+  public static LineSections of(
       Station upStation, Station downStation, int distance, int duration) {
-    return new LineSections2(upStation, downStation, distance, duration);
+    return new LineSections(upStation, downStation, distance, duration);
   }
 
   public int size() {
@@ -48,15 +48,15 @@ public class LineSections2 {
     return sections.isEmpty();
   }
 
-  public LineSection2 getFirst() {
+  public LineSection getFirst() {
     return sections.get(0);
   }
 
-  public LineSection2 getLast() {
+  public LineSection getLast() {
     return sections.get(sections.size() - 1);
   }
 
-  public void add(LineSection2 lineSection) {
+  public void add(LineSection lineSection) {
     validateAdd(lineSection);
     if (isEmpty()) {
       sections.add(lineSection);
@@ -79,7 +79,7 @@ public class LineSections2 {
     throw new CannotAddLineSectionException();
   }
 
-  private boolean insertUp(LineSection2 lineSection) {
+  private boolean insertUp(LineSection lineSection) {
     OptionalInt optionalIndex = indexOfSplitUp(lineSection);
     if (optionalIndex.isPresent()) {
       insert(lineSection, optionalIndex.getAsInt());
@@ -88,7 +88,7 @@ public class LineSections2 {
     return false;
   }
 
-  private boolean insertDown(LineSection2 lineSection) {
+  private boolean insertDown(LineSection lineSection) {
     OptionalInt optionalIndex = indexOfSplitDown(lineSection);
     if (optionalIndex.isPresent()) {
       insert(lineSection, optionalIndex.getAsInt());
@@ -97,45 +97,45 @@ public class LineSections2 {
     return false;
   }
 
-  private void insert(LineSection2 lineSection, int index) {
-    LineSection2 splitTargetSection = sections.remove(index);
-    List<LineSection2> splitSections = splitTargetSection.split(lineSection);
+  private void insert(LineSection lineSection, int index) {
+    LineSection splitTargetSection = sections.remove(index);
+    List<LineSection> splitSections = splitTargetSection.split(lineSection);
     sections.addAll(index, splitSections);
   }
 
-  private OptionalInt indexOfSplitUp(LineSection2 lineSection) {
+  private OptionalInt indexOfSplitUp(LineSection lineSection) {
     return IntStream.range(0, sections.size())
         .filter(it -> sections.get(it).canSplitUp(lineSection))
         .findFirst();
   }
 
-  private OptionalInt indexOfSplitDown(LineSection2 lineSection) {
+  private OptionalInt indexOfSplitDown(LineSection lineSection) {
     return IntStream.range(0, sections.size())
         .filter(it -> sections.get(it).canSplitDown(lineSection))
         .findFirst();
   }
 
-  private boolean isPrepend(LineSection2 lineSection) {
+  private boolean isPrepend(LineSection lineSection) {
     return getFirst().canPrepend(lineSection);
   }
 
-  private boolean isAppend(LineSection2 lineSection) {
+  private boolean isAppend(LineSection lineSection) {
     return getLast().canAppend(lineSection);
   }
 
-  private void validateAdd(LineSection2 lineSection) {
+  private void validateAdd(LineSection lineSection) {
     if (containsBothStations(lineSection)) {
       throw new LineSectionAlreadyExistsException();
     }
   }
 
-  private boolean containsBothStations(LineSection2 lineSection) {
+  private boolean containsBothStations(LineSection lineSection) {
     List<Station> stations = getStations();
     return stations.stream().anyMatch(it -> it.isSame(lineSection.getUpStation()))
         && stations.stream().anyMatch(it -> it.isSame(lineSection.getDownStation()));
   }
 
-  public void addAll(LineSections2 lineSections) {
+  public void addAll(LineSections lineSections) {
     lineSections.sections.forEach(this::add);
   }
 
@@ -144,7 +144,7 @@ public class LineSections2 {
       return Collections.emptyList();
     }
     List<Station> stations =
-        sections.stream().map(LineSection2::getUpStation).collect(Collectors.toList());
+        sections.stream().map(LineSection::getUpStation).collect(Collectors.toList());
     stations.add(getLast().getDownStation());
     return Collections.unmodifiableList(stations);
   }
@@ -166,9 +166,9 @@ public class LineSections2 {
       return false;
     }
     int index = optionalIndex.getAsInt();
-    LineSection2 upSection = sections.remove(index);
-    LineSection2 downSection = sections.remove(index);
-    LineSection2 mergedSection = upSection.merge(downSection);
+    LineSection upSection = sections.remove(index);
+    LineSection downSection = sections.remove(index);
+    LineSection mergedSection = upSection.merge(downSection);
     sections.add(index, mergedSection);
     return true;
   }
@@ -200,13 +200,13 @@ public class LineSections2 {
     }
   }
 
-  public long getTimeTo(LineSection2 section) {
+  public long getTimeTo(LineSection section) {
     if (sections.stream().noneMatch(section::isSame)) {
       throw new IllegalArgumentException("구간이 존재하지 않습니다.");
     }
     return sections.stream()
         .takeWhile(it -> !it.isSame(section))
-        .mapToLong(LineSection2::getDuration)
+        .mapToLong(LineSection::getDuration)
         .sum();
   }
 }

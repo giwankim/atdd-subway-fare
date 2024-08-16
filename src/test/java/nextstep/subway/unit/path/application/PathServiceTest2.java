@@ -60,22 +60,19 @@ class PathServiceTest2 {
 
     Station 남부터미널역 = 남부터미널역();
     Station 양재역 = 양재역();
-    Line2 이호선 =
-        aLine2()
-            .name("2호선")
-            .lineSections(new LineSections2(LineSection2.of(교대역, 강남역, 10, 2)))
-            .build();
-    Line2 삼호선 =
-        aLine2()
+    Line 이호선 =
+        aLine().name("2호선").lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build();
+    Line 삼호선 =
+        aLine()
             .name("3호선")
             .lineSections(
-                new LineSections2(
-                    LineSection2.of(교대역, 남부터미널역, 2, 10), LineSection2.of(남부터미널역, 양재역, 3, 10)))
+                new LineSections(
+                    LineSection.of(교대역, 남부터미널역, 2, 10), LineSection.of(남부터미널역, 양재역, 3, 10)))
             .build();
-    Line2 신분당선 =
-        aLine2()
+    Line 신분당선 =
+        aLine()
             .name("신분당선")
-            .lineSections(new LineSections2(LineSection2.of(강남역, 양재역, 10, 3)))
+            .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
             .build();
     SubwayGraph2 graph = new SubwayGraph2(type);
     graph.addLine(이호선);
@@ -130,11 +127,8 @@ class PathServiceTest2 {
     LoginMember loginMember = new LoginMember(member.getEmail());
     given(memberService.findMemberByEmail(member.getEmail())).willReturn(member);
 
-    Line2 이호선 =
-        aLine2()
-            .name("2호선")
-            .lineSections(new LineSections2(LineSection2.of(교대역, 강남역, 10, 3)))
-            .build();
+    Line 이호선 =
+        aLine().name("2호선").lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 3))).build();
     SubwayGraph2 graph = new SubwayGraph2(type);
     graph.addLine(이호선);
 

@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
-import nextstep.subway.line.domain.LineSections2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.line.domain.LineSections;
 import nextstep.subway.path.domain.LineSectionEdge2;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -23,12 +23,12 @@ class LineSectionEdgeTest2 {
   @DisplayName("가장 빠른 출발 시간을 구한다.")
   @Test
   void getArrivalTime() {
-    LineSection2 section = LineSection2.of(교대역, 강남역, 10, 3);
-    Line2 line =
-        aLine2()
+    LineSection section = LineSection.of(교대역, 강남역, 10, 3);
+    Line line =
+        aLine()
             .id(1L)
             .name("이호선")
-            .lineSections(new LineSections2(section))
+            .lineSections(new LineSections(section))
             .surcharge(0)
             .startTime(LocalTime.of(5, 0))
             .endTime(LocalTime.of(23, 0))
@@ -44,13 +44,13 @@ class LineSectionEdgeTest2 {
   @DisplayName("출발 시간을 구한다 - 노선 주기가 짧은 경우")
   @Test
   void getArrivalTimeFrequentInterval() {
-    LineSection2 section1 = LineSection2.of(교대역, 강남역, 10, 10);
-    LineSection2 section2 = LineSection2.of(강남역, 역삼역, 15, 15);
-    Line2 line =
-        aLine2()
+    LineSection section1 = LineSection.of(교대역, 강남역, 10, 10);
+    LineSection section2 = LineSection.of(강남역, 역삼역, 15, 15);
+    Line line =
+        aLine()
             .id(1L)
             .name("이호선")
-            .lineSections(new LineSections2(section1, section2))
+            .lineSections(new LineSections(section1, section2))
             .surcharge(0)
             .startTime(LocalTime.of(5, 0))
             .endTime(LocalTime.of(23, 0))
@@ -66,12 +66,12 @@ class LineSectionEdgeTest2 {
   @DisplayName("막차 시간을 넘기면 다음날 출발 시간을 구한다.")
   @Test
   void getArrivalTimeNextDayAfterEndTime() {
-    LineSection2 section = LineSection2.of(교대역, 강남역, 10, 3);
-    Line2 line =
-        aLine2()
+    LineSection section = LineSection.of(교대역, 강남역, 10, 3);
+    Line line =
+        aLine()
             .id(1L)
             .name("이호선")
-            .lineSections(new LineSections2(section))
+            .lineSections(new LineSections(section))
             .surcharge(0)
             .startTime(LocalTime.of(5, 0))
             .endTime(LocalTime.of(23, 0))

@@ -7,8 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.List;
-import nextstep.subway.line.application.LineService2;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.application.LineService;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.application.GraphService2;
 import nextstep.subway.path.domain.PathType2;
 import nextstep.subway.path.domain.SubwayGraph2;
@@ -24,15 +24,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayName("경로 그래프 서비스 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
 class GraphServiceTest2 {
-  @Mock private LineService2 lineService;
+  @Mock private LineService lineService;
   @InjectMocks private GraphService2 graphService;
 
   @DisplayName("노선 정보 바탕으로 그래프를 불러온다.")
   @ParameterizedTest
   @EnumSource(PathType2.class)
   void loadGraph(PathType2 type) {
-    Line2 이호선 = 이호선2();
-    Line2 신분당선 = 신분당선2();
+    Line 이호선 = 이호선();
+    Line 신분당선 = 신분당선();
     given(lineService.findAllLines()).willReturn(List.of(이호선, 신분당선));
 
     SubwayGraph2 graph = graphService.loadGraph(type);
