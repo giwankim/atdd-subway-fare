@@ -1,9 +1,11 @@
 package nextstep.subway.acceptance.path;
 
 import static nextstep.Fixtures.*;
-import static nextstep.subway.acceptance.path.steps.PathAcceptanceSteps.*;
+import static nextstep.subway.acceptance.path.steps.PathAcceptanceSteps2.*;
 
-import nextstep.subway.line.domain.*;
+import nextstep.subway.line.domain.LineRepository2;
+import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.LineSections2;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.support.AcceptanceTest;
@@ -14,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 조회 기능 인수테스트")
-class PathAcceptanceTest extends AcceptanceTest {
+class PathAcceptanceTest2 extends AcceptanceTest {
   @Autowired StationRepository stationRepository;
-  @Autowired LineRepository lineRepository;
+  @Autowired LineRepository2 lineRepository;
 
   private Station 교대역;
   private Station 양재역;
@@ -44,20 +46,20 @@ class PathAcceptanceTest extends AcceptanceTest {
     Station 남부터미널 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build());
+        aLine2().lineSections(new LineSections2(LineSection2.of(교대역, 강남역, 10, 2))).build());
     lineRepository.save(
-        aLine()
+        aLine2()
             .name("신분당선")
             .color("bg-red-600")
-            .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
+            .lineSections(new LineSections2(LineSection2.of(강남역, 양재역, 10, 3)))
             .build());
     lineRepository.save(
-        aLine()
+        aLine2()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(
-                new LineSections(
-                    LineSection.of(교대역, 남부터미널, 2, 10), LineSection.of(남부터미널, 양재역, 3, 10)))
+                new LineSections2(
+                    LineSection2.of(교대역, 남부터미널, 2, 10), LineSection2.of(남부터미널, 양재역, 3, 10)))
             .build());
   }
 
@@ -65,8 +67,8 @@ class PathAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 경로 조회")
   @Test
   void shouldReturnShortestDistancePath() {
-    var response = 경로_조회_요청(교대역, 양재역, accessToken);
-    경로_역_목록_조회됨(response, "교대역", "남부터미널역", "양재역");
-    경로_거리_조회됨(response, 5);
+    var response = 경로_조회_요청2(교대역, 양재역, accessToken);
+    경로_역_목록_조회됨2(response, "교대역", "남부터미널역", "양재역");
+    경로_거리_조회됨2(response, 5);
   }
 }
