@@ -14,7 +14,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 public class SubwayGraph {
   private static final String STATION_NOT_FOUND = "구간의 상/하행역이 존재하지 않습니다.";
   private static final double EPSILON = 10e-7;
-  public static final int MAX_PATHS = 1000;
+  public static final int MAX_PATH_COUNT = 1000;
 
   private final WeightedMultigraph<Station, LineSectionEdge> graph;
   private final PathType type;
@@ -64,7 +64,7 @@ public class SubwayGraph {
     validate(source, target);
 
     List<GraphPath<Station, LineSectionEdge>> graphPaths =
-        new KShortestPaths<>(graph, MAX_PATHS).getPaths(source, target);
+        new KShortestPaths<>(graph, MAX_PATH_COUNT).getPaths(source, target);
 
     return new Paths(graphPaths.stream().map(SubwayGraph::mapToPath).collect(Collectors.toList()));
   }
