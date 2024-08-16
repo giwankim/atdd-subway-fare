@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Stream;
-import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
-import nextstep.subway.fare.domain.SurchargePolicy2;
+import nextstep.subway.fare.domain.DistanceSurchargePolicy;
+import nextstep.subway.fare.domain.SurchargePolicy;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("거리 기반 요금 정책 단위 테스트")
-class DistanceSurchargePolicyTest2 {
+class DistanceSurchargePolicyTest {
   @DisplayName("경로의 추가 요금을 계산한다.")
   @ParameterizedTest
   @MethodSource
@@ -30,7 +30,7 @@ class DistanceSurchargePolicyTest2 {
     List<LineSectionEdge> edges =
         List.of(LineSectionEdge.of(LineSection.of(교대역, 강남역, distance, 5), 이호선));
     Path path = Path.of(List.of(교대역, 강남역), edges);
-    SurchargePolicy2 policy = new DistanceSurchargePolicy2(10, 50, 100, 5);
+    SurchargePolicy policy = new DistanceSurchargePolicy(10, 50, 100, 5);
     assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }
 

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Map;
-import nextstep.subway.fare.domain.LineSurchargePolicy2;
+import nextstep.subway.fare.domain.LineSurchargePolicy;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("노선별 요금 추가 정책 서비스 단위 테스트")
-class LineSurchargePolicyTest2 {
+class LineSurchargePolicyTest {
   @DisplayName("추가 요금을 계산한다.")
   @Test
   void getSurchargeAmount() {
@@ -26,7 +26,7 @@ class LineSurchargePolicyTest2 {
     List<LineSectionEdge> edges =
         List.of(LineSectionEdge.of(LineSection.of(교대역, 강남역, 10, 10), 이호선));
     Path path = Path.of(List.of(교대역, 강남역), edges);
-    LineSurchargePolicy2 policy = new LineSurchargePolicy2(Map.of(1L, 900));
+    LineSurchargePolicy policy = new LineSurchargePolicy(Map.of(1L, 900));
 
     long surcharge = policy.calculateSurcharge(path);
 
@@ -43,8 +43,8 @@ class LineSurchargePolicyTest2 {
     Line line1 = aLine().id(1L).build();
     Line line2 = aLine().id(2L).build();
     Line line3 = aLine().id(3L).build();
-    LineSurchargePolicy2 policy =
-        new LineSurchargePolicy2(
+    LineSurchargePolicy policy =
+        new LineSurchargePolicy(
             Map.of(
                 1L, 900,
                 2L, 1000,

@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Stream;
-import nextstep.subway.fare.domain.DistanceCondition2;
-import nextstep.subway.fare.domain.SurchargeCondition2;
+import nextstep.subway.fare.domain.DistanceCondition;
+import nextstep.subway.fare.domain.SurchargeCondition;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
@@ -19,13 +19,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("거리 기반 할인 조건 단위 테스트")
-class DistanceConditionTest2 {
+class DistanceConditionTest {
   @DisplayName("조건을 만족하는지 확인")
   @ParameterizedTest
   @MethodSource
   void isSatisfiedBy(List<Station> stations, List<LineSectionEdge> edges, boolean expected) {
     Path path = Path.of(stations, edges);
-    SurchargeCondition2 condition = new DistanceCondition2(10);
+    SurchargeCondition condition = new DistanceCondition(10);
     assertThat(condition.isSatisfiedBy(path)).isEqualTo(expected);
   }
 

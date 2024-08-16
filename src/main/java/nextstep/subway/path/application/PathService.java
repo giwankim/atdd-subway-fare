@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.fare.application.FareCalculator2;
+import nextstep.subway.fare.application.FareCalculator;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
@@ -22,7 +22,7 @@ public class PathService {
   private final GraphService graphService;
   private final StationReader stationReader;
   private final MemberService memberService;
-  private final FareCalculator2 fareCalculator;
+  private final FareCalculator fareCalculator;
 
   public PathResponse findPath(PathRequest request, LoginMember loginMember) {
     Member member = memberService.findMemberByEmail(loginMember.getEmail());

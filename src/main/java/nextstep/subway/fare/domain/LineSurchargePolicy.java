@@ -6,10 +6,10 @@ import java.util.Objects;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.domain.Path;
 
-public class LineSurchargePolicy2 extends SurchargePolicy2 {
+public class LineSurchargePolicy extends SurchargePolicy {
   private final Map<Long, Integer> lineIdToSurcharge;
 
-  public LineSurchargePolicy2(Map<Long, Integer> lineIdToSurcharge) {
+  public LineSurchargePolicy(Map<Long, Integer> lineIdToSurcharge) {
     super(path -> true);
     this.lineIdToSurcharge = lineIdToSurcharge;
   }

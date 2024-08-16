@@ -2,10 +2,10 @@ package nextstep.subway.fare.domain;
 
 import nextstep.subway.path.domain.Path;
 
-public class DistanceCondition2 implements SurchargeCondition2 {
+public class DistanceCondition implements SurchargeCondition {
   private final long lowerBound;
 
-  public DistanceCondition2(long lowerBound) {
+  public DistanceCondition(long lowerBound) {
     this.lowerBound = lowerBound;
   }
 

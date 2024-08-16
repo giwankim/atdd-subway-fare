@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Stream;
-import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
-import nextstep.subway.fare.domain.OverlappedSurchargePolicy2;
+import nextstep.subway.fare.domain.DistanceSurchargePolicy;
+import nextstep.subway.fare.domain.OverlappedSurchargePolicy;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("OverlappedOverFarePolicy 클래스 단위 테스트")
-class OverlappedSurchargePolicyTest2 {
+class OverlappedSurchargePolicyTest {
   @DisplayName("할증 금액을 계산한다.")
   @ParameterizedTest
   @MethodSource
@@ -31,10 +31,10 @@ class OverlappedSurchargePolicyTest2 {
         Path.of(
             List.of(교대역, 강남역),
             List.of(LineSectionEdge.of(LineSection.of(교대역, 강남역, distance, 5), 이호선)));
-    OverlappedSurchargePolicy2 policy =
-        new OverlappedSurchargePolicy2(
-            new DistanceSurchargePolicy2(10, 50, 100, 5),
-            new DistanceSurchargePolicy2(50, Long.MAX_VALUE, 100, 8));
+    OverlappedSurchargePolicy policy =
+        new OverlappedSurchargePolicy(
+            new DistanceSurchargePolicy(10, 50, 100, 5),
+            new DistanceSurchargePolicy(50, Long.MAX_VALUE, 100, 8));
     assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }
 

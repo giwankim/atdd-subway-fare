@@ -3,10 +3,10 @@ package nextstep.subway.fare.domain;
 import java.util.List;
 import nextstep.subway.path.domain.Path;
 
-public abstract class SurchargePolicy2 {
-  private final List<SurchargeCondition2> conditions;
+public abstract class SurchargePolicy {
+  private final List<SurchargeCondition> conditions;
 
-  protected SurchargePolicy2(SurchargeCondition2... conditions) {
+  protected SurchargePolicy(SurchargeCondition... conditions) {
     this.conditions = List.of(conditions);
   }
 

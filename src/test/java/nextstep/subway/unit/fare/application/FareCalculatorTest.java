@@ -1,7 +1,7 @@
 package nextstep.subway.unit.fare.application;
 
 import static nextstep.Fixtures.*;
-import static nextstep.subway.fare.application.SurchargePolicyService2.*;
+import static nextstep.subway.fare.application.SurchargePolicyService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import nextstep.member.domain.Member;
-import nextstep.subway.fare.application.FareCalculator2;
-import nextstep.subway.fare.application.SurchargePolicyService2;
-import nextstep.subway.fare.domain.DistanceSurchargePolicy2;
-import nextstep.subway.fare.domain.LineSurchargePolicy2;
-import nextstep.subway.fare.domain.OverlappedSurchargePolicy2;
+import nextstep.subway.fare.application.FareCalculator;
+import nextstep.subway.fare.application.SurchargePolicyService;
+import nextstep.subway.fare.domain.DistanceSurchargePolicy;
+import nextstep.subway.fare.domain.LineSurchargePolicy;
+import nextstep.subway.fare.domain.OverlappedSurchargePolicy;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
@@ -32,9 +32,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @DisplayName("요금 계산기 단위 테스트")
 @SuppressWarnings("NonAsciiCharacters")
 @ExtendWith(MockitoExtension.class)
-class FareCalculatorTest2 {
-  @Mock private SurchargePolicyService2 surchargePolicyService;
-  @InjectMocks private FareCalculator2 fareCalculator;
+class FareCalculatorTest {
+  @Mock private SurchargePolicyService surchargePolicyService;
+  @InjectMocks private FareCalculator fareCalculator;
 
   private final Station 교대역 = 교대역();
   private final Station 강남역 = 강남역();
@@ -54,9 +54,9 @@ class FareCalculatorTest2 {
     Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
-            new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, DISTANCE_5KM),
-                new DistanceSurchargePolicy2(
+            new OverlappedSurchargePolicy(
+                new DistanceSurchargePolicy(10L, 50L, OVERCHARGE_PER_5KM, DISTANCE_5KM),
+                new DistanceSurchargePolicy(
                     50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, DISTANCE_8KM)));
 
     long fare = fareCalculator.calculateFare(path, adult);
@@ -94,9 +94,9 @@ class FareCalculatorTest2 {
     Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
-            new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, 5L),
-                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
+            new OverlappedSurchargePolicy(
+                new DistanceSurchargePolicy(10L, 50L, OVERCHARGE_PER_5KM, 5L),
+                new DistanceSurchargePolicy(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
 
     long fare = fareCalculator.calculateFare(path, youth);
 
@@ -133,9 +133,9 @@ class FareCalculatorTest2 {
     Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
-            new OverlappedSurchargePolicy2(
-                new DistanceSurchargePolicy2(10L, 50L, OVERCHARGE_PER_5KM, 5L),
-                new DistanceSurchargePolicy2(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
+            new OverlappedSurchargePolicy(
+                new DistanceSurchargePolicy(10L, 50L, OVERCHARGE_PER_5KM, 5L),
+                new DistanceSurchargePolicy(50L, Long.MAX_VALUE, OVERCHARGE_PER_8KM, 8L)));
 
     long fare = fareCalculator.calculateFare(path, child);
 
@@ -168,7 +168,7 @@ class FareCalculatorTest2 {
             1L, 900,
             2L, 1000);
     given(surchargePolicyService.loadPolicy())
-        .willReturn(new LineSurchargePolicy2(lineIdToSurcharge));
+        .willReturn(new LineSurchargePolicy(lineIdToSurcharge));
 
     Line line1 = aLine().id(1L).build();
     Line line2 = aLine().id(2L).build();

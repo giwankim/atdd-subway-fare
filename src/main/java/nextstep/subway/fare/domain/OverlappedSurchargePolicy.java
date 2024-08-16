@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import nextstep.subway.path.domain.Path;
 
-public class OverlappedSurchargePolicy2 extends SurchargePolicy2 {
-  private final List<SurchargePolicy2> policies;
+public class OverlappedSurchargePolicy extends SurchargePolicy {
+  private final List<SurchargePolicy> policies;
 
-  public OverlappedSurchargePolicy2(SurchargePolicy2... policies) {
+  public OverlappedSurchargePolicy(SurchargePolicy... policies) {
     super(path -> true);
     this.policies = Arrays.asList(policies);
   }
@@ -15,7 +15,7 @@ public class OverlappedSurchargePolicy2 extends SurchargePolicy2 {
   @Override
   protected long getSurchargeAmount(Path path) {
     long overFareAmount = 0L;
-    for (SurchargePolicy2 policy : policies) {
+    for (SurchargePolicy policy : policies) {
       overFareAmount += policy.calculateSurcharge(path);
     }
     return overFareAmount;

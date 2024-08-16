@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.fare.application.FareCalculator2;
+import nextstep.subway.fare.application.FareCalculator;
 import nextstep.subway.line.domain.*;
 import nextstep.subway.path.application.GraphService;
 import nextstep.subway.path.application.PathService;
@@ -40,7 +40,7 @@ class PathServiceTest {
   @Mock private GraphService graphService;
   @Mock private StationReader stationReader;
   @Mock private MemberService memberService;
-  @Mock private FareCalculator2 fareCalculator;
+  @Mock private FareCalculator fareCalculator;
   @InjectMocks private PathService pathService;
 
   Station 교대역 = 교대역();
