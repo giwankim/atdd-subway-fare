@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
@@ -7,11 +8,13 @@ import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.WeightedMultigraph;
 
 public class SubwayGraph {
   private static final String STATION_NOT_FOUND = "구간의 상/하행역이 존재하지 않습니다.";
   private static final double EPSILON = 10e-7;
+  public static final int MAX_PATH_COUNT = 1000;
 
   private final WeightedMultigraph<Station, LineSectionEdge> graph;
   private final PathType type;
@@ -46,21 +49,34 @@ public class SubwayGraph {
     DijkstraShortestPath<Station, LineSectionEdge> shortestPath = new DijkstraShortestPath<>(graph);
 
     GraphPath<Station, LineSectionEdge> path = shortestPath.getPath(source, target);
+
     if (path == null) {
       return Path.empty();
     }
+    return mapToPath(path);
+  }
 
-    List<LineSectionEdge> edges = path.getEdgeList();
-    long totalDistance = edges.stream().mapToLong(e -> e.getLineSection().getDistance()).sum();
-    long totalDuration = edges.stream().mapToLong(e -> e.getLineSection().getDuration()).sum();
-    List<Line> lines = edges.stream().map(LineSectionEdge::getLine).collect(Collectors.toList());
-    return Path.of(path.getVertexList(), lines, totalDistance, totalDuration);
+  public Paths getAllPaths(Station source, Station target) {
+    if (source.isSame(target)) {
+      return new Paths(Collections.singletonList(getShortestPath(source, target)));
+    }
+
+    validate(source, target);
+
+    List<GraphPath<Station, LineSectionEdge>> graphPaths =
+        new KShortestPaths<>(graph, MAX_PATH_COUNT).getPaths(source, target);
+
+    return new Paths(graphPaths.stream().map(SubwayGraph::mapToPath).collect(Collectors.toList()));
   }
 
   private void validate(Station source, Station target) {
     if (!graph.containsVertex(source) || !graph.containsVertex(target)) {
       throw new IllegalArgumentException(STATION_NOT_FOUND);
     }
+  }
+
+  private static Path mapToPath(GraphPath<Station, LineSectionEdge> path) {
+    return Path.of(path.getVertexList(), path.getEdgeList());
   }
 
   public boolean isSame(SubwayGraph that) {

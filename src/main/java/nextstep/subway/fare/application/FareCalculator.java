@@ -2,7 +2,8 @@ package nextstep.subway.fare.application;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.member.domain.Member;
-import nextstep.subway.fare.domain.*;
+import nextstep.subway.fare.domain.AgeDiscountPolicy;
+import nextstep.subway.fare.domain.SurchargePolicy;
 import nextstep.subway.path.domain.Path;
 import org.springframework.stereotype.Service;
 

@@ -199,4 +199,14 @@ public class LineSections {
       throw new CannotRemoveLastLineSectionException();
     }
   }
+
+  public long getTimeTo(LineSection section) {
+    if (sections.stream().noneMatch(section::isSame)) {
+      throw new IllegalArgumentException("구간이 존재하지 않습니다.");
+    }
+    return sections.stream()
+        .takeWhile(it -> !it.isSame(section))
+        .mapToLong(LineSection::getDuration)
+        .sum();
+  }
 }

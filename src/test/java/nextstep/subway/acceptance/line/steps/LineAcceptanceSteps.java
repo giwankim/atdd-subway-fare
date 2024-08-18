@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.UpdateLineRequest;
+import nextstep.subway.line.application.dto.*;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import org.springframework.http.HttpHeaders;
@@ -22,19 +22,23 @@ public class LineAcceptanceSteps {
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
     LineSection section = line.getLineSections().getFirst();
-    LineRequest request =
-        new LineRequest(
-            line.getName(),
-            line.getColor(),
-            line.getSurcharge(),
-            section.getUpStation().getId(),
-            section.getDownStation().getId(),
-            section.getDistance(),
-            section.getDuration());
+
+    Map<String, String> params = new HashMap<>();
+    params.put("name", line.getName());
+    params.put("color", line.getColor());
+    params.put("surcharge", String.valueOf(line.getSurcharge()));
+    params.put("upStationId", section.getUpStation().getId().toString());
+    params.put("downStationId", section.getDownStation().getId().toString());
+    params.put("distance", String.valueOf(section.getDistance()));
+    params.put("duration", String.valueOf(section.getDuration()));
+    params.put("startTime", line.getStartTime().toString());
+    params.put("endTime", line.getEndTime().toString());
+    params.put("intervalTime", String.valueOf(line.getIntervalTime()));
+
     return RestAssured.given()
         .log()
         .all()
-        .body(request)
+        .body(params)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
         .post("/lines")

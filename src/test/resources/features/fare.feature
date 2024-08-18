@@ -17,10 +17,10 @@ Feature: 요급 정책 기능
         | 남부터미널역 |
         | 양재역    |
       And 노선들을 생성하고
-        | name | color  | upStation | downStation | distance | duration | surcharge |
-        | 2호선  | green  | 교대역       | 강남역         | 20       | 2        | 0         |
-        | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        | 0         |
-        | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       | 0         |
+        | name | color  | upStation | downStation | distance | duration | surcharge | startTime | endTime | intervalTime |
+        | 2호선  | green  | 교대역       | 강남역         | 20       | 2        | 0         | 05:00     | 23:00   | 10           |
+        | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        | 0         | 05:00     | 23:00   | 20           |
+        | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       | 0         | 05:00     | 23:00   | 10           |
       And 구간들을 등록하고
         | line | upStation | downStation | distance | duration |
         | 3호선  | 남부터미널역    | 양재역         | 3        | 10       |
@@ -50,10 +50,10 @@ Feature: 요급 정책 기능
         | 남부터미널역 |
         | 양재역    |
       And 노선들을 생성하고
-        | name | color  | upStation | downStation | distance | duration | surcharge |
-        | 2호선  | green  | 교대역       | 강남역         | 20       | 2        | 0         |
-        | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        | 900       |
-        | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       | 1100      |
+        | name | color  | upStation | downStation | distance | duration | surcharge | startTime | endTime | intervalTime |
+        | 2호선  | green  | 교대역       | 강남역         | 20       | 2        | 0         | 05:00     | 23:00   | 10           |
+        | 신분당선 | red    | 강남역       | 양재역         | 30       | 3        | 900       | 05:00     | 23:00   | 20           |
+        | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 10       | 1100      | 05:00     | 23:00   | 10           |
       And 구간들을 등록하고
         | line | upStation | downStation | distance | duration |
         | 3호선  | 남부터미널역    | 양재역         | 3        | 10       |

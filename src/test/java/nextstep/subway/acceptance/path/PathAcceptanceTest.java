@@ -3,7 +3,9 @@ package nextstep.subway.acceptance.path;
 import static nextstep.Fixtures.*;
 import static nextstep.subway.acceptance.path.steps.PathAcceptanceSteps.*;
 
-import nextstep.subway.line.domain.*;
+import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.line.domain.LineSections;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.support.AcceptanceTest;
@@ -44,15 +46,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     Station 남부터미널 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine2().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build());
+        aLine().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 2))).build());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("신분당선")
             .color("bg-red-600")
             .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 3)))
             .build());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(

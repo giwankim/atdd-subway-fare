@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.support.AcceptanceContext;
@@ -60,6 +61,9 @@ public class LineStepDefinitions {
                   .distance(Integer.parseInt(row.get("distance")))
                   .duration(Integer.parseInt(row.get("duration")))
                   .surcharge(Integer.parseInt(row.get("surcharge")))
+                  .startTime(LocalTime.parse(row.get("startTime")))
+                  .endTime(LocalTime.parse(row.get("endTime")))
+                  .intervalTime(Integer.parseInt(row.get("intervalTime")))
                   .build();
           var response =
               RestAssured.given()

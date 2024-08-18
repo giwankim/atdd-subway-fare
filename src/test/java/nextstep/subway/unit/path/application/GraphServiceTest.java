@@ -31,8 +31,8 @@ class GraphServiceTest {
   @ParameterizedTest
   @EnumSource(PathType.class)
   void loadGraph(PathType type) {
-    Line 이호선 = 이호선2();
-    Line 신분당선 = 신분당선2();
+    Line 이호선 = 이호선();
+    Line 신분당선 = 신분당선();
     given(lineService.findAllLines()).willReturn(List.of(이호선, 신분당선));
 
     SubwayGraph graph = graphService.loadGraph(type);

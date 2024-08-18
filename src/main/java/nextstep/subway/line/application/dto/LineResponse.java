@@ -1,5 +1,6 @@
 package nextstep.subway.line.application.dto;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -16,14 +17,27 @@ public class LineResponse {
   private final String name;
   private final String color;
   private final Integer surcharge;
+  private final LocalTime startTime;
+  private final LocalTime endTime;
+  private final Integer intervalTime;
   private final List<StationResponse> stations;
 
   public LineResponse(
-      Long id, String name, String color, Integer surcharge, List<StationResponse> stations) {
+      Long id,
+      String name,
+      String color,
+      Integer surcharge,
+      LocalTime startTime,
+      LocalTime endTime,
+      Integer intervalTime,
+      List<StationResponse> stations) {
     this.id = id;
     this.name = name;
     this.color = color;
     this.surcharge = surcharge;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.intervalTime = intervalTime;
     this.stations = stations;
   }
 
@@ -33,6 +47,9 @@ public class LineResponse {
         line.getName(),
         line.getColor(),
         line.getSurcharge(),
+        line.getStartTime(),
+        line.getEndTime(),
+        line.getIntervalTime(),
         StationResponse.listOf(line.getStations()));
   }
 

@@ -28,12 +28,14 @@ class LineSectionMapperTest {
     LineSection section = 강남_역삼_구간();
     Station upStation = section.getUpStation();
     Station downStation = section.getDownStation();
-    given(stationReader.readById(upStation.getId())).willReturn(upStation);
-    given(stationReader.readById(downStation.getId())).willReturn(downStation);
+    Long upStationId = upStation.getId();
+    Long downStationId = downStation.getId();
+    given(stationReader.readById(upStationId)).willReturn(upStation);
+    given(stationReader.readById(downStationId)).willReturn(downStation);
 
     LineSectionRequest request =
         new LineSectionRequest(
-            upStation.getId(), downStation.getId(), section.getDistance(), section.getDuration());
+            upStationId, downStationId, section.getDistance(), section.getDuration());
 
     LineSection actualSection = lineSectionMapper.map(request);
 

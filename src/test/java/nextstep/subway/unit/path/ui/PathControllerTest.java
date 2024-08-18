@@ -9,17 +9,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.LineSectionEdge;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,34 +44,73 @@ class PathControllerTest {
   @Autowired private JwtTokenProvider jwtTokenProvider;
   @MockBean private PathService pathService;
 
-  @Test
-  @DisplayName("경로를 조회 요청에 응답한다.")
-  void findPath() throws Exception {
-    Member member = aMember().build();
-    String accessToken = jwtTokenProvider.createToken(member.getEmail());
+  private String acccessToken;
 
-    Station 교대역 = 교대역();
+  @BeforeEach
+  void setUp() {
+    Member member = aMember().build();
+    acccessToken = jwtTokenProvider.createToken(member.getEmail());
+  }
+
+  @DisplayName("경로를 조회 요청에 응답한다.")
+  @Test
+  void findPath() throws Exception {
+    Station 강남역 = 강남역();
     Station 양재역 = 양재역();
-    Path path = Path.of(List.of(교대역, 양재역), List.of(이호선2(), 신분당선2()), 5, 10);
+    Line 신분당선 = 신분당선();
+    LineSectionEdge edge = LineSectionEdge.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
+    Path path = Path.of(List.of(강남역, 양재역), Collections.singletonList(edge));
     given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
         .willReturn(PathResponse.of(path, 1250L));
 
     mockMvc
         .perform(
             get("/paths")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .param("source", String.valueOf(교대역.getId()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + acccessToken)
+                .param("source", String.valueOf(강남역.getId()))
                 .param("target", String.valueOf(양재역.getId()))
                 .param("type", PathType.DISTANCE.name()))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.stations", hasSize(2)))
-        .andExpect(jsonPath("$.stations[0].id").value(교대역.getId()))
-        .andExpect(jsonPath("$.stations[0].name").value(교대역.getName()))
+        .andExpect(jsonPath("$.stations[0].id").value(강남역.getId()))
+        .andExpect(jsonPath("$.stations[0].name").value(강남역.getName()))
         .andExpect(jsonPath("$.stations[1].id").value(양재역.getId()))
         .andExpect(jsonPath("$.stations[1].name").value(양재역.getName()))
-        .andExpect(jsonPath("$.distance").value(5))
-        .andExpect(jsonPath("$.duration").value(10))
+        .andExpect(jsonPath("$.distance").value(10))
+        .andExpect(jsonPath("$.duration").value(3))
         .andExpect(jsonPath("$.fare").value(1250L));
+  }
+
+  @DisplayName("가장 빠른 도착 시간 경로를 조회한다.")
+  @Test
+  void findPathArrivalTime() throws Exception {
+    Station 강남역 = 강남역();
+    Station 양재역 = 양재역();
+    Line 신분당선 = 신분당선();
+    LineSectionEdge edge = LineSectionEdge.of(LineSection.of(강남역, 양재역, 10, 3), 신분당선);
+    Path path = Path.of(List.of(강남역, 양재역), Collections.singletonList(edge));
+    given(pathService.findPath(any(PathRequest.class), any(LoginMember.class)))
+        .willReturn(PathResponse.of(path, 1250L, LocalDateTime.of(2024, 8, 12, 10, 3)));
+
+    mockMvc
+        .perform(
+            get("/paths")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + acccessToken)
+                .param("source", String.valueOf(강남역.getId()))
+                .param("target", String.valueOf(양재역.getId()))
+                .param("type", PathType.ARRIVAL_TIME.name())
+                .param("time", "202408121000"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.stations", hasSize(2)))
+        .andExpect(jsonPath("$.stations[0].id").value(강남역.getId()))
+        .andExpect(jsonPath("$.stations[0].name").value(강남역.getName()))
+        .andExpect(jsonPath("$.stations[1].id").value(양재역.getId()))
+        .andExpect(jsonPath("$.stations[1].name").value(양재역.getName()))
+        .andExpect(jsonPath("$.distance").value(10))
+        .andExpect(jsonPath("$.duration").value(3))
+        .andExpect(jsonPath("$.fare").value(1250L))
+        .andExpect(jsonPath("$.arrivalTime").value("202408121003"));
   }
 }

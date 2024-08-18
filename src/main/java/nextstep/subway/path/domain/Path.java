@@ -1,31 +1,27 @@
 package nextstep.subway.path.domain;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import lombok.Getter;
+import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.domain.Station;
 
 public class Path {
   private final List<Station> stations;
-  private final List<Line> lines;
-  @Getter private final long totalDistance;
-  @Getter private final long totalDuration;
+  private final List<LineSectionEdge> edges;
 
-  private Path(List<Station> stations, List<Line> lines, long totalDistance, long totalDuration) {
+  private Path(List<Station> stations, List<LineSectionEdge> edges) {
     this.stations = stations;
-    this.lines = lines;
-    this.totalDistance = totalDistance;
-    this.totalDuration = totalDuration;
+    this.edges = edges;
   }
 
   public static Path empty() {
-    return new Path(Collections.emptyList(), Collections.emptyList(), 0, 0);
+    return new Path(Collections.emptyList(), Collections.emptyList());
   }
 
-  public static Path of(
-      List<Station> stations, List<Line> lines, long totalDistance, long totalDuration) {
-    return new Path(stations, lines, totalDistance, totalDuration);
+  public static Path of(List<Station> stations, List<LineSectionEdge> edges) {
+    return new Path(stations, edges);
   }
 
   public List<Station> getStations() {
@@ -33,6 +29,22 @@ public class Path {
   }
 
   public List<Line> getLines() {
-    return Collections.unmodifiableList(lines);
+    return edges.stream().map(LineSectionEdge::getLine).collect(Collectors.toUnmodifiableList());
+  }
+
+  public long getTotalDistance() {
+    return edges.stream().mapToLong(e -> e.getLineSection().getDistance()).sum();
+  }
+
+  public long getTotalDuration() {
+    return edges.stream().mapToLong(e -> e.getLineSection().getDuration()).sum();
+  }
+
+  public LocalDateTime getArrivalTime(LocalDateTime departureTime) {
+    LocalDateTime arrivalTime = departureTime;
+    for (LineSectionEdge edge : edges) {
+      arrivalTime = edge.getArrivalTime(arrivalTime);
+    }
+    return arrivalTime;
   }
 }

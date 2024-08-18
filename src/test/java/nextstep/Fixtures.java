@@ -1,5 +1,6 @@
 package nextstep;
 
+import java.time.LocalTime;
 import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.Favorite.FavoriteBuilder;
 import nextstep.member.domain.Member;
@@ -40,42 +41,54 @@ public class Fixtures {
     return Station.builder().id(7L).name("양재역").build();
   }
 
-  public static LineBuilder aLine2() {
+  public static LineBuilder aLine() {
     return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
         .surcharge(0)
+        .startTime(LocalTime.of(5, 0))
+        .endTime(LocalTime.of(23, 0))
+        .intervalTime(10)
         .lineSections(new LineSections());
   }
 
-  public static Line 이호선2() {
+  public static Line 이호선() {
     return Line.builder()
         .id(1L)
         .name("2호선")
         .color("bg-green-600")
         .lineSections(new LineSections(강남_역삼_구간()))
         .surcharge(0)
+        .startTime(LocalTime.of(5, 0))
+        .endTime(LocalTime.of(23, 0))
+        .intervalTime(10)
         .build();
   }
 
-  public static Line 신분당선2() {
+  public static Line 신분당선() {
     return Line.builder()
         .id(2L)
         .name("신분당선")
         .color("bg-red-600")
         .lineSections(new LineSections(강남_판교_구간()))
         .surcharge(900)
+        .startTime(LocalTime.of(5, 0))
+        .endTime(LocalTime.of(23, 0))
+        .intervalTime(10)
         .build();
   }
 
-  public static Line 삼호선2() {
+  public static Line 삼호선() {
     return Line.builder()
         .id(3L)
         .name("삼호선")
         .color("bg-orange-600")
         .lineSections(new LineSections(교대_남부터미널_구간(), 남부터미널_양재_구간()))
         .surcharge(0)
+        .startTime(LocalTime.of(5, 0))
+        .endTime(LocalTime.of(23, 0))
+        .intervalTime(10)
         .build();
   }
 
@@ -103,24 +116,6 @@ public class Fixtures {
         .downStation(판교역())
         .distance(20)
         .duration(2)
-        .build();
-  }
-
-  public static LineSection 교대_강남_구간() {
-    return LineSection.builder()
-        .upStation(교대역())
-        .downStation(강남역())
-        .distance(10)
-        .duration(2)
-        .build();
-  }
-
-  public static LineSection 강남_양재_구간() {
-    return LineSection.builder()
-        .upStation(강남역())
-        .downStation(양재역())
-        .distance(10)
-        .duration(3)
         .build();
   }
 

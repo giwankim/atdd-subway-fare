@@ -3,12 +3,13 @@ package nextstep.subway.unit.fare.domain;
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import nextstep.subway.fare.domain.DistanceSurchargePolicy;
 import nextstep.subway.fare.domain.SurchargePolicy;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.path.domain.LineSectionEdge;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -22,21 +23,24 @@ class DistanceSurchargePolicyTest {
   @DisplayName("경로의 추가 요금을 계산한다.")
   @ParameterizedTest
   @MethodSource
-  void calculateSurcharge(long distance, long expectedFare) {
-    List<Station> stations = Arrays.asList(교대역(), 강남역());
-    List<Line> lines = List.of(이호선2());
+  void calculateSurcharge(int distance, long expectedFare) {
+    Station 교대역 = 교대역();
+    Station 강남역 = 강남역();
+    Line 이호선 = 이호선();
+    List<LineSectionEdge> edges =
+        List.of(LineSectionEdge.of(LineSection.of(교대역, 강남역, distance, 5), 이호선));
+    Path path = Path.of(List.of(교대역, 강남역), edges);
     SurchargePolicy policy = new DistanceSurchargePolicy(10, 50, 100, 5);
-    assertThat(policy.calculateSurcharge(Path.of(stations, lines, distance, 10)))
-        .isEqualTo(expectedFare);
+    assertThat(policy.calculateSurcharge(path)).isEqualTo(expectedFare);
   }
 
   private static Stream<Arguments> calculateSurcharge() {
     return Stream.of(
-        Arguments.of(10L, 0L),
-        Arguments.of(11L, 100L),
-        Arguments.of(15L, 100L),
-        Arguments.of(16L, 200L),
-        Arguments.of(20L, 200L),
-        Arguments.of(21L, 300L));
+        Arguments.of(10, 0L),
+        Arguments.of(11, 100L),
+        Arguments.of(15, 100L),
+        Arguments.of(16, 200L),
+        Arguments.of(20, 200L),
+        Arguments.of(21, 300L));
   }
 }

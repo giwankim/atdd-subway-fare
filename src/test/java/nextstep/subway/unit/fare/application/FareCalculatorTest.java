@@ -5,16 +5,20 @@ import static nextstep.subway.fare.application.SurchargePolicyService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import nextstep.member.domain.Member;
 import nextstep.subway.fare.application.FareCalculator;
 import nextstep.subway.fare.application.SurchargePolicyService;
-import nextstep.subway.fare.domain.*;
+import nextstep.subway.fare.domain.DistanceSurchargePolicy;
+import nextstep.subway.fare.domain.LineSurchargePolicy;
+import nextstep.subway.fare.domain.OverlappedSurchargePolicy;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.path.domain.LineSectionEdge;
 import nextstep.subway.path.domain.Path;
+import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,12 +36,22 @@ class FareCalculatorTest {
   @Mock private SurchargePolicyService surchargePolicyService;
   @InjectMocks private FareCalculator fareCalculator;
 
+  private final Station 교대역 = 교대역();
+  private final Station 강남역 = 강남역();
+  private final Station 양재역 = 양재역();
+  private final Line 이호선 = 이호선();
+  private final Line 신분당선 = 신분당선();
+
   @DisplayName("요금 계산")
   @ParameterizedTest
   @MethodSource
   void calculateFare(int distance, int expectedFare) {
     Member adult = aMember().build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 삼호선2()), distance, 10);
+    List<LineSectionEdge> edges =
+        List.of(
+            LineSectionEdge.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
+    Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -73,7 +87,11 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareYouth(int distance, int expectedFare) {
     Member youth = aMember().age(13).build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 삼호선2()), distance, 10);
+    List<LineSectionEdge> edges =
+        List.of(
+            LineSectionEdge.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
+    Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -108,7 +126,11 @@ class FareCalculatorTest {
   @MethodSource
   void calculateFareChild(int distance, int expectedFare) {
     Member child = aMember().age(6).build();
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), List.of(이호선2(), 신분당선2()), distance, 10);
+    List<LineSectionEdge> edges =
+        List.of(
+            LineSectionEdge.of(LineSection.of(교대역, 강남역, 0, 0), 이호선),
+            LineSectionEdge.of(LineSection.of(강남역, 양재역, distance, 10), 신분당선));
+    Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
     given(surchargePolicyService.loadPolicy())
         .willReturn(
             new OverlappedSurchargePolicy(
@@ -148,8 +170,13 @@ class FareCalculatorTest {
     given(surchargePolicyService.loadPolicy())
         .willReturn(new LineSurchargePolicy(lineIdToSurcharge));
 
-    List<Line> lines = List.of(aLine2().id(1L).build(), aLine2().id(2L).build());
-    Path path = Path.of(Arrays.asList(교대역(), 강남역(), 양재역()), lines, 10, 10);
+    Line line1 = aLine().id(1L).build();
+    Line line2 = aLine().id(2L).build();
+    List<LineSectionEdge> edges =
+        List.of(
+            LineSectionEdge.of(LineSection.of(교대역, 강남역, 5, 5), line1),
+            LineSectionEdge.of(LineSection.of(강남역, 양재역, 5, 5), line2));
+    Path path = Path.of(List.of(교대역, 강남역, 양재역), edges);
 
     Member adult = aMember().build();
 

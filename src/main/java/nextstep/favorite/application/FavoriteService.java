@@ -1,5 +1,6 @@
 package nextstep.favorite.application;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,8 @@ public class FavoriteService {
   private boolean isValidPath(FavoriteRequest request, LoginMember loginMember) {
     PathResponse path =
         pathService.findPath(
-            PathRequest.of(request.getSource(), request.getTarget(), PathType.DISTANCE),
+            PathRequest.of(
+                request.getSource(), request.getTarget(), PathType.DISTANCE, LocalDateTime.now()),
             loginMember);
     return !path.getStations().isEmpty();
   }
